@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ohm's Law Lab</title>
+<style>
+:root{
+  --bg:#f5f3ee; --card:#ffffff; --ink:#1d2430; --muted:#5d6675; --line:#e2ded5;
+  --series:#2f6fde; --series-soft:#e4edfd; --parallel:#d4731f; --parallel-soft:#fcebdc;
+  --wire:#8b93a1; --glass:#eef1f5; --glass-rim:#9aa2af;
+  --meter:#2b2f36; --meter-edge:#454b55; --lcd:#c6d6b0; --lcd-ink:#1d2716;
+  --danger:#c8402d; --knob:#e9ebef; --knob-cap:#ffffff;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 6px 18px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#13161b; --card:#1c2027; --ink:#e7e9ee; --muted:#9ba4b3; --line:#2f3540;
+    --series:#6ea2ff; --series-soft:#1f2c45; --parallel:#f39a4c; --parallel-soft:#3a2a1c;
+    --wire:#7c8595; --glass:#2a3039; --glass-rim:#6d7583;
+    --meter:#0d0f12; --meter-edge:#3a404a; --knob:#2a3039; --knob-cap:#353c47;
+    --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1160px;margin:0 auto;padding:24px 16px 48px}
+header h1{margin:0 0 4px;font-size:1.7rem}
+header p{margin:0 0 20px;color:var(--muted);max-width:760px}
+.grid{display:grid;gap:16px}
+.top{grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)}
+.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.wide-left{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
+@media (max-width:900px){.top,.two,.wide-left{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+.card h2{font-size:1.05rem;margin:0 0 10px}
+.muted{color:var(--muted)}
+.small{font-size:.86rem}
+
+/* circuit */
+#circuit{width:100%;height:auto;display:block}
+.wire{fill:none;stroke:var(--wire);stroke-width:4;stroke-linejoin:round;stroke-linecap:round}
+.flow{fill:none;stroke-width:3.2;stroke-linecap:round;stroke-dasharray:1 15}
+.glass{fill:var(--glass)}
+.glass-rim{fill:none;stroke:var(--glass-rim);stroke-width:2}
+.fil{fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.plate-long{stroke:var(--ink);stroke-width:3.5}
+.plate-short{stroke:var(--ink);stroke-width:7}
+.batt-text{fill:var(--ink);font-weight:700;font-size:17px}
+.batt-sign{fill:var(--muted);font-size:15px;font-weight:700}
+.meter-body{fill:var(--meter);stroke:var(--meter-edge);stroke-width:2}
+.lcd{fill:var(--lcd)}
+.lcd-text{fill:var(--lcd-ink);font:600 21px ui-monospace,"Cascadia Mono",Consolas,monospace}
+.lcd-unit{fill:var(--lcd-ink);font:600 13px ui-monospace,Consolas,monospace}
+.meter-label{fill:#cfd4dc;font-size:10px;letter-spacing:.14em;font-weight:600}
+.term{fill:#d23b2b}.term.blk{fill:#111}
+.svg-note{fill:var(--muted);font-size:12.5px}
+.warn{fill:var(--danger);font-size:13px;font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:6px}
+
+/* controls */
+.mode{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:12px}
+.mode button{font:inherit;font-weight:600;padding:9px 6px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.mode button[data-mode=series][aria-pressed=true]{background:var(--series);color:#fff}
+.mode button[data-mode=parallel][aria-pressed=true]{background:var(--parallel);color:#fff}
+.mode button[data-model][aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.ctl-label{font-size:.8rem;color:var(--muted);margin:0 0 4px}
+.dials{display:grid;gap:6px}
+@media (max-width:900px) and (min-width:620px){.dials{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.dialbox{display:grid;grid-template-columns:150px 1fr;align-items:center;gap:12px}
+.dialbox .name{font-weight:600;font-size:.95rem;margin-bottom:6px}
+.dial{width:150px;height:auto;touch-action:none;cursor:grab;display:block;margin:0 auto;outline:none}
+.dial:active{cursor:grabbing}
+.dial:focus-visible .knob{stroke:var(--series);stroke-width:3}
+.dial .arc-bg{fill:none;stroke:var(--line);stroke-width:6;stroke-linecap:round}
+.dial .arc-val{fill:none;stroke-width:6;stroke-linecap:round}
+.dial .knob{fill:var(--knob);stroke:var(--line);stroke-width:1.5}
+.dial .knob-cap{fill:var(--knob-cap)}
+.dial .pointer{stroke:var(--ink);stroke-width:4;stroke-linecap:round}
+.dial .tick{stroke:var(--muted);stroke-width:1.3}
+.dial .tl{fill:var(--muted);font-size:11px}
+.numin{display:inline-flex;align-items:center;gap:4px}
+.numin input{width:72px;font:inherit;font-weight:600;text-align:right;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.row-btns{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:14px;flex-wrap:wrap}
+.btn{font:inherit;font-size:.9rem;padding:6px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);cursor:pointer}
+.btn:hover{border-color:var(--muted)}
+.big-readout{margin-top:14px;padding:12px;border-radius:10px;background:var(--bg);display:grid;grid-template-columns:repeat(4,1fr);gap:8px 12px}
+.big-readout div{display:flex;flex-direction:column}
+.big-readout span{font-size:.8rem;color:var(--muted)}
+.big-readout b{font-size:1.25rem}
+@media (max-width:620px){.big-readout{grid-template-columns:1fr 1fr}}
+
+/* equations */
+.eq{padding:8px 0;border-top:1px dashed var(--line)}
+.eq:first-of-type{border-top:0}
+.eq .lbl{display:block;font-size:.8rem;color:var(--muted)}
+.eq code{font:inherit}
+.eq b{white-space:nowrap}
+.why p{margin:0 0 10px}
+
+/* charts */
+.chart{width:100%;height:auto;display:block}
+.chart .grid-l{stroke:var(--line);stroke-width:1}
+.chart .axis{stroke:var(--muted);stroke-width:1.2}
+.chart text{fill:var(--muted);font-size:12px}
+.chart .ttl{fill:var(--ink);font-size:12.5px;font-weight:600}
+.chart .val{font-size:13px;font-weight:700}
+.chart .col{fill:transparent;cursor:pointer}
+.chart .col:hover{fill:rgba(128,128,128,.08)}
+.chk{display:inline-flex;gap:6px;align-items:center;cursor:pointer;font-size:.92rem}
+
+/* table */
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:.9rem}
+th,td{padding:6px 6px;white-space:nowrap;text-align:right;border-bottom:1px solid var(--line)}
+th{font-size:.8rem;color:var(--muted);font-weight:600;vertical-align:bottom}
+th:first-child,td:first-child{text-align:left}
+tr.sel td{background:var(--hl);font-weight:700}
+.labdot{display:inline-block;margin-left:6px;font-size:.7rem;padding:0 6px;border-radius:6px;background:var(--line);color:var(--muted);font-weight:600}
+.tablewrap{overflow-x:auto}
+details{border-top:1px dashed var(--line);padding:8px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font-weight:600}
+details p{margin:6px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Ohm's Law Lab: light bulbs in series and parallel</h1>
+  <p>Turn the dials (drag, scroll, or use arrow keys) or type a number. The ammeter shows the total current leaving the battery, the bulbs glow according to the power each one gets, and the moving dots show current flowing.</p>
+</header>
+
+<div class="grid top">
+  <section class="card">
+    <h2>The circuit</h2>
+    <svg id="circuit" viewBox="0 0 700 370" role="img" aria-label="Circuit diagram"></svg>
+    <div class="legend small muted">
+      <span>Dots move faster where more current flows.</span>
+      <span>Bulb glow = power per bulb (full glow = one bulb on 12 V).</span>
+    </div>
+    <div class="big-readout" id="big"></div>
+  </section>
+
+  <section class="card">
+    <h2>Controls</h2>
+    <p class="ctl-label">Wiring</p>
+    <div class="mode" role="group" aria-label="Wiring">
+      <button data-mode="series" aria-pressed="true">Series</button>
+      <button data-mode="parallel" aria-pressed="false">Parallel</button>
+    </div>
+    <p class="ctl-label">Bulbs behave like</p>
+    <div class="mode" role="group" aria-label="Bulb model">
+      <button data-model="ideal" aria-pressed="true">Ideal resistor</button>
+      <button data-model="real" aria-pressed="false">Real filament</button>
+    </div>
+    <p class="small muted" id="model-note" style="margin:-4px 0 10px"></p>
+    <div class="dials">
+      <div class="dialbox" id="dial-V"></div>
+      <div class="dialbox" id="dial-R"></div>
+      <div class="dialbox" id="dial-N"></div>
+    </div>
+    <div class="row-btns">
+      <span class="small muted">Lab default: 12 V, 15 Ω bulbs</span>
+      <button class="btn" id="reset">Reset</button>
+    </div>
+  </section>
+</div>
+
+<div class="grid two" style="margin-top:16px">
+  <section class="card">
+    <h2>Ohm's law with your numbers</h2>
+    <div id="eqs"></div>
+  </section>
+  <section class="card why">
+    <h2 id="why-title">Why series and parallel behave differently</h2>
+    <div id="why"></div>
+  </section>
+</div>
+
+<section class="card" style="margin-top:16px">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <h2 style="margin:0">How the number of bulbs changes things <span class="muted small" id="chart-sub"></span></h2>
+    <label class="chk"><input type="checkbox" id="compare"> <span id="compare-label">Also show parallel</span></label>
+  </div>
+  <p class="small muted" style="margin:4px 0 8px">Click a column on either chart to jump to that many bulbs.</p>
+  <div class="grid two">
+    <svg class="chart" id="chartI" viewBox="0 0 480 290" role="img" aria-label="Current versus number of bulbs"></svg>
+    <svg class="chart" id="chartR" viewBox="0 0 480 290" role="img" aria-label="Total resistance versus number of bulbs"></svg>
+  </div>
+</section>
+
+<div class="grid wide-left" style="margin-top:16px">
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      <h2 style="margin:0">Prediction table <span class="muted small" id="table-sub"></span></h2>
+      <button class="btn" id="copy">Copy as spreadsheet data</button>
+    </div>
+    <p class="small muted" style="margin:4px 0 8px">Rows tagged “lab” are the bulb counts in the class experiment. Write your measured current next to the prediction and compare.</p>
+    <div class="tablewrap"><table id="table"></table></div>
+  </section>
+  <section class="card">
+    <h2>Try this</h2>
+    <details><summary>In series, what happens to the current when you double the number of bulbs?</summary>
+      <p>It halves. Doubling the bulbs doubles the total resistance, and I = V ÷ R. Try 2 bulbs, then 4.</p></details>
+    <details><summary>In parallel, why don't the bulbs get dimmer as you add more?</summary>
+      <p>Each bulb is wired straight across the battery, so each one always gets the full battery voltage. The battery simply supplies more total current: watch the ammeter climb with every bulb you add.</p></details>
+    <details><summary>With 3 bulbs at 12 V, how much more power does parallel use than series?</summary>
+      <p>Nine times as much (28.8 W vs 3.2 W). The ratio is always N², because parallel resistance is N times smaller and series resistance is N times bigger. That is why a parallel string drains a battery much faster.</p></details>
+    <details><summary>In the real experiment, why does each extra bulb add less resistance?</summary>
+      <p>A bulb is not a fixed resistor. Its tungsten filament's resistance rises as it heats up: glowing, it has about 10 times the resistance it has cold. In series, each bulb you add cuts the voltage every bulb gets, so they all run cooler and every one of them loses resistance. The new bulb adds its share, but the bulbs already there shrink, so the total grows by less each time. Switch to “Real filament” to see it, and look at the “Added by this bulb” column.</p></details>
+    <details><summary>Will the total resistance level off completely?</summary>
+      <p>No. As bulbs get dimmer, each one heads toward its cold resistance (about 1/10 of its lit value). Once they're barely warm, every extra bulb adds roughly that cold amount, so the total keeps climbing, just slowly and in a straight line. With 15 Ω bulbs that's about 1.5 Ω per bulb, and it takes dozens of bulbs to get there.</p></details>
+    <details><summary>What does the ammeter have to be connected like?</summary>
+      <p>In series, in the main line next to the battery, so all the current passes through it. An ammeter has almost zero resistance; connecting it straight across the battery would short it out.</p></details>
+  </section>
+</div>
+</div>
+
+<script>
+(function(){
+const NS = 'http://www.w3.org/2000/svg';
+const DEFAULTS = {V:12, R:15, N:3, mode:'series', model:'ideal', compare:false};
+const S = Object.assign({}, DEFAULTS);
+const LIM = {
+  V:{min:0, max:30, step:0.5, unit:'V', name:'Battery voltage', labels:[0,6,12,18,24,30]},
+  R:{min:1, max:100, step:1, unit:'Ω', name:'Ohms per bulb', labels:[1,25,50,75,100]},
+  N:{min:1, max:10, step:1, unit:'bulbs', name:'Number of bulbs', labels:[1,2,3,4,5,6,7,8,9,10]}
+};
+const RATED_V = 12; // bulbs glow fully at 12 V across one bulb
+const reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Real filament: tungsten resistance grows with temperature, R = R_cold * (T / 300 K)^1.2.
+   The filament heats until the electrical power going in equals the heat it radiates away
+   (proportional to T^4 - room^4). "Ohms per bulb" is the fully lit resistance at RATED_V,
+   and the cold resistance is 1/10 of that, typical for small incandescent bulbs. */
+const T_ROOM = 300, HOT_COLD = 10, R_EXP = 1.2;
+const T_LIT = T_ROOM * Math.pow(HOT_COLD, 1 / R_EXP);
+function filament(Vb, Rlit){
+  const R0 = Rlit / HOT_COLD, Rof = T => R0 * Math.pow(T / T_ROOM, R_EXP);
+  const k = (RATED_V * RATED_V / Rlit) / (Math.pow(T_LIT, 4) - Math.pow(T_ROOM, 4));
+  if (!(Vb > 0)) return {R: R0, T: T_ROOM};
+  let lo = T_ROOM, hi = 20000; // power in falls and heat out rises with T, so bisect
+  for (let i = 0; i < 60; i++) {
+    const T = (lo + hi) / 2;
+    if (Vb * Vb / Rof(T) > k * (Math.pow(T, 4) - Math.pow(T_ROOM, 4))) lo = T; else hi = T;
+  }
+  return {R: Rof(lo), T: lo};
+}
+function calc(V, R, N, mode, model = S.model){
+  const series = mode === 'series';
+  const Vb = series ? V / N : V;
+  const f = model === 'real' ? filament(Vb, R) : {R: R, T: null};
+  const Rb = f.R;
+  const Rt = series ? N * Rb : Rb / N;
+  const I = Rt > 0 ? V / Rt : 0;
+  const Ib = series ? I : I / N;
+  return {Rb, T: f.T, Rt, I, Vb, Ib, Pb: Vb * Ib, P: V * I};
+}
+const degF = T => Math.round(((T - 273.15) * 9 / 5 + 32) / 10) * 10;
+function fmt(x){
+  if (!isFinite(x)) return '–';
+  if (x === 0) return '0';
+  const a = Math.abs(x);
+  const d = a >= 100 ? 1 : a >= 1 ? 2 : a >= 0.1 ? 3 : 4;
+  return String(parseFloat(x.toFixed(d)));
+}
+function css(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+const modeColor = m => css(m === 'series' ? '--series' : '--parallel');
+const other = m => m === 'series' ? 'parallel' : 'series';
+const cap = s => s[0].toUpperCase() + s.slice(1);
+
+/* ---------- dials ---------- */
+const dials = {};
+function polar(c, r, deg){ const a = deg * Math.PI / 180; return [c + r * Math.sin(a), c - r * Math.cos(a)]; }
+function arc(c, r, a0, a1){
+  const [x0, y0] = polar(c, r, a0), [x1, y1] = polar(c, r, a1);
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)} A${r} ${r} 0 ${a1 - a0 > 180 ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+}
+function makeDial(key){
+  const L = LIM[key], box = document.getElementById('dial-' + key), c = 85;
+  const ang = v => -135 + 270 * (v - L.min) / (L.max - L.min);
+  let ticks = '';
+  const minor = key === 'N' ? [] : Array.from({length: 21}, (_, i) => L.min + (L.max - L.min) * i / 20);
+  minor.forEach(v => { const [a, b] = [polar(c, 63, ang(v)), polar(c, 66, ang(v))]; ticks += `<line class="tick" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/>`; });
+  L.labels.forEach(v => {
+    const [a, b] = [polar(c, 62, ang(v)), polar(c, 68, ang(v))], [tx, ty] = polar(c, 77, ang(v));
+    ticks += `<line class="tick" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/><text class="tl" x="${tx}" y="${ty + 3.5}" text-anchor="middle">${v}</text>`;
+  });
+  box.innerHTML = `<svg class="dial" viewBox="0 0 170 170" role="slider" tabindex="0" aria-label="${L.name}" aria-valuemin="${L.min}" aria-valuemax="${L.max}">
+      ${ticks}
+      <path class="arc-bg" d="${arc(c, 56, -135, 135)}"/>
+      <path class="arc-val"/>
+      <circle class="knob" cx="${c}" cy="${c}" r="44"/>
+      <circle class="knob-cap" cx="${c}" cy="${c}" r="33"/>
+      <g class="ptr"><line class="pointer" x1="${c}" y1="${c - 14}" x2="${c}" y2="${c - 38}"/></g>
+    </svg>
+    <div><div class="name">${L.name}</div><label class="numin"><input type="number" min="${L.min}" max="${L.max}" step="${key === 'N' ? 1 : 'any'}" aria-label="${L.name}"> <span>${L.unit}</span></label></div>`;
+  const svg = box.querySelector('svg'), input = box.querySelector('input');
+  const clamp = v => Math.min(L.max, Math.max(L.min, v));
+  function setVal(v, snap){
+    if (!isFinite(v)) return;
+    if (snap || key === 'N') v = L.min + Math.round((v - L.min) / L.step) * L.step;
+    v = +clamp(v).toFixed(3);
+    if (v !== S[key]) { S[key] = v; update(); }
+  }
+  let dragging = false;
+  function fromPointer(e){
+    const r = svg.getBoundingClientRect();
+    let a = Math.atan2(e.clientX - r.left - r.width / 2, -(e.clientY - r.top - r.height / 2)) * 180 / Math.PI;
+    if (a > 135 || a < -135) a = (S[key] - L.min) / (L.max - L.min) > 0.5 ? 135 : -135;
+    setVal(L.min + (a + 135) / 270 * (L.max - L.min), true);
+  }
+  svg.addEventListener('pointerdown', e => { dragging = true; svg.setPointerCapture(e.pointerId); svg.focus(); fromPointer(e); e.preventDefault(); });
+  svg.addEventListener('pointermove', e => { if (dragging) fromPointer(e); });
+  ['pointerup', 'pointercancel'].forEach(t => svg.addEventListener(t, () => dragging = false));
+  svg.addEventListener('wheel', e => { e.preventDefault(); setVal(S[key] + (e.deltaY < 0 ? L.step : -L.step), true); }, {passive: false});
+  svg.addEventListener('keydown', e => {
+    const k = e.key, s = L.step;
+    const d = {ArrowUp: s, ArrowRight: s, ArrowDown: -s, ArrowLeft: -s, PageUp: 10 * s, PageDown: -10 * s}[k];
+    if (d !== undefined) setVal(S[key] + d, true);
+    else if (k === 'Home') setVal(L.min); else if (k === 'End') setVal(L.max); else return;
+    e.preventDefault();
+  });
+  input.addEventListener('input', () => { const v = parseFloat(input.value); if (isFinite(v) && v >= L.min && v <= L.max) setVal(v); });
+  input.addEventListener('change', () => { const v = parseFloat(input.value); if (isFinite(v)) setVal(v); input.value = S[key]; });
+  dials[key] = function render(){
+    const v = S[key], a = ang(v);
+    svg.querySelector('.ptr').setAttribute('transform', `rotate(${a} ${c} ${c})`);
+    const av = svg.querySelector('.arc-val');
+    av.setAttribute('d', a > -134.9 ? arc(c, 56, -135, a) : '');
+    av.style.stroke = modeColor(S.mode);
+    svg.setAttribute('aria-valuenow', v);
+    svg.setAttribute('aria-valuetext', `${v} ${L.unit}`);
+    if (document.activeElement !== input) input.value = v;
+  };
+}
+
+/* ---------- circuit ---------- */
+function bulb(x, y, rot, b, over){
+  const g = Math.min(1, b);
+  const fil = b <= 0.01 ? css('--glass-rim') : `hsl(${over ? 50 : 38}, 100%, ${45 + 40 * g}%)`;
+  return `<g transform="translate(${x} ${y}) rotate(${rot})">
+    <circle r="${(20 + 30 * g).toFixed(1)}" fill="url(#glow)" opacity="${g.toFixed(3)}"/>
+    <circle r="20" class="glass"/>
+    <circle r="20" fill="#ffe27a" opacity="${(0.85 * g).toFixed(3)}"/>
+    <path class="fil" stroke="${fil}" d="M-20 0 L-10 0 Q-7.5 -9 -5 0 Q-2.5 9 0 0 Q2.5 -9 5 0 Q7.5 9 10 0 L17 0"/>
+    <circle r="20" class="glass-rim" ${over ? `style="stroke:${css('--danger')}"` : ''}/>
+  </g>`;
+}
+function meter(cx, cy, I){
+  const txt = I < 10 ? I.toFixed(3) : I < 100 ? I.toFixed(2) : I.toFixed(1);
+  return `<g transform="translate(${cx} ${cy})">
+    <rect x="-62" y="-44" width="124" height="88" rx="12" class="meter-body"/>
+    <rect x="-52" y="-34" width="104" height="38" rx="4" class="lcd"/>
+    <text x="34" y="-7" text-anchor="end" class="lcd-text">${txt}</text>
+    <text x="38" y="-7" class="lcd-unit">A</text>
+    <text x="0" y="19" text-anchor="middle" class="meter-label">AMMETER</text>
+    <circle cx="-30" cy="33" r="5" class="term blk"/><circle cx="30" cy="33" r="5" class="term"/>
+    <text x="-16" y="36" text-anchor="middle" class="meter-label" style="font-size:8px">COM</text>
+    <text x="18" y="36" text-anchor="middle" class="meter-label" style="font-size:8px">A</text>
+  </g>`;
+}
+let flows = [];
+function drawCircuit(r){
+  const {V, R, N, mode} = S, top = 60, bot = 300, right = 640;
+  const pRated = RATED_V * RATED_V / R;
+  const b = pRated > 0 ? Math.pow(r.Pb / pRated, 0.6) : 0;
+  const over = r.Pb > 2.25 * pRated; // more than 1.5x rated voltage across a bulb
+  const segs = []; // {d, I}
+  let wires = '', bulbs = '';
+  if (mode === 'series') {
+    const xs = Array.from({length: N}, (_, i) => N === 1 ? 420 : 230 + i * 380 / (N - 1));
+    segs.push({d: `M60 165 V${top} H${right} V${bot} H60 V201`, I: r.I});
+    xs.forEach(x => bulbs += bulb(x, top, 0, b, over));
+  } else {
+    const xs = Array.from({length: N}, (_, i) => N === 1 ? 420 : 250 + i * 370 / (N - 1));
+    segs.push({d: `M60 165 V${top} H${xs[0]}`, I: r.I});
+    xs.forEach((x, i) => {
+      segs.push({d: `M${x} ${top} V${bot}`, I: r.Ib});
+      if (i < N - 1) {
+        const share = r.I * (N - 1 - i) / N;
+        segs.push({d: `M${x} ${top} H${xs[i + 1]}`, I: share});
+        segs.push({d: `M${xs[i + 1]} ${bot} H${x}`, I: share});
+      }
+      bulbs += bulb(x, 180, 90, b, over);
+    });
+    segs.push({d: `M${xs[0]} ${bot} H60 V201`, I: r.I});
+  }
+  segs.forEach(s => wires += `<path class="wire" d="${s.d}"/>`);
+  const col = modeColor(mode);
+  const flowSvg = segs.map(s => `<path class="flow" stroke="${col}" data-i="${s.I}" d="${s.d}"/>`).join('');
+  const label = mode === 'series'
+    ? `${N} bulb${N > 1 ? 's' : ''} in series: one path, same current through each`
+    : `${N} bulb${N > 1 ? 's' : ''} in parallel: each bulb has its own path`;
+  const svg = document.getElementById('circuit');
+  svg.innerHTML = `<defs><radialGradient id="glow"><stop offset="0" stop-color="#fff2a8" stop-opacity=".95"/><stop offset=".45" stop-color="#ffc83a" stop-opacity=".45"/><stop offset="1" stop-color="#ffb000" stop-opacity="0"/></radialGradient></defs>
+    ${wires}${flowSvg}
+    <line class="plate-long" x1="36" y1="165" x2="84" y2="165"/>
+    <line class="plate-short" x1="48" y1="177" x2="72" y2="177"/>
+    <line class="plate-long" x1="36" y1="189" x2="84" y2="189"/>
+    <line class="plate-short" x1="48" y1="201" x2="72" y2="201"/>
+    <text class="batt-sign" x="90" y="170">+</text><text class="batt-sign" x="91" y="206">−</text>
+    <text class="batt-text" x="106" y="190">${fmt(V)} V</text>
+    <text class="svg-note" x="106" y="208">battery</text>
+    ${bulbs}
+    ${meter(150, bot + 6, r.I)}
+    <text class="svg-note" x="${mode === 'series' ? 420 : 435}" y="${mode === 'series' ? 112 : 352}" text-anchor="middle">${label}</text>
+    ${over ? `<text class="warn" x="440" y="${mode === 'series' ? 132 : 334}" text-anchor="middle">Real bulbs would likely burn out at this voltage</text>` : ''}`;
+  flows = Array.from(svg.querySelectorAll('.flow')).map(el => ({el, speed: speedFor(+el.dataset.i)}));
+  if (reduceMotion) flows.forEach(f => f.el.style.strokeDasharray = 'none');
+}
+// scaled so 0.05 A and 10 A are both visible; zero current = still
+function speedFor(I){ return I <= 0 ? 0 : Math.min(260, 70 * Math.sqrt(I)); }
+let last = performance.now();
+function tick(now){
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  flows.forEach(f => { f.off = (f.off || 0) - f.speed * dt; f.el.style.strokeDashoffset = f.off; });
+  requestAnimationFrame(tick);
+}
+
+/* ---------- equations & explanation ---------- */
+function drawEquations(r){
+  const {V, R, N, mode} = S;
+  const v = x => `${fmt(x)}`;
+  const real = S.model === 'real', Rb = r.Rb;
+  const solo = calc(V, R, 1, mode).Pb; // power one bulb would get alone
+  const pct = solo > 0 ? r.Pb / solo * 100 : 0;
+  let h = real ? `
+    <div class="eq"><span class="lbl">Each bulb's resistance at ${v(r.Vb)} V (hot filament: ${v(R)} Ω fully lit, ${v(R / HOT_COLD)} Ω cold)</span>R<sub>bulb</sub> ≈ <b>${v(Rb)} Ω</b> <span class="muted small">(filament ≈ ${degF(r.T).toLocaleString()} °F)</span></div>` : '';
+  if (mode === 'series') {
+    h += `
+    <div class="eq"><span class="lbl">Total resistance: resistances in a line add up</span>R<sub>total</sub> = N × R<sub>bulb</sub> = ${N} × ${v(Rb)} Ω = <b>${v(r.Rt)} Ω</b></div>
+    <div class="eq"><span class="lbl">Current from the battery (Ohm's law, what the ammeter reads)</span>I = V ÷ R<sub>total</sub> = ${v(V)} V ÷ ${v(r.Rt)} Ω = <b>${v(r.I)} A</b></div>
+    <div class="eq"><span class="lbl">Voltage across each bulb: the battery voltage is shared</span>V<sub>bulb</sub> = I × R<sub>bulb</sub> = ${v(r.I)} A × ${v(Rb)} Ω = <b>${v(r.Vb)} V</b> <span class="muted small">(= ${v(V)} V ÷ ${N})</span></div>
+    <div class="eq"><span class="lbl">Current through each bulb: only one path, so it is the same everywhere</span>I<sub>bulb</sub> = I = <b>${v(r.Ib)} A</b></div>`;
+  } else {
+    h += `
+    <div class="eq"><span class="lbl">Total resistance: more paths means less resistance</span>1/R<sub>total</sub> = ${N === 1 ? `1/${v(Rb)}` : (N <= 4 ? Array(N).fill(`1/${v(Rb)}`).join(' + ') : `1/${v(Rb)} + … (${N} times)`)} → R<sub>total</sub> = R<sub>bulb</sub> ÷ N = ${v(Rb)} Ω ÷ ${N} = <b>${v(r.Rt)} Ω</b></div>
+    <div class="eq"><span class="lbl">Current from the battery (Ohm's law, what the ammeter reads)</span>I = V ÷ R<sub>total</sub> = ${v(V)} V ÷ ${v(r.Rt)} Ω = <b>${v(r.I)} A</b></div>
+    <div class="eq"><span class="lbl">Voltage across each bulb: every bulb connects straight across the battery</span>V<sub>bulb</sub> = V = <b>${v(r.Vb)} V</b></div>
+    <div class="eq"><span class="lbl">Current through each bulb: the total splits between ${N} path${N > 1 ? 's' : ''}</span>I<sub>bulb</sub> = V ÷ R<sub>bulb</sub> = ${v(V)} V ÷ ${v(Rb)} Ω = <b>${v(r.Ib)} A</b> <span class="muted small">(= ${v(r.I)} A ÷ ${N})</span></div>`;
+  }
+  h += `
+    <div class="eq"><span class="lbl">Power per bulb (how bright it is)</span>P<sub>bulb</sub> = V<sub>bulb</sub> × I<sub>bulb</sub> = ${v(r.Vb)} V × ${v(r.Ib)} A = <b>${v(r.Pb)} W</b> <span class="muted small">(${pct >= 10 ? Math.round(pct) : fmt(pct)}% of what one bulb alone would get)</span></div>
+    <div class="eq"><span class="lbl">Total power drawn from the battery</span>P = V × I = ${v(V)} V × ${v(r.I)} A = <b>${v(r.P)} W</b></div>`;
+  document.getElementById('eqs').innerHTML = h;
+
+  document.getElementById('big').innerHTML = `
+    <div><span>Total resistance</span><b>${v(r.Rt)} Ω</b></div>
+    <div><span>Current (ammeter)</span><b style="color:${modeColor(mode)}">${v(r.I)} A</b></div>
+    <div><span>Volts per bulb</span><b>${v(r.Vb)} V</b></div>
+    <div><span>Power per bulb</span><b>${v(r.Pb)} W</b></div>`;
+
+  const why = mode === 'series'
+    ? `<p><b>Series is one road with ${N} toll booths.</b> All the current has to pass through every bulb in turn, so each bulb you add is another obstacle. The total resistance grows (${N} × ${v(Rb)} Ω = ${v(r.Rt)} Ω) and the current from the battery drops.</p>
+       ${real ? `<p><b>Why each real bulb adds less than the last.</b> With ${N} bulb${N > 1 ? 's' : ''} sharing ${v(V)} V, each gets only ${v(r.Vb)} V, so its filament runs cooler (about ${degF(r.T).toLocaleString()} °F) and its resistance drops from ${v(R)} Ω to ${v(Rb)} Ω. Add another bulb and <i>every</i> bulb cools a bit more, so the total rises by less each time. In the table, the “Added by this bulb” column shows the shrinking steps.</p>`
+       : `<p>The battery's ${v(V)} V gets shared out, ${v(r.Vb)} V per bulb. Less voltage <i>and</i> less current means each bulb's power falls with the square of the count: 2 bulbs each get ¼ the power of one, 3 bulbs get 1/9. That is why series bulbs dim so quickly.</p>`}
+       <p class="small muted">Side effect: if one bulb breaks, the single path is cut and they all go out (old Christmas lights).</p>`
+    : `<p><b>Parallel is a highway with ${N} lane${N > 1 ? 's' : ''}.</b> Each bulb gets its own path straight across the battery, so each one sees the full ${v(V)} V and draws ${v(r.Ib)} A, exactly as if it were alone.</p>
+       <p>Adding a bulb adds a lane, so the circuit as a whole lets <i>more</i> current through: total resistance falls (${v(Rb)} Ω ÷ ${N} = ${v(r.Rt)} Ω) and the ammeter reading rises to ${v(r.I)} A. The bulbs stay bright, but the battery works ${N} times harder.</p>
+       ${real ? `<p>Real filaments change little here: every bulb gets the same ${v(V)} V no matter how many you add, so they all run at the same temperature${Math.abs(V - RATED_V) < 0.01 ? ', fully lit at their ' + v(R) + ' Ω' : ` (about ${degF(r.T).toLocaleString()} °F, ${v(Rb)} Ω each)`}.</p>` : ''}
+       <p class="small muted">Side effect: one broken bulb leaves the others lit. Your house is wired in parallel for this reason.</p>`;
+  document.getElementById('why').innerHTML = why;
+  document.getElementById('why-title').textContent = mode === 'series' ? 'Why series bulbs get dimmer' : 'Why parallel bulbs stay bright';
+}
+
+/* ---------- charts ---------- */
+function niceTop(max){
+  if (!(max > 0)) return {top: 1, step: 0.2};
+  const raw = max / 5, mag = Math.pow(10, Math.floor(Math.log10(raw))), n = raw / mag;
+  const step = (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * mag;
+  return {top: Math.ceil(max / step - 1e-9) * step, step};
+}
+function drawChart(id, pick, unit, yTitle){
+  const svg = document.getElementById(id), W = 480, H = 290, m = {l: 60, r: 14, t: 44, b: 46};
+  if (S.compare && S.model === 'real') m.t = 60; // two legend rows
+  const ns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const modes = S.compare ? [S.mode, other(S.mode)] : [S.mode];
+  const models = S.model === 'real' ? ['real', 'ideal'] : ['ideal'];
+  const lines = [];
+  modes.forEach(md => models.forEach(ml => lines.push({md, ml, main: md === S.mode && ml === S.model,
+    vals: ns.map(n => pick(calc(S.V, S.R, n, md, ml)))})));
+  const data = {[S.mode]: lines[0].vals};
+  const {top, step} = niceTop(Math.max(...lines.flatMap(l => l.vals)));
+  const pw = W - m.l - m.r, ph = H - m.t - m.b, cw = pw / 10;
+  const x = n => m.l + (n - 0.5) * cw, y = v => m.t + ph - v / top * ph;
+  let h = `<text class="ttl" x="${m.l}" y="16">${yTitle}</text>`;
+  h += `<rect x="${x(S.N) - cw / 2}" y="${m.t}" width="${cw}" height="${ph}" fill="${css(S.mode === 'series' ? '--series-soft' : '--parallel-soft')}"/>`;
+  for (let v = 0; v <= top + 1e-9; v += step) {
+    h += `<line class="grid-l" x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}"/><text x="${m.l - 6}" y="${y(v) + 4}" text-anchor="end">${fmt(v)}</text>`;
+  }
+  h += `<line class="axis" x1="${m.l}" x2="${W - m.r}" y1="${m.t + ph}" y2="${m.t + ph}"/>`;
+  ns.forEach(n => h += `<text x="${x(n)}" y="${m.t + ph + 17}" text-anchor="middle" ${n === S.N ? 'style="font-weight:700;fill:var(--ink)"' : ''}>${n}</text>`);
+  h += `<text x="${m.l + pw / 2}" y="${H - 6}" text-anchor="middle">Number of bulbs</text>`;
+  h += `<text transform="translate(14 ${m.t + ph / 2}) rotate(-90)" text-anchor="middle">${unit}</text>`;
+  const dash = l => l.main ? '' : l.ml !== S.model ? '2 4' : '6 4';
+  lines.slice().reverse().forEach(l => {
+    const c = modeColor(l.md), op = l.main ? 1 : l.md === S.mode ? .8 : .65;
+    const d = ns.map((n, i) => `${i ? 'L' : 'M'}${x(n).toFixed(1)} ${y(l.vals[i]).toFixed(1)}`).join(' ');
+    h += `<path d="${d}" fill="none" stroke="${c}" stroke-width="${l.main ? 2.5 : 1.8}" stroke-dasharray="${dash(l)}" opacity="${op}"/>`;
+    ns.forEach((n, i) => {
+      const sel = n === S.N && l.main;
+      h += `<circle cx="${x(n)}" cy="${y(l.vals[i])}" r="${sel ? 6.5 : l.main ? 3.8 : 2.6}" fill="${sel ? c : 'var(--card)'}" stroke="${c}" stroke-width="2" opacity="${op}"><title>${n} bulb${n > 1 ? 's' : ''} (${l.md}, ${l.ml}): ${fmt(l.vals[i])} ${unit.match(/\((.*)\)/)[1]}</title></circle>`;
+    });
+  });
+  const sv = data[S.mode][S.N - 1], sy = Math.max(m.t + 12, y(sv) - 10);
+  const dm = data[S.mode], rising = dm[9] > dm[0];
+  const anchor = (rising && S.N > 2) || S.N >= 9 ? 'end' : 'start'; // keep the label off the line
+  h += `<text class="val" x="${x(S.N) + (anchor === 'end' ? -10 : 10)}" y="${sy}" text-anchor="${anchor}" style="fill:${modeColor(S.mode)}">${fmt(sv)} ${unit.match(/\((.*)\)/)[1]}</text>`;
+  if (lines.length > 1) {
+    h += lines.map((l, i) => {
+      const t = `${cap(l.md)}${models.length > 1 ? (l.ml === 'real' ? ', real' : ', ideal') : ''}`;
+      const g = `<g transform="translate(${m.l + (i % 2) * 140} ${30 + Math.floor(i / 2) * 16})"><line x1="0" x2="18" y1="0" y2="0" stroke="${modeColor(l.md)}" stroke-width="2.5" stroke-dasharray="${dash(l)}"/><text x="22" y="4">${t}</text></g>`;
+      return g;
+    }).join('');
+  }
+  ns.forEach(n => h += `<rect class="col" data-n="${n}" x="${x(n) - cw / 2}" y="${m.t}" width="${cw}" height="${ph + 22}"/>`);
+  svg.innerHTML = h;
+}
+
+/* ---------- table ---------- */
+function rowsData(){
+  let prev = 0;
+  return [1,2,3,4,5,6,7,8,9,10].map(n => { const r = calc(S.V, S.R, n, S.mode); const add = r.Rt - prev; prev = r.Rt; return {n, add, ...r}; });
+}
+function drawTable(){
+  const t = document.getElementById('table');
+  document.documentElement.style.setProperty('--hl', css(S.mode === 'series' ? '--series-soft' : '--parallel-soft'));
+  let h = `<thead><tr><th>Bulbs</th><th>Total R (Ω)</th><th>Added by<br>this bulb (Ω)</th><th>Current (A)</th><th>Volts per<br>bulb</th><th>Watts per<br>bulb</th>${S.model === 'real' ? '<th>Filament<br>°F</th>' : ''}</tr></thead><tbody>`;
+  rowsData().forEach(r => h += `<tr class="${r.n === S.N ? 'sel' : ''}"><td>${r.n}${r.n <= 5 ? '<span class="labdot">lab</span>' : ''}</td><td>${fmt(r.Rt)}</td><td>${r.add >= 0 ? '+' : '−'}${fmt(Math.abs(r.add))}</td><td>${fmt(r.I)}</td><td>${fmt(r.Vb)}</td><td>${fmt(r.Pb)}</td>${S.model === 'real' ? `<td>${degF(r.T).toLocaleString()}</td>` : ''}</tr>`);
+  t.innerHTML = h + '</tbody>';
+  const sub = `(${S.mode}, ${fmt(S.V)} V, ${fmt(S.R)} Ω per bulb${S.model === 'real' ? ' when lit, real filaments' : ''})`;
+  document.getElementById('table-sub').textContent = sub;
+  document.getElementById('chart-sub').textContent = sub;
+}
+
+/* ---------- wiring it together ---------- */
+function update(){
+  const r = calc(S.V, S.R, S.N, S.mode);
+  Object.values(dials).forEach(f => f());
+  document.querySelectorAll('button[data-mode]').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === S.mode));
+  document.querySelectorAll('button[data-model]').forEach(b => b.setAttribute('aria-pressed', b.dataset.model === S.model));
+  document.getElementById('model-note').textContent = S.model === 'real'
+    ? `Filament resistance rises as it heats: ${fmt(S.R)} Ω fully lit at ${RATED_V} V, about ${fmt(S.R / HOT_COLD)} Ω cold.`
+    : 'Each bulb is a fixed resistor, as in the textbook.';
+  document.getElementById('compare-label').textContent = 'Also show ' + other(S.mode);
+  document.getElementById('compare').checked = S.compare;
+  drawCircuit(r);
+  drawEquations(r);
+  drawChart('chartI', d => d.I, 'Current (A)', 'Current from the battery vs. number of bulbs');
+  drawChart('chartR', d => d.Rt, 'Total resistance (Ω)', 'Total circuit resistance vs. number of bulbs');
+  drawTable();
+}
+
+['V', 'R', 'N'].forEach(makeDial);
+document.querySelectorAll('button[data-mode]').forEach(b => b.addEventListener('click', () => { S.mode = b.dataset.mode; update(); }));
+document.querySelectorAll('button[data-model]').forEach(b => b.addEventListener('click', () => { S.model = b.dataset.model; update(); }));
+document.getElementById('compare').addEventListener('change', e => { S.compare = e.target.checked; update(); });
+document.getElementById('reset').addEventListener('click', () => { Object.assign(S, DEFAULTS); update(); });
+['chartI', 'chartR'].forEach(id => document.getElementById(id).addEventListener('click', e => {
+  const n = e.target.dataset && e.target.dataset.n; if (n) { S.N = +n; update(); }
+}));
+document.getElementById('copy').addEventListener('click', async e => {
+  const lines = [['Bulbs', 'Wiring', 'Bulb model', 'Battery V', 'Ohms per bulb', 'Total R (ohm)', 'Predicted current (A)', 'Measured current (A)', 'Volts per bulb', 'Watts per bulb', 'Total watts', 'Added by this bulb (ohm)']
+    .join('\t')].concat(rowsData().map(r => [r.n, S.mode, S.model, S.V, S.R, fmt(r.Rt), fmt(r.I), '', fmt(r.Vb), fmt(r.Pb), fmt(r.P), fmt(r.add)].join('\t')));
+  const text = lines.join('\n');
+  try { await navigator.clipboard.writeText(text); }
+  catch (_) { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+  e.target.textContent = 'Copied. Paste into Excel or Sheets';
+  setTimeout(() => e.target.textContent = 'Copy as spreadsheet data', 2200);
+});
+if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', update);
+update();
+if (!reduceMotion) requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
