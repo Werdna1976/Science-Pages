@@ -1,0 +1,1209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Dairy Lab: Food Science</title>
+<meta name="description" content="Study guide and interactive lab exhibits for the Science Olympiad Food Science event (2027, Division B): ice cream, curds, butter, and the dairy science written test.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbf6ec; --paper:#fffdf8; --ink:#2a2420; --muted:#6f655c; --line:#eadfcc;
+  --berry:#d6456b; --berry-soft:#fbe3ea;
+  --butter:#e9b42c; --butter-soft:#fbf0cf;
+  --mint:#2f9c84; --mint-soft:#dcf2ec;
+  --blue:#3b6fd1; --blue-soft:#e2eafb;
+  --ice:#cfe6f5; --cold:#3b8fd1; --warm:#e0683a;
+  --milk:#ffffff; --milk-edge:#d9cfbf;
+  --shadow:0 1px 2px rgba(60,40,20,.05),0 8px 24px rgba(60,40,20,.07);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#17130f; --paper:#221c17; --ink:#f1e9de; --muted:#b3a799; --line:#3a3027;
+    --berry:#ff7598; --berry-soft:#3d1f29;
+    --butter:#f5c54d; --butter-soft:#3a2f14;
+    --mint:#4cc7aa; --mint-soft:#163330;
+    --blue:#7ea6ff; --blue-soft:#1d2840;
+    --ice:#29404f; --cold:#69b3ee; --warm:#ff8d5e;
+    --milk:#f4efe6; --milk-edge:#8a7d6b;
+    --shadow:none; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Nunito",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;line-height:1.15;margin:0}
+a{color:var(--blue)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+.muted{color:var(--muted)}
+small{font-size:.85rem}
+
+/* nav */
+nav.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav.top a{flex:none;text-decoration:none;color:var(--ink);font-weight:700;font-size:.92rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
+nav.top a:hover{border-color:var(--berry);color:var(--berry)}
+
+/* hero */
+.hero{padding:44px 0 28px}
+.eyebrow{display:inline-block;font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--berry);background:var(--berry-soft);padding:4px 10px;border-radius:999px;margin-bottom:14px}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800}
+.hero p.lead{font-size:1.15rem;max-width:720px;margin:14px 0 0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:26px}
+.fact{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)}
+.fact b{display:block;font-family:"Fraunces",serif;font-size:1.6rem}
+.fact span{color:var(--muted);font-size:.9rem}
+.note{border-left:4px solid var(--butter);background:var(--butter-soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:18px 0;font-size:.95rem}
+
+/* sections */
+section{padding:36px 0;border-top:1px dashed var(--line)}
+section > .wrap > h2{font-size:clamp(1.7rem,4vw,2.3rem);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tag{font-family:"Nunito",sans-serif;font-size:.8rem;font-weight:800;padding:3px 10px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase}
+.t-ice{background:var(--blue-soft);color:var(--blue)}
+.t-curd{background:var(--mint-soft);color:var(--mint)}
+.t-butter{background:var(--butter-soft);color:color-mix(in srgb,var(--butter) 70%,var(--ink))}
+.t-test{background:var(--berry-soft);color:var(--berry)}
+.sub{color:var(--muted);max-width:760px;margin:8px 0 20px}
+h3{font-size:1.3rem;margin:26px 0 10px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow)}
+.card h4{margin:0 0 8px;font-size:1.05rem}
+ol.steps{margin:0;padding-left:22px}
+ol.steps li{margin:4px 0}
+ul.tight{margin:0;padding-left:20px}
+ul.tight li{margin:4px 0}
+.key{display:inline-block;font-weight:800;color:var(--berry)}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:inline-block;margin:6px 0}
+
+/* lab exhibit */
+.lab{background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-top:10px}
+.lab-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.lab-head h3{margin:0}
+.lab-grid{display:grid;grid-template-columns:300px 1fr;gap:18px}
+@media (max-width:860px){.lab-grid{grid-template-columns:1fr}}
+.controls{display:flex;flex-direction:column;gap:14px}
+.ctl label{display:flex;justify-content:space-between;font-weight:700;font-size:.92rem;gap:8px}
+.ctl label output{font-weight:800;color:var(--berry);white-space:nowrap}
+.ctl input[type=range]{width:100%;accent-color:var(--berry)}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.seg button{font:inherit;font-size:.85rem;font-weight:700;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--berry);border-color:var(--berry);color:#fff}
+.hint{font-size:.82rem;color:var(--muted);margin-top:2px}
+.viz{display:flex;flex-direction:column;gap:12px;min-width:0}
+.viz svg{width:100%;height:auto;display:block}
+.pair{display:grid;gap:12px;grid-template-columns:200px 1fr;align-items:center}
+@media (max-width:600px){.pair{grid-template-columns:1fr}.pair > svg:first-child{max-width:220px;margin:0 auto}}
+.readouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.ro{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.ro span{display:block;font-size:.78rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.ro b{font-family:"Fraunces",serif;font-size:1.35rem}
+.ro.big{background:var(--berry-soft);border-color:transparent}
+.ro.big b{color:var(--berry)}
+.verdict{border-radius:12px;padding:10px 14px;font-weight:700;background:var(--mint-soft);color:var(--ink)}
+.verdict.warn{background:var(--butter-soft)}
+.verdict.bad{background:var(--berry-soft)}
+.btn{font:inherit;font-weight:800;padding:7px 14px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.toy{font-size:.82rem;color:var(--muted);margin-top:10px}
+svg text{font-family:"Nunito",sans-serif;fill:var(--ink)}
+.axis{stroke:var(--line);stroke-width:1}
+.axis-label{font-size:11px;fill:var(--muted)}
+
+/* videos */
+.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.vid{display:block;text-decoration:none;color:inherit;background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.vid:hover{border-color:var(--berry)}
+.vid .thumb{aspect-ratio:16/9;background:var(--line) center/cover no-repeat;position:relative}
+.vid .thumb::after{content:"▶";position:absolute;inset:auto auto 10px 10px;background:rgba(0,0,0,.65);color:#fff;font-size:.8rem;padding:3px 9px;border-radius:999px}
+.vid .thumb.search{display:flex;align-items:center;justify-content:center;font-size:2rem;background:var(--berry-soft)}
+.vid .thumb.search::after{content:"search"}
+.vid .thumb.ext::after{content:"▶ PBS"}
+.vid div.t{padding:10px 12px}
+.vid b{display:block;font-size:.95rem;line-height:1.3}
+.vid span{font-size:.82rem;color:var(--muted)}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+
+/* flashcards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.flash{perspective:900px;min-height:150px;cursor:pointer;border:0;padding:0;background:none;font:inherit;color:inherit;text-align:left}
+.flash .in{position:relative;width:100%;height:100%;min-height:150px;transition:transform .45s;transform-style:preserve-3d}
+.flash.flip .in{transform:rotateY(180deg)}
+.flash .f,.flash .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;padding:14px 16px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
+.flash .f{background:var(--paper)}
+.flash .f small{color:var(--berry);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.72rem;margin-bottom:6px}
+.flash .b{background:var(--mint-soft);transform:rotateY(180deg);font-size:.93rem}
+@media (prefers-reduced-motion:reduce){.flash .in{transition:none}}
+
+/* checklist */
+.check{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.check label{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:9px 12px;cursor:pointer}
+.check input{margin-top:5px;accent-color:var(--mint);width:18px;height:18px;flex:none}
+.check label:has(input:checked){opacity:.6;text-decoration:line-through}
+
+footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px dashed var(--line)}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Sections">
+  <div class="wrap">
+    <a href="#overview">Overview</a>
+    <a href="#ice-cream">🍦 Ice cream</a>
+    <a href="#curds">🧀 Curds</a>
+    <a href="#butter">🧈 Butter</a>
+    <a href="#test">📝 Test topics</a>
+    <a href="#notebook">📓 Notebook</a>
+    <a href="#score">🏅 Score</a>
+    <a href="#videos">▶ Videos & links</a>
+    <a href="#checklist">✅ Checklist</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Science Olympiad · Food Science · 2027 · Division B</span>
+    <h1>The Dairy Lab</h1>
+    <p class="lead">Food Science is about the chemistry of milk. You'll make three dairy products under time pressure, show a notebook of experiments you ran at home, and take a written test. This page explains the science behind each task and has lab exhibits you can play with to figure out how to win each one.</p>
+    <div class="facts">
+      <div class="fact"><b>2</b><span>students per team, about 50 minutes</span></div>
+      <div class="fact"><b>3</b><span>lab tasks to prepare: ice cream, curds, butter</span></div>
+      <div class="fact"><b>18</b><span>points for your experiment notebook</span></div>
+      <div class="fact"><b>10</b><span>points (about) per lab task</span></div>
+      <div class="fact"><b>50</b><span>points for the written test</span></div>
+    </div>
+    <p class="note"><b>Check the official rules.</b> Everything here comes from the 2027 Food Science rules as summarized by <a href="https://www.scio.ly/docs/food-science">Scio.ly</a> and the <a href="https://www.soinc.org/food-science-b">Science Olympiad event page</a>. The official Rules Manual always wins, and rules get clarified during the season, so check <a href="https://www.soinc.org/food-science-b">soinc.org</a> before each tournament.</p>
+  </div>
+</header>
+
+<!-- ===================== OVERVIEW ===================== -->
+<section id="overview">
+  <div class="wrap">
+    <h2>How the event works</h2>
+    <p class="sub">There are three scored parts. The notebook is the only part you can finish before you walk in the door, so it's the easiest place to lock in points.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>1. Experiment notebook (before the tournament)</h4>
+        <p>Run <b>at least 3 experiments for each of the 3 lab tasks</b> (9 total) and record them on the official <a href="https://www.soinc.org/food-science-b">Food Science Experiment Form</a>. Change only <b>one variable</b> per experiment. Only the first 3 per task are graded, 2 points each, so 18 points max. The notebook is impounded (handed in) at check-in and returned at the end.</p>
+      </div>
+      <div class="card">
+        <h4>2. Lab tasks (at the tournament)</h4>
+        <p>You won't know which task you'll get until you're there. Regionals and invitationals usually run 1 task, states 1 or 2, nationals 2 or 3. So practice all three until they're automatic.</p>
+        <ul class="tight">
+          <li><b>Ice cream:</b> 0.1 point per millimeter of height of a scoop that stands on its own for 5 seconds.</li>
+          <li><b>Curds and butter:</b> (your mass ÷ supervisor's mass) × 10, max 10.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>3. Written test</h4>
+        <p>Dairy science: milk chemistry, fats, sugars, proteins, vitamins and minerals, emulsions, pasteurization, probiotics, types of dairy products, lactose intolerance and allergies, labels, and health benefits. Score is your percent correct ÷ 2, so up to 50 points. That's the single biggest chunk, which is why there's a whole <a href="#test">test topics</a> section below.</p>
+      </div>
+      <div class="card">
+        <h4>Bring and wear</h4>
+        <p>Category C (indirect-vent, Z87) goggles, lab coat or apron, skin covered neck to wrist to toes, long hair tied back. One 8.5×11" note sheet each (both sides), up to two non-phone calculators. Your own pint bag, gallon bag, 500–600 mL lidded container, and a ~30 cm square of cheesecloth. Losing points for cleanup (up to 10%) or safety is the easiest way to throw away a medal. Full list in the <a href="#checklist">checklist</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ICE CREAM ===================== -->
+<section id="ice-cream">
+  <div class="wrap">
+    <h2>Task 1: Ice cream <span class="tag t-ice">Freezing point depression</span></h2>
+    <p class="sub">Goal: the tallest scoop that stands on its own for 5 seconds. Height wins, not taste.</p>
+
+    <div class="cols">
+      <div class="card">
+        <h4>The procedure</h4>
+        <ol class="steps">
+          <li>Mix up to <b>125 mL</b> milk, cream, or half and half with up to <b>15 mL sugar</b> and up to <b>1.2 mL vanilla</b> (optional).</li>
+          <li>Half-fill the <b>gallon bag</b> with ice and add up to <b>90 mL salt</b>.</li>
+          <li>Seal the mix in the <b>pint bag</b>, put it inside the gallon bag, seal, and shake hard.</li>
+          <li>After about 5–10 minutes, take out the ice cream.</li>
+          <li>The scoop must stand for 5 seconds before it's measured. You're allowed to shape it by hand.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h4>The science</h4>
+        <p>Pure ice sits at 0 °C. When salt dissolves in the thin layer of meltwater on the ice, the dissolved ions get in the way of water molecules locking back into crystals. Ice keeps melting but can't refreeze as easily, and melting <span class="key">absorbs heat</span>, so the salty slush drops well below 0 °C, down to about −21 °C at the limit. That's <b>freezing point depression</b>, a <b>colligative property</b>: it depends on how many particles are dissolved, not what they are.</p>
+        <p class="formula">ΔT<sub>f</sub> = i · K<sub>f</sub> · m</p>
+        <p><small>i = particles per formula unit (NaCl → Na⁺ + Cl⁻, so i ≈ 2), K<sub>f</sub> = 1.86 °C·kg/mol for water, m = molality (moles of solute per kg of water). The sugar in your mix does the same thing on a smaller scale, so sweeter mixes freeze at a lower temperature and come out softer.</small></p>
+      </div>
+    </div>
+
+    <div class="lab" id="iceLab">
+      <div class="lab-head"><h3>🍦 Exhibit: the ice cream bag</h3><span class="muted"><small>Change one thing at a time, just like your notebook.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Base <output id="ic-base-o"></output></label>
+            <div class="seg" id="ic-base">
+              <button data-v="milk">Whole milk</button><button data-v="hh" aria-pressed="true">Half &amp; half</button><button data-v="cream">Heavy cream</button>
+            </div></div>
+          <div class="ctl"><label for="ic-vol">Base volume <output id="ic-vol-o"></output></label><input id="ic-vol" type="range" min="50" max="125" step="5" value="125"><div class="hint">Max 125 mL. More mix = more ice cream to stack.</div></div>
+          <div class="ctl"><label for="ic-sugar">Sugar <output id="ic-sugar-o"></output></label><input id="ic-sugar" type="range" min="0" max="15" step="1" value="15"></div>
+          <div class="ctl"><label for="ic-salt">Salt on the ice <output id="ic-salt-o"></output></label><input id="ic-salt" type="range" min="0" max="90" step="5" value="60"><div class="hint">Max 90 mL.</div></div>
+          <div class="ctl"><label>Salt type <output id="ic-st-o"></output></label>
+            <div class="seg" id="ic-st">
+              <button data-v="table" aria-pressed="true">Table salt</button><button data-v="kosher">Kosher</button><button data-v="rock">Rock salt</button>
+            </div><div class="hint">Same volume, different mass and dissolving speed.</div></div>
+          <div class="ctl"><label>Shaking <output id="ic-shake-o"></output></label>
+            <div class="seg" id="ic-shake">
+              <button data-v="1">Gentle</button><button data-v="2" aria-pressed="true">Steady</button><button data-v="3">Hard</button>
+            </div></div>
+          <div class="ctl"><label for="ic-time">Shake time <output id="ic-time-o"></output></label><input id="ic-time" type="range" min="0" max="15" step="0.5" value="7"></div>
+        </div>
+        <div class="viz">
+          <svg id="ic-chart" viewBox="0 0 560 230" role="img" aria-label="Temperature of the salty ice and the ice cream mix over time"></svg>
+          <div class="pair">
+            <svg id="ic-scoop" viewBox="0 0 200 170" role="img" aria-label="Side view of the finished scoop"></svg>
+            <div class="readouts">
+              <div class="ro"><span>Salty ice</span><b id="ic-r-brine"></b></div>
+              <div class="ro"><span>Mix starts freezing</span><b id="ic-r-fp"></b></div>
+              <div class="ro"><span>Water frozen</span><b id="ic-r-frozen"></b></div>
+              <div class="ro big"><span>Scoop height</span><b id="ic-r-h"></b></div>
+              <div class="ro big"><span>Points</span><b id="ic-r-pts"></b></div>
+            </div>
+          </div>
+          <div class="verdict" id="ic-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">This is a simplified model built from real chemistry (freezing point depression, heat flow, latent heat) with estimated constants. Use it to form a hypothesis, then test it for real in the kitchen and record what happens.</p>
+    </div>
+
+    <h3>What the exhibit is showing you</h3>
+    <div class="cols">
+      <div class="card">
+        <h4>Height comes from volume and stiffness</h4>
+        <p>A scoop is basically a cone. For the same volume, a stiff mix can be shaped into a tall, skinny tower; a soft one slumps into a pancake. So you want <b>all the mix you're allowed</b> (volume) and a mix that is <b>frozen enough to hold its shape</b> (stiffness). Fat helps: fat droplets partly clump together during shaking and build a network that traps air and holds the shape.</p>
+      </div>
+      <div class="card">
+        <h4>Watch out for these traps</h4>
+        <ul class="tight">
+          <li><b>Not enough salt:</b> the ice stays near 0 °C and the mix never freezes in time.</li>
+          <li><b>Heavy cream + lots of hard shaking:</b> you start making butter. The texture turns grainy and greasy.</li>
+          <li><b>Too much sugar:</b> lowers the mix's freezing point, so it stays soft longer.</li>
+          <li><b>Warm hands:</b> hold the bag with a towel or gloves. Your hands are heat sources.</li>
+          <li><b>Salty leaks:</b> wipe the pint bag before opening it so brine doesn't drip into the ice cream.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Notebook experiment ideas</h3>
+    <div class="card">
+      <ul class="tight">
+        <li>Salt amount: 30 vs 60 vs 90 mL (measure brine temperature with a thermometer every minute).</li>
+        <li>Base: milk vs half and half vs cream (same salt, same time). Measure height.</li>
+        <li>Shake time: 5 vs 7.5 vs 10 minutes.</li>
+        <li>Salt type: table vs kosher vs rock salt at the same volume.</li>
+        <li>Sugar: 5 vs 10 vs 15 mL.</li>
+        <li>Shaping technique: free-poured vs packed into a cup and flipped vs hand-shaped cone.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CURDS ===================== -->
+<section id="curds">
+  <div class="wrap">
+    <h2>Task 2: Curd mass <span class="tag t-curd">Proteins &amp; pH</span></h2>
+    <p class="sub">Goal: the heaviest pile of curds from 120 mL of an unknown milk. You're scored against the supervisor's own result.</p>
+
+    <div class="cols">
+      <div class="card">
+        <h4>The procedure</h4>
+        <ol class="steps">
+          <li>Weigh 120 mL of milk in a beaker. It should be near room temperature.</li>
+          <li>Add drops of <b>vinegar or lemon juice</b>, stir for 30 seconds, and let it stand about 5 minutes.</li>
+          <li>Pour through cheesecloth over a beaker and drain for 15 minutes.</li>
+          <li>Weigh the curds.</li>
+        </ol>
+        <p class="muted"><small>The milk is an "unknown," so it could be skim, 2%, whole, or something else. Practice with all of them.</small></p>
+      </div>
+      <div class="card">
+        <h4>The science</h4>
+        <p>About 80% of milk protein is <b>casein</b>. Casein clusters into tiny balls called <b>micelles</b> that carry a negative charge on their surface, so they repel each other and stay floating. Milk's normal pH is about 6.7.</p>
+        <p>Acid adds H⁺ ions that cancel those negative charges. At pH 4.6, the <span class="key">isoelectric point</span> of casein, the micelles have no net charge, stop repelling, and clump into curds. Fat gets trapped in the clumps. What drains through is <b>whey</b>: water, lactose, minerals, and whey proteins, which don't curdle from acid alone at room temperature.</p>
+        <p>Go past pH 4.6 and the casein starts picking up a <b>positive</b> charge, so the micelles begin repelling again and the curd gets smaller and rubbery. <b>More acid is not always better.</b></p>
+      </div>
+    </div>
+
+    <div class="lab" id="curdLab">
+      <div class="lab-head"><h3>🧀 Exhibit: the curdling beaker</h3><span class="muted"><small>Find the acid "sweet spot" for each milk.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Unknown milk <output id="cd-milk-o"></output></label>
+            <div class="seg" id="cd-milk">
+              <button data-v="skim">Skim</button><button data-v="two">2%</button><button data-v="whole" aria-pressed="true">Whole</button><button data-v="hh">Half &amp; half</button>
+            </div></div>
+          <div class="ctl"><label>Acid <output id="cd-acid-o"></output></label>
+            <div class="seg" id="cd-acid">
+              <button data-v="vinegar" aria-pressed="true">White vinegar</button><button data-v="lemon">Lemon juice</button>
+            </div></div>
+          <div class="ctl"><label for="cd-drops">Drops of acid <output id="cd-drops-o"></output></label><input id="cd-drops" type="range" min="0" max="220" step="5" value="60"><div class="hint">1 drop ≈ 0.05 mL, so 20 drops ≈ 1 mL.</div></div>
+          <div class="ctl"><label for="cd-temp">Milk temperature <output id="cd-temp-o"></output></label><input id="cd-temp" type="range" min="10" max="40" step="1" value="22"><div class="hint">The rules say near room temperature. Warmer milk curdles faster and more completely.</div></div>
+          <div class="ctl"><label>Stirring <output id="cd-stir-o"></output></label>
+            <div class="seg" id="cd-stir">
+              <button data-v="1" aria-pressed="true">Gentle</button><button data-v="2">Medium</button><button data-v="3">Vigorous</button>
+            </div><div class="hint">Vigorous stirring breaks curds into tiny bits that slip through the cloth.</div></div>
+        </div>
+        <div class="viz">
+          <div class="pair">
+            <svg id="cd-beaker" viewBox="0 0 200 210" role="img" aria-label="Beaker showing curd formation"></svg>
+            <svg id="cd-micelle" viewBox="0 0 300 190" role="img" aria-label="Casein micelles and their surface charge"></svg>
+          </div>
+          <svg id="cd-chart" viewBox="0 0 560 200" role="img" aria-label="Curd mass versus drops of acid"></svg>
+          <div class="readouts">
+            <div class="ro"><span>pH</span><b id="cd-r-ph"></b></div>
+            <div class="ro"><span>Casein caught</span><b id="cd-r-caught"></b></div>
+            <div class="ro big"><span>Curd mass</span><b id="cd-r-mass"></b></div>
+            <div class="ro"><span>Best possible here</span><b id="cd-r-best"></b></div>
+          </div>
+          <div class="verdict" id="cd-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Simplified model: the pH curve, casein and fat amounts, and moisture levels are realistic estimates, not lab measurements. Your real milk and acid will differ, which is exactly what your notebook experiments are for.</p>
+    </div>
+
+    <h3>Strategy</h3>
+    <div class="cols">
+      <div class="card">
+        <h4>Moves that add grams</h4>
+        <ul class="tight">
+          <li><b>Find your drop count for each milk type</b> at home, and write it on your note sheet. That's the single most useful thing you can bring.</li>
+          <li><b>Add acid slowly</b> while stirring gently, and stop once the liquid around the curds turns clear and yellow-green (that's whey).</li>
+          <li><b>Fold the cheesecloth</b> into 2–4 layers so small curds don't escape.</li>
+          <li><b>Don't squeeze</b> the curds. The water held inside them counts toward your mass.</li>
+          <li><b>Scrape the beaker</b> and the cloth. Every curd left behind is lost points.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Why fattier milk gives heavier curds</h4>
+        <p>Fat globules don't curdle themselves, but they get trapped inside the casein network as it forms, and so does water. Whole milk and half and half give heavier curds than skim even though skim has slightly more casein per cup. If the unknown milk gives a skimpy, rubbery curd, it's probably skim.</p>
+        <p class="muted"><small>Real-world connection: paneer, ricotta, and queso blanco are all made this way, with acid plus heat. Most other cheeses use the enzyme rennet (chymosin) instead of acid.</small></p>
+      </div>
+    </div>
+
+    <h3>Notebook experiment ideas</h3>
+    <div class="card">
+      <ul class="tight">
+        <li>Drops of vinegar: 20 vs 60 vs 100 drops (same milk). Measure pH with strips if you can.</li>
+        <li>Vinegar vs lemon juice at the same number of drops.</li>
+        <li>Milk type: skim vs 2% vs whole.</li>
+        <li>Milk temperature: fridge-cold vs room temperature vs warm (about 40 °C).</li>
+        <li>Stirring: gentle vs vigorous.</li>
+        <li>Cheesecloth layers: 1 vs 2 vs 4.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BUTTER ===================== -->
+<section id="butter">
+  <div class="wrap">
+    <h2>Task 3: Butter from cream <span class="tag t-butter">Emulsions</span></h2>
+    <p class="sub">Goal: the most butter from 150 mL of heavy cream, shaken in your own 500–600 mL container. Scored against the supervisor's result.</p>
+
+    <div class="cols">
+      <div class="card">
+        <h4>The procedure</h4>
+        <ol class="steps">
+          <li>Weigh 150 mL of heavy cream in your 500–600 mL container. The cream should be about 13 °C (55 °F).</li>
+          <li>Cap it and shake until butter grains clearly separate from the liquid.</li>
+          <li>Pour off the liquid (buttermilk) and weigh the butter.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h4>The science</h4>
+        <p>Cream is an <b>oil-in-water emulsion</b>: tiny fat globules floating in water, each wrapped in a thin skin called the <b>milk fat globule membrane</b> (made of phospholipids and proteins). The membrane keeps globules from merging.</p>
+        <p>Shaking whips in air. The fat globules line up around the bubbles (that's whipped cream). Keep shaking and the partly solid fat crystals poke holes in the membranes, liquid fat leaks out and glues globules together, the foam collapses, and the emulsion <span class="key">flips</span> into a <b>water-in-oil emulsion</b>: butter, plus the leftover buttermilk. This flip is called <b>phase inversion</b>.</p>
+      </div>
+    </div>
+
+    <div class="lab" id="butterLab">
+      <div class="lab-head"><h3>🧈 Exhibit: the shaking jar</h3>
+        <span><button class="btn" id="bt-play">▶ Shake it</button></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="bt-temp">Cream temperature <output id="bt-temp-o"></output></label><input id="bt-temp" type="range" min="2" max="30" step="1" value="13"><div class="hint">Rules say about 13 °C. See what happens if it's fridge-cold or room-warm.</div></div>
+          <div class="ctl"><label for="bt-rate">Shake speed <output id="bt-rate-o"></output></label><input id="bt-rate" type="range" min="60" max="300" step="10" value="150"><div class="hint">Shakes per minute. Two partners can take turns to keep it high.</div></div>
+          <div class="ctl"><label for="bt-vol">Cream in the jar <output id="bt-vol-o"></output></label><input id="bt-vol" type="range" min="100" max="350" step="10" value="150"><div class="hint">Rules use 150 mL in a 500–600 mL container. Try overfilling to see why headspace matters.</div></div>
+          <div class="ctl"><label>Cream type <output id="bt-fat-o"></output></label>
+            <div class="seg" id="bt-fat">
+              <button data-v="30">Whipping (30%)</button><button data-v="36" aria-pressed="true">Heavy (36%)</button><button data-v="40">Extra heavy (40%)</button>
+            </div></div>
+          <div class="ctl"><label for="bt-time">Time shaking <output id="bt-time-o"></output></label><input id="bt-time" type="range" min="0" max="20" step="0.25" value="0"></div>
+        </div>
+        <div class="viz">
+          <div class="pair">
+            <svg id="bt-jar" viewBox="0 0 200 230" role="img" aria-label="Jar of cream being shaken"></svg>
+            <div>
+              <svg id="bt-stages" viewBox="0 0 360 120" role="img" aria-label="Stages of churning"></svg>
+              <div class="verdict" id="bt-stage" style="margin-top:8px"></div>
+            </div>
+          </div>
+          <div class="readouts">
+            <div class="ro"><span>Butter forms at</span><b id="bt-r-tb"></b></div>
+            <div class="ro"><span>Fat recovered</span><b id="bt-r-eff"></b></div>
+            <div class="ro big"><span>Butter mass</span><b id="bt-r-mass"></b></div>
+            <div class="ro"><span>Buttermilk</span><b id="bt-r-bm"></b></div>
+          </div>
+          <div class="verdict" id="bt-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Simplified model: churning times and yields are estimates shaped to match how real cream behaves (warmer churns faster but loses more fat to the buttermilk; overfilled jars churn slowly). Time yourself at home and compare.</p>
+    </div>
+
+    <h3>Strategy</h3>
+    <div class="cols">
+      <div class="card">
+        <h4>Listen to the jar</h4>
+        <p>At first you'll hear sloshing. When the cream whips, the jar goes <b>quiet</b> because the foam doesn't move. Keep going. When you hear <b>sloshing again</b>, the foam has broken and butter is forming. Within a minute you should see yellow grains in thin, bluish-white buttermilk. That sound change is your best timer.</p>
+      </div>
+      <div class="card">
+        <h4>Why about 13 °C?</h4>
+        <p>At 13 °C milk fat is a mix of solid crystals and liquid oil. The crystals poke through membranes (fast churning), and the liquid fat glues globules together. Too cold and everything is solid, so it takes forever. Too warm and the fat is so liquid that more of it stays in the buttermilk, and the butter is soft and greasy. Bring a thermometer and an insulated bag, and know what to do if your cream is too warm or cold.</p>
+      </div>
+    </div>
+
+    <h3>Notebook experiment ideas</h3>
+    <div class="card">
+      <ul class="tight">
+        <li>Cream temperature: 5 °C vs 13 °C vs 22 °C. Record time to butter and butter mass.</li>
+        <li>Container size or fill level: 150 mL in a 250 mL jar vs a 550 mL jar.</li>
+        <li>Shaking style: up-and-down vs side-to-side vs circular.</li>
+        <li>Cream brand or fat percent: whipping (30%) vs heavy (36%+).</li>
+        <li>Adding a clean marble (or not) to the jar as an agitator. Check whether your tournament allows it first.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TEST TOPICS ===================== -->
+<section id="test">
+  <div class="wrap">
+    <h2>Written test topics <span class="tag t-test">50 points</span></h2>
+    <p class="sub">The test is worth more than all the lab tasks combined at most tournaments. Here is the core of each topic, plus flashcards at the end.</p>
+
+    <div class="lab" id="milkLab">
+      <div class="lab-head"><h3>🥛 Exhibit: what's in it?</h3><span class="muted"><small>Grams per 100 g. Pick products to compare.</small></span></div>
+      <div class="seg" id="mk-pick"></div>
+      <svg id="mk-chart" viewBox="0 0 640 360" role="img" aria-label="Composition of dairy products" style="width:100%;height:auto;margin-top:12px"></svg>
+      <p class="toy">Typical values from USDA food composition data, rounded. Brands vary.</p>
+    </div>
+
+    <h3>Milk chemistry</h3>
+    <div class="cols">
+      <div class="card">
+        <h4>Proteins</h4>
+        <p>Milk is about 3.3% protein: <b>casein</b> (about 80%) and <b>whey proteins</b> (about 20%, mostly β-lactoglobulin and α-lactalbumin). Casein forms micelles held together partly by calcium phosphate and curdles with acid (pH 4.6) or the enzyme <b>rennet/chymosin</b>, which snips κ-casein, the "hairy" outer layer that keeps micelles apart. Whey proteins stay dissolved in acid but <b>denature</b> (unfold) with heat, which is why heated milk forms a skin.</p>
+        <p><small>Test for protein: <b>biuret reagent</b> turns violet.</small></p>
+      </div>
+      <div class="card">
+        <h4>Carbohydrates</h4>
+        <p>The sugar in milk is <b>lactose</b>, a disaccharide of <b>glucose + galactose</b> joined by a β(1→4) bond. Sucrose (table sugar) is glucose + fructose. Starches are long chains of glucose, which is how thickeners in some ice creams work.</p>
+        <p><small>Test for reducing sugars (lactose, glucose): <b>Benedict's</b> solution turns green → orange → brick red when heated. Sucrose is not a reducing sugar. Test for starch: <b>iodine</b> turns blue-black.</small></p>
+      </div>
+      <div class="card">
+        <h4>Fats (lipids)</h4>
+        <p>Milk fat is mostly <b>triglycerides</b>: a glycerol backbone + 3 fatty acids, joined by <b>esterification</b> (each bond releases a water molecule; the reverse, hydrolysis, adds water back). <b>Saturated</b> fatty acids have no C=C double bonds, pack tightly, and are solid at room temperature. <b>Unsaturated</b> ones have C=C bonds that kink the chain, so they're liquid. Butterfat is about 2/3 saturated. <b>Essential</b> fatty acids (linoleic, omega-6; α-linolenic, omega-3) must come from food.</p>
+        <p><small>Phospholipids (like lecithin) have a water-loving head and fat-loving tails, which makes them great emulsifiers.</small></p>
+      </div>
+      <div class="card">
+        <h4>Emulsions</h4>
+        <p>An emulsion is tiny droplets of one liquid spread through another they don't mix with. <b>Milk and cream</b> are oil-in-water. <b>Butter</b> is water-in-oil (the inverse). Emulsifiers sit at the boundary and keep droplets from merging. <b>Homogenization</b> forces milk through tiny holes at high pressure to shrink fat globules so cream doesn't rise to the top. Ice cream is an emulsion <i>and</i> a foam (air) <i>and</i> a suspension of ice crystals.</p>
+      </div>
+    </div>
+
+    <div class="lab" id="pastLab">
+      <div class="lab-head"><h3>🔥 Exhibit: pasteurization time vs temperature</h3><span class="muted"><small>Hotter = much shorter.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="ps-temp">Temperature <output id="ps-temp-o"></output></label><input id="ps-temp" type="range" min="63" max="100" step="0.5" value="72"></div>
+          <div class="readouts" style="grid-template-columns:1fr">
+            <div class="ro big"><span>Hold for at least</span><b id="ps-r-time"></b></div>
+          </div>
+          <p class="hint">Times between the legal standards are read off a smooth curve through them. Pasteurization kills disease-causing bacteria (like <i>Listeria</i>, <i>Salmonella</i>, <i>E. coli</i>) but not all bacteria or spores, so pasteurized milk still needs refrigeration.</p>
+        </div>
+        <div class="viz"><svg id="ps-chart" viewBox="0 0 560 260" role="img" aria-label="Pasteurization standards on a log time scale"></svg></div>
+      </div>
+      <div class="tablewrap" style="margin-top:12px">
+        <table>
+          <tr><th>Method</th><th>Temperature</th><th>Time</th><th>Notes</th></tr>
+          <tr><td>Vat / LTLT (low temp, long time)</td><td>63 °C (145 °F)</td><td>30 min</td><td>Batch method, small dairies</td></tr>
+          <tr><td>HTST (high temp, short time)</td><td>72 °C (161 °F)</td><td>15 s</td><td>Most U.S. milk</td></tr>
+          <tr><td>HHST (higher heat, shorter time)</td><td>89–100 °C</td><td>1 s → 0.01 s</td><td>Longer shelf life</td></tr>
+          <tr><td>UHT (ultra-high temperature)</td><td>~138 °C (280 °F)</td><td>~2 s</td><td>Kills spores too; sealed boxes keep months unopened without refrigeration</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <h3>Products, cultures, and health</h3>
+    <div class="cols">
+      <div class="card">
+        <h4>Cultured dairy and probiotics</h4>
+        <p><b>Probiotics</b> are live microbes that benefit health. Bacteria ferment lactose into <b>lactic acid</b>, which lowers pH, thickens milk (casein again!), adds tang, and helps preserve it.</p>
+        <div class="tablewrap"><table>
+          <tr><th>Product</th><th>How it's made</th></tr>
+          <tr><td>Yogurt</td><td><i>Streptococcus thermophilus</i> + <i>Lactobacillus bulgaricus</i>, about 43 °C</td></tr>
+          <tr><td>Kefir</td><td>Kefir "grains" (bacteria + yeasts); slightly fizzy</td></tr>
+          <tr><td>Cultured buttermilk</td><td>Low-fat milk + <i>Lactococcus</i> cultures, room temp</td></tr>
+          <tr><td>Traditional buttermilk</td><td>The liquid left after churning butter</td></tr>
+          <tr><td>Sour cream</td><td>Cream (~18% fat) + lactic acid bacteria</td></tr>
+          <tr><td>Cheese</td><td>Starter bacteria + rennet, curds pressed and aged</td></tr>
+          <tr><td>Cultured butter</td><td>Cream fermented before churning</td></tr>
+        </table></div>
+      </div>
+      <div class="card">
+        <h4>Frozen desserts and fats</h4>
+        <div class="tablewrap"><table>
+          <tr><th>Product</th><th>Key fact</th></tr>
+          <tr><td>Ice cream</td><td>U.S. legal minimum 10% milkfat; air whipped in ("overrun")</td></tr>
+          <tr><td>Frozen custard</td><td>Ice cream with egg yolk (at least 1.4% yolk solids)</td></tr>
+          <tr><td>Gelato</td><td>More milk, less cream, less air; denser, served warmer</td></tr>
+          <tr><td>Sherbet</td><td>Fruit-based with a little dairy (1–2% milkfat)</td></tr>
+          <tr><td>Whipped cream</td><td>Air bubbles held by partly clumped fat</td></tr>
+          <tr><td>Ghee</td><td>Butter cooked to remove water and milk solids; pure fat, high smoke point</td></tr>
+          <tr><td>Powdered milk</td><td>Water evaporated; reconstitute by adding water back</td></tr>
+        </table></div>
+      </div>
+      <div class="card">
+        <h4>Vitamins and minerals</h4>
+        <div class="tablewrap"><table>
+          <tr><th>Nutrient</th><th>Why it matters</th><th>Deficiency</th></tr>
+          <tr><td>Calcium</td><td>Bones, teeth, muscles. Ages 9–18 need 1,300 mg/day; a cup of milk has ~300 mg</td><td>Weak bones, osteoporosis later</td></tr>
+          <tr><td>Vitamin D</td><td>Helps absorb calcium. Added to most U.S. milk</td><td>Rickets (soft bones)</td></tr>
+          <tr><td>Vitamin B12</td><td>Red blood cells, nerves</td><td>Anemia</td></tr>
+          <tr><td>Riboflavin (B2)</td><td>Energy metabolism; light destroys it (why milk isn't in clear jugs)</td><td>Cracked lips, sore throat</td></tr>
+          <tr><td>Vitamin A</td><td>Vision, immune system; fat-soluble, so added back to skim</td><td>Night blindness</td></tr>
+          <tr><td>Phosphorus, potassium</td><td>Bones; blood pressure</td><td></td></tr>
+        </table></div>
+      </div>
+      <div class="card">
+        <h4>Lactose intolerance vs milk allergy</h4>
+        <p><b>Lactose intolerance</b> is digestive: the body makes too little of the enzyme <b>lactase</b>, so lactose reaches the large intestine, where bacteria ferment it into gas. Uncomfortable, not dangerous. Lactose-free milk has lactase added, which splits lactose into glucose + galactose (it tastes sweeter). Yogurt and aged cheese have less lactose.</p>
+        <p><b>Milk allergy</b> is the immune system reacting to milk <b>proteins</b> (casein or whey). It can be serious. Milk is one of the 9 major U.S. food allergens that must be declared on labels.</p>
+        <h4 style="margin-top:12px">Labels</h4>
+        <p>Nutrition Facts must list calories, fats, sugars (including added sugars), protein, calcium, vitamin D, potassium, and iron. Milk names: whole (~3.25% fat), reduced-fat (2%), low-fat (1%), fat-free/skim (under 0.5 g fat per serving).</p>
+      </div>
+      <div class="card">
+        <h4>Effects of cooking</h4>
+        <ul class="tight">
+          <li><b>Skin on hot milk:</b> whey proteins denature and casein dries at the surface.</li>
+          <li><b>Browning:</b> the Maillard reaction between lactose and proteins (dulce de leche, caramel flavors).</li>
+          <li><b>Curdling in sauces:</b> acid + heat (tomato soup with milk) pushes casein toward pH 4.6.</li>
+          <li><b>Scorching:</b> proteins and lactose stick and burn on the pan bottom.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Preservation</h4>
+        <ul class="tight">
+          <li><b>Refrigeration</b> slows bacteria.</li>
+          <li><b>Pasteurization</b> kills pathogens.</li>
+          <li><b>Fermentation</b> (acid) keeps yogurt and cheese safe.</li>
+          <li><b>Drying</b> (powdered milk) removes the water bacteria need.</li>
+          <li><b>Salt</b> in butter and cheese draws water away from microbes.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Flashcards</h3>
+    <p class="muted">Tap a card to flip it. <button class="btn ghost" id="fc-shuffle" style="margin-left:6px">Shuffle</button> <button class="btn ghost" id="fc-reset">Flip all back</button></p>
+    <div class="cards" id="fc"></div>
+  </div>
+</section>
+
+<!-- ===================== NOTEBOOK ===================== -->
+<section id="notebook">
+  <div class="wrap">
+    <h2>The experiment notebook <span class="tag t-test">18 points</span></h2>
+    <p class="sub">These are the only points you can lock in before the tournament, and doing the experiments is also the best practice for the lab tasks.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>What a full-credit experiment has</h4>
+        <ul class="tight">
+          <li>A <b>question</b> and a <b>hypothesis</b> ("If I use more salt, the ice cream will be taller, because…").</li>
+          <li>One <b>independent variable</b> (what you change), the <b>dependent variable</b> (what you measure), and the <b>controlled variables</b> (everything you keep the same).</li>
+          <li>Exact amounts, temperatures, and times. Someone else should be able to repeat it.</li>
+          <li>A <b>data table</b> with units, ideally with more than one trial.</li>
+          <li>A <b>conclusion</b> that says whether the hypothesis was right and explains why using the science.</li>
+        </ul>
+        <p>Use the official <a href="https://www.soinc.org/food-science-b">Experiment Form</a>. Only the first 3 per task are graded, so put your best ones first.</p>
+      </div>
+      <div class="card">
+        <h4>Example data table (curds)</h4>
+        <div class="tablewrap"><table>
+          <tr><th>Drops of vinegar</th><th>Trial 1 (g)</th><th>Trial 2 (g)</th><th>Average (g)</th></tr>
+          <tr><td>20</td><td></td><td></td><td></td></tr>
+          <tr><td>60</td><td></td><td></td><td></td></tr>
+          <tr><td>100</td><td></td><td></td><td></td></tr>
+        </table></div>
+        <p class="muted"><small>Controlled: 120 mL whole milk, 22 °C, stirred gently 30 s, stood 5 min, drained 15 min through 2 layers of cheesecloth.</small></p>
+        <p>Practice measuring the way the event does: a kitchen scale that reads to 0.1 g, a thermometer, graduated cylinders, and a dropper.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SCORE ===================== -->
+<section id="score">
+  <div class="wrap">
+    <h2>Score calculator</h2>
+    <p class="sub">See where points come from. Plug in your practice results.</p>
+    <div class="lab">
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="sc-nb">Complete notebook experiments (of 9) <output id="sc-nb-o"></output></label><input id="sc-nb" type="range" min="0" max="9" step="1" value="9"></div>
+          <div class="ctl"><label for="sc-ice">Ice cream height <output id="sc-ice-o"></output></label><input id="sc-ice" type="range" min="0" max="120" step="1" value="55"></div>
+          <div class="ctl"><label for="sc-curd">Curd mass vs supervisor <output id="sc-curd-o"></output></label><input id="sc-curd" type="range" min="0" max="120" step="1" value="90"></div>
+          <div class="ctl"><label for="sc-but">Butter mass vs supervisor <output id="sc-but-o"></output></label><input id="sc-but" type="range" min="0" max="120" step="1" value="90"></div>
+          <div class="ctl"><label for="sc-test">Written test score <output id="sc-test-o"></output></label><input id="sc-test" type="range" min="0" max="100" step="1" value="60"></div>
+          <div class="ctl"><label>Tasks given at this tournament</label>
+            <div class="seg" id="sc-which">
+              <button data-v="ice" aria-pressed="true">Ice cream</button><button data-v="curd">Curds</button><button data-v="but">Butter</button>
+            </div><div class="hint">Toggle to match the tournament (regionals usually run one).</div></div>
+        </div>
+        <div class="viz">
+          <svg id="sc-chart" viewBox="0 0 560 120" role="img" aria-label="Score breakdown"></svg>
+          <div class="readouts" id="sc-ro"></div>
+          <div class="verdict" id="sc-verdict"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VIDEOS ===================== -->
+<section id="videos">
+  <div class="wrap">
+    <h2>Videos and links</h2>
+    <p class="sub">Videos first, then reading. The "search" tiles open a YouTube search for topics where many good short videos exist.</p>
+    <h3>Watch</h3>
+    <div class="vids" id="vids"></div>
+    <h3>Read and practice</h3>
+    <div class="cols">
+      <div class="card">
+        <h4>Rules and event resources</h4>
+        <ul class="tight">
+          <li><a href="https://www.soinc.org/food-science-b">Science Olympiad: Food Science event page</a> (rules, Experiment Form, equipment list)</li>
+          <li><a href="https://www.scio.ly/docs/food-science">Scio.ly Food Science guide</a> (very detailed; great for test prep)</li>
+          <li><a href="https://www.scio.ly/practice?event=Food%20Science">Scio.ly practice questions</a></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Hands-on activities with the science explained</h4>
+        <ul class="tight">
+          <li><a href="https://www.sciencebuddies.org/stem-activities/ice-cream-bag">Science Buddies: Ice cream in a bag</a></li>
+          <li><a href="https://www.sciencebuddies.org/science-fair-projects/project-ideas/FoodSci_p050/cooking-food-science/shaking-for-butter">Science Buddies: Shaking for butter</a> (has a full experiment plan)</li>
+          <li><a href="https://www.scientificamerican.com/article/bring-science-home-shaking-butter/">Scientific American: Shaking up butter</a></li>
+          <li><a href="https://edu.rsc.org/primary-science/how-to-make-butter/4011889.article">Royal Society of Chemistry: How to make butter</a></li>
+          <li><a href="https://www.sciencebuddies.org/stem-activities/milk-into-plastic">Science Buddies: Turn milk into plastic</a> (casein curdling)</li>
+          <li><a href="https://foodscience.uoguelph.ca/sites/default/files/FindingScienceInIceCream.pdf">University of Guelph: Finding science in ice cream (PDF)</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+  <div class="wrap">
+    <h2>Tournament-day checklist</h2>
+    <p class="sub">Tick things off as you pack. Your checks are saved on this device. <button class="btn ghost" id="ck-clear">Clear all</button></p>
+    <div class="check" id="ck"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Made for studying the Science Olympiad Food Science event (2027, Division B). Not an official Science Olympiad resource; the official Rules Manual takes precedence. Lab exhibits are simplified models for building intuition.</p>
+    <p><a href="../">← All science pages</a></p>
+  </div>
+</footer>
+
+<script>
+(() => {
+"use strict";
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function txt(parent, x, y, s, attrs = {}) { const t = el("text", { x, y, ...attrs }, parent); t.textContent = s; return t; }
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const fmt = (v, d = 1) => Number(v).toFixed(d);
+
+// segmented buttons -> value getter
+function seg(id, onChange) {
+  const box = document.getElementById(id);
+  box.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (box.dataset.multi) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    else box.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    onChange();
+  });
+  return () => {
+    if (box.dataset.multi) return [...box.querySelectorAll("button[aria-pressed=true]")].map(b => b.dataset.v);
+    const b = box.querySelector("button[aria-pressed=true]"); return b ? b.dataset.v : null;
+  };
+}
+const num = id => parseFloat(document.getElementById(id).value);
+function onInput(ids, fn) { ids.forEach(id => document.getElementById(id).addEventListener("input", fn)); }
+
+// simple line chart helper
+function axes(svg, { x0, y0, w, h, xmin, xmax, ymin, ymax, xticks, yticks, xlabel, ylabel, xfmt = v => v, yfmt = v => v }) {
+  const X = v => x0 + (v - xmin) / (xmax - xmin) * w;
+  const Y = v => y0 + h - (v - ymin) / (ymax - ymin) * h;
+  yticks.forEach(v => { el("line", { x1: x0, x2: x0 + w, y1: Y(v), y2: Y(v), class: "axis" }, svg); txt(svg, x0 - 6, Y(v) + 4, yfmt(v), { "text-anchor": "end", class: "axis-label" }); });
+  xticks.forEach(v => txt(svg, X(v), y0 + h + 15, xfmt(v), { "text-anchor": "middle", class: "axis-label" }));
+  if (xlabel) txt(svg, x0 + w / 2, y0 + h + 30, xlabel, { "text-anchor": "middle", class: "axis-label" });
+  if (ylabel) txt(svg, 12, y0 + h / 2, ylabel, { "text-anchor": "middle", class: "axis-label", transform: `rotate(-90 12 ${y0 + h / 2})` });
+  return { X, Y };
+}
+const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join("");
+
+/* =============== ICE CREAM =============== */
+const IC = {
+  base: { milk: { name: "whole milk", water: .88, ov: .05, amax: .75, lact: .55 },
+          hh:   { name: "half & half", water: .80, ov: .15, amax: 1.2, lact: .5 },
+          cream:{ name: "heavy cream", water: .58, ov: .22, amax: 1.45, lact: .35 } },
+  salt: { table: { name: "table", gml: 1.2, tau: .4 }, kosher: { name: "kosher", gml: .6, tau: .7 }, rock: { name: "rock", gml: 1.05, tau: 1.6 } },
+  shake: { 1: { name: "gentle", k: .6 }, 2: { name: "steady", k: 1 }, 3: { name: "hard", k: 1.4 } }
+};
+const icBase = seg("ic-base", icUpdate), icSalt = seg("ic-st", icUpdate), icShake = seg("ic-shake", icUpdate);
+onInput(["ic-vol", "ic-sugar", "ic-salt", "ic-time"], icUpdate);
+
+function icSim(p) {
+  const b = IC.base[p.base], s = IC.salt[p.st], sh = IC.shake[p.shake];
+  const iceG = 1000, saltG = p.salt * s.gml, r = saltG / iceG;
+  const TbFinal = -21 * (1 - Math.exp(-r / 0.09));
+  const sugarG = p.sugar * 0.85, waterG = p.vol * 1.01 * b.water;
+  const fp0 = -b.lact - 1.86 * (sugarG / 342) / (waterG / 1000);
+  const mass = p.vol * 1.01 + sugarG;
+  const k = 0.5 * sh.k * Math.pow(140 / mass, 0.33);
+  let T = 5, f = 0; const dt = 0.05, out = [];
+  for (let t = 0; t <= 15.0001; t += dt) {
+    const Tb = TbFinal * (1 - Math.exp(-t / s.tau));
+    out.push({ t, Tb, T, f });
+    const fpEff = fp0 / Math.max(0.08, 1 - f);
+    if (T > fpEff + 1e-6) { T += -k * (T - Tb) * dt; if (T < fpEff) T = fpEff; }
+    else if (Tb < fpEff) { f += k * (fpEff - Tb) * (mass / waterG) / 80 * dt; f = Math.min(f, 0.92); T = fp0 / Math.max(0.08, 1 - f); }
+    else { T += -k * (T - Tb) * dt * 0.2; }
+  }
+  return { out, TbFinal, fp0, b, sh };
+}
+function icResult(p) {
+  const sim = icSim(p);
+  const st = sim.out[Math.round(p.time / 0.05)];
+  const b = sim.b;
+  const buttery = p.base === "cream" && p.shake >= 2 && p.time >= (p.shake === 3 ? 6 : 9);
+  let ov = b.ov * (0.6 + 0.4 * p.shake / 2) * smooth(0.1, 0.5, st.f);
+  let a = 0.15 + (b.amax - 0.15) * smooth(0.18, 0.55, st.f);
+  if (st.f > 0.8) a *= 0.92;
+  if (buttery) { a *= 0.75; ov *= 0.4; }
+  const V = (p.vol + p.sugar * 0.6 + 1.2) * (1 + ov);
+  const hcm = Math.cbrt(3 * a * a * V / Math.PI);
+  const hmm = Math.round(st.f < 0.12 ? 0 : hcm * 10);
+  return { sim, st, a, hmm, pts: hmm * 0.1, buttery };
+}
+function icUpdate() {
+  const p = { base: icBase(), st: icSalt(), shake: +icShake(), vol: num("ic-vol"), sugar: num("ic-sugar"), salt: num("ic-salt"), time: num("ic-time") };
+  $("#ic-base-o").textContent = IC.base[p.base].name;
+  $("#ic-vol-o").textContent = p.vol + " mL";
+  $("#ic-sugar-o").textContent = p.sugar + " mL";
+  $("#ic-salt-o").textContent = p.salt + " mL ≈ " + Math.round(p.salt * IC.salt[p.st].gml) + " g";
+  $("#ic-st-o").textContent = IC.salt[p.st].name;
+  $("#ic-shake-o").textContent = IC.shake[p.shake].name;
+  $("#ic-time-o").textContent = p.time + " min";
+  const R = icResult(p), { sim, st } = R;
+  // chart
+  const svg = $("#ic-chart"); svg.innerHTML = "";
+  const A = axes(svg, { x0: 44, y0: 12, w: 470, h: 170, xmin: 0, xmax: 15, ymin: -22, ymax: 6, xticks: [0, 3, 6, 9, 12, 15], yticks: [-20, -15, -10, -5, 0, 5], xlabel: "minutes of shaking", ylabel: "°C", yfmt: v => v });
+  el("line", { x1: A.X(0), x2: A.X(15), y1: A.Y(0), y2: A.Y(0), stroke: css("--muted"), "stroke-dasharray": "3 4" }, svg);
+  el("path", { d: path(sim.out.map(o => [A.X(o.t), A.Y(o.Tb)])), fill: "none", stroke: css("--cold"), "stroke-width": 3 }, svg);
+  el("path", { d: path(sim.out.map(o => [A.X(o.t), A.Y(o.T)])), fill: "none", stroke: css("--berry"), "stroke-width": 3 }, svg);
+  // frozen fraction as shaded band on right axis scale (0..1 -> -22..6 mapped)
+  const FY = f => 12 + 170 - f * 170;
+  el("path", { d: path(sim.out.map(o => [A.X(o.t), FY(o.f)])), fill: "none", stroke: css("--mint"), "stroke-width": 2, "stroke-dasharray": "6 4" }, svg);
+  [0, .5, 1].forEach(f => txt(svg, 520, FY(f) + 4, Math.round(f * 100) + "%", { class: "axis-label" }));
+  el("line", { x1: A.X(p.time), x2: A.X(p.time), y1: 12, y2: 182, stroke: css("--ink"), "stroke-width": 1.5 }, svg);
+  el("circle", { cx: A.X(p.time), cy: A.Y(st.T), r: 5, fill: css("--berry") }, svg);
+  const lg = [["salty ice", "--cold", ""], ["ice cream mix", "--berry", ""], ["% water frozen (right)", "--mint", "6 4"]];
+  lg.forEach((l, i) => { const x = 60 + i * 140; el("line", { x1: x, x2: x + 22, y1: 222, y2: 222, stroke: css(l[1]), "stroke-width": 3, "stroke-dasharray": l[2] }, svg); txt(svg, x + 28, 226, l[0], { class: "axis-label" }); });
+  // scoop
+  const sc = $("#ic-scoop"); sc.innerHTML = "";
+  const hpx = clamp(R.hmm * 1.6, 0, 140), w = R.hmm ? clamp(hpx / R.a * 1.0, 20, 180) : 0;
+  el("line", { x1: 5, x2: 195, y1: 160, y2: 160, stroke: css("--muted"), "stroke-width": 2 }, sc);
+  if (R.hmm > 0) {
+    const cx = 100, y = 160;
+    el("path", { d: `M${cx - w / 2} ${y} C ${cx - w / 2} ${y - hpx * .55}, ${cx - w * .18} ${y - hpx}, ${cx} ${y - hpx} C ${cx + w * .18} ${y - hpx}, ${cx + w / 2} ${y - hpx * .55}, ${cx + w / 2} ${y} Z`, fill: R.buttery ? css("--butter-soft") : css("--milk"), stroke: css("--milk-edge"), "stroke-width": 2 }, sc);
+    el("line", { x1: 180, x2: 180, y1: y, y2: y - hpx, stroke: css("--berry"), "stroke-width": 2 }, sc);
+    txt(sc, 176, y - hpx / 2, R.hmm + " mm", { "text-anchor": "end", "font-size": 12, "font-weight": 800, fill: css("--berry") });
+  } else {
+    el("ellipse", { cx: 100, cy: 156, rx: 80, ry: 5, fill: css("--milk"), stroke: css("--milk-edge") }, sc);
+    txt(sc, 100, 120, "a puddle", { "text-anchor": "middle", class: "axis-label" });
+  }
+  $("#ic-r-brine").textContent = fmt(sim.TbFinal) + " °C";
+  $("#ic-r-fp").textContent = fmt(sim.fp0) + " °C";
+  $("#ic-r-frozen").textContent = Math.round(st.f * 100) + "%";
+  $("#ic-r-h").textContent = R.hmm + " mm";
+  $("#ic-r-pts").textContent = fmt(R.pts);
+  const v = $("#ic-verdict"); v.className = "verdict";
+  if (sim.TbFinal > sim.fp0 - 0.5) { v.classList.add("bad"); v.textContent = "The salty ice never gets colder than the mix's freezing point. Without enough salt, it can't freeze. Add salt."; }
+  else if (st.f < 0.12) { v.classList.add("bad"); v.textContent = "Still liquid. It needs more time, harder shaking, or colder ice (more salt)."; }
+  else if (R.buttery) { v.classList.add("warn"); v.textContent = "Heavy cream shaken this hard and long starts turning to butter: grainy and greasy. Try half & half, or stop sooner."; }
+  else if (st.f < 0.45) { v.classList.add("warn"); v.textContent = "Soft-serve stage. It slumps, so height is low. A minute or two more would firm it up."; }
+  else if (st.f > 0.8) { v.classList.add("warn"); v.textContent = "Frozen hard and icy. It stands, but it's crumbly to shape. You could stop a bit earlier."; }
+  else v.textContent = "Firm and scoopable: good structure for a tall scoop. Now try changing one thing to beat this height.";
+}
+icUpdate();
+
+/* =============== CURDS =============== */
+const CD = {
+  milk: { skim: { name: "skim", cas: 2.8, fat: 0.1, need: 1.08 }, two: { name: "2%", cas: 2.7, fat: 2.0, need: 1.04 }, whole: { name: "whole", cas: 2.6, fat: 3.3, need: 1 }, hh: { name: "half & half", cas: 2.3, fat: 11.5, need: .9 } },
+  acid: { vinegar: { name: "vinegar (5% acetic)", v46: 5.0 }, lemon: { name: "lemon juice (citric)", v46: 4.4 } },
+  stir: { 1: { name: "gentle", loss: .03, moist: .74 }, 2: { name: "medium", loss: .09, moist: .70 }, 3: { name: "vigorous", loss: .22, moist: .65 } }
+};
+const cdMilk = seg("cd-milk", cdUpdate), cdAcid = seg("cd-acid", cdUpdate), cdStir = seg("cd-stir", cdUpdate);
+onInput(["cd-drops", "cd-temp"], cdUpdate);
+function cdPH(drops, m, a) {
+  const x = (drops * 0.05) / (CD.acid[a].v46 * CD.milk[m].need);
+  if (x <= 1) return 6.7 - 2.1 * Math.pow(x, 0.9);
+  return 4.6 - 0.95 * (1 - Math.exp(-(x - 1) * 1.1));
+}
+function cdMass(drops, m, a, T, s) {
+  const ph = cdPH(drops, m, a), mk = CD.milk[m], st = CD.stir[s];
+  const d = ph - 4.6;
+  const precip = d >= 0 ? Math.exp(-Math.pow(d / 0.42, 2)) : Math.exp(-Math.pow(d / 0.85, 2));
+  const tf = 1 - 0.45 * Math.exp(-(T - 8) / 12);
+  const caught = clamp(precip * tf, 0, 1);
+  const solids = 1.2 * (mk.cas * caught + mk.fat * 0.9 * Math.min(1, caught * 1.15) + 0.4 * caught);
+  const moist = st.moist - (d < 0 ? Math.min(0.08, -d * 0.08) : 0);
+  const wet = solids / (1 - moist) * (1 - st.loss);
+  return { ph, caught, wet };
+}
+function cdUpdate() {
+  const m = cdMilk(), a = cdAcid(), s = +cdStir(), drops = num("cd-drops"), T = num("cd-temp");
+  $("#cd-milk-o").textContent = CD.milk[m].name; $("#cd-acid-o").textContent = CD.acid[a].name.split(" ")[0];
+  $("#cd-stir-o").textContent = CD.stir[s].name;
+  $("#cd-drops-o").textContent = drops + " drops ≈ " + fmt(drops * 0.05) + " mL";
+  $("#cd-temp-o").textContent = T + " °C";
+  const R = cdMass(drops, m, a, T, s);
+  let best = { d: 0, w: 0 };
+  const series = [];
+  for (let d = 0; d <= 220; d += 2) { const r = cdMass(d, m, a, T, s); series.push([d, r.wet]); if (r.wet > best.w) best = { d, w: r.wet }; }
+  // chart
+  const svg = $("#cd-chart"); svg.innerHTML = "";
+  const ymax = Math.max(40, Math.ceil(best.w / 10) * 10 + 5);
+  const A = axes(svg, { x0: 44, y0: 10, w: 500, h: 145, xmin: 0, xmax: 220, ymin: 0, ymax, xticks: [0, 40, 80, 120, 160, 200], yticks: [0, ymax / 2, ymax].map(v => Math.round(v)), xlabel: "drops of acid", ylabel: "curd g" });
+  el("path", { d: path(series.map(p => [A.X(p[0]), A.Y(p[1])])) + `L${A.X(220)} ${A.Y(0)} L${A.X(0)} ${A.Y(0)}Z`, fill: css("--mint-soft"), stroke: "none" }, svg);
+  el("path", { d: path(series.map(p => [A.X(p[0]), A.Y(p[1])])), fill: "none", stroke: css("--mint"), "stroke-width": 3 }, svg);
+  el("line", { x1: A.X(best.d), x2: A.X(best.d), y1: A.Y(best.w), y2: A.Y(0), stroke: css("--mint"), "stroke-dasharray": "3 3" }, svg);
+  txt(svg, A.X(best.d), A.Y(best.w) - 8, "sweet spot ≈ " + best.d + " drops", { "text-anchor": "middle", class: "axis-label", "font-weight": 800 });
+  el("circle", { cx: A.X(drops), cy: A.Y(R.wet), r: 6, fill: css("--berry") }, svg);
+  // beaker
+  const bk = $("#cd-beaker"); bk.innerHTML = "";
+  el("path", { d: "M40 30 L40 190 Q40 200 50 200 L150 200 Q160 200 160 190 L160 30", fill: "none", stroke: css("--milk-edge"), "stroke-width": 3 }, bk);
+  const top = 70, clear = clamp(R.caught, 0, 1);
+  const wheyCol = `color-mix(in srgb, ${css("--milk")} ${Math.round((1 - clear) * 100)}%, #d9e6a6)`;
+  el("rect", { x: 42, y: top, width: 116, height: 128, fill: wheyCol, opacity: .95 }, bk);
+  let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const nCurd = Math.round(clear * 60);
+  const sz = s === 3 ? 3 : s === 2 ? 5 : 7;
+  for (let i = 0; i < nCurd; i++) {
+    el("circle", { cx: 50 + rnd() * 100, cy: 200 - 6 - rnd() * (40 + clear * 60), r: sz * (0.6 + rnd() * 0.7), fill: css("--milk"), stroke: css("--milk-edge"), "stroke-width": 1 }, bk);
+  }
+  for (let y = 60; y <= 190; y += 26) el("line", { x1: 160, x2: 168, y1: y, y2: y, stroke: css("--milk-edge") }, bk);
+  txt(bk, 100, 22, "pH " + fmt(R.ph), { "text-anchor": "middle", "font-weight": 800, "font-size": 16 });
+  // micelles
+  const mc = $("#cd-micelle"); mc.innerHTML = "";
+  const charge = (R.ph - 4.6) / 2.1; // + = negative surface
+  const gap = 30 + 45 * Math.min(1, Math.abs(charge) * 1.6);
+  const cx0 = 150 - gap, cx1 = 150 + gap;
+  const sign = charge > 0.03 ? "−" : charge < -0.03 ? "+" : "";
+  const nSign = Math.round(Math.min(1, Math.abs(charge) * 1.6) * 8);
+  [cx0, cx1].forEach(cx => {
+    el("circle", { cx, cy: 85, r: 34, fill: css("--milk"), stroke: css("--milk-edge"), "stroke-width": 2 }, mc);
+    for (let i = 0; i < 9; i++) { const an = i / 9 * Math.PI * 2; el("circle", { cx: cx + Math.cos(an) * 16, cy: 85 + Math.sin(an) * 16, r: 6, fill: css("--mint-soft"), stroke: css("--mint") }, mc); }
+    for (let i = 0; i < nSign; i++) { const an = i / nSign * Math.PI * 2; txt(mc, cx + Math.cos(an) * 44, 90 + Math.sin(an) * 44, sign, { "text-anchor": "middle", "font-size": 16, "font-weight": 800, fill: sign === "+" ? css("--warm") : css("--blue") }); }
+  });
+  if (nSign >= 2) { txt(mc, 150, 90, "⟷", { "text-anchor": "middle", "font-size": 18, fill: css("--muted") }); }
+  const label = R.ph > 5.2 ? "Charged micelles repel: milk stays smooth" : R.ph >= 4.3 ? "Near pH 4.6: no net charge, micelles stick → curds" : "Too acidic: micelles turn positive and repel again";
+  txt(mc, 150, 160, label, { "text-anchor": "middle", "font-size": 12, "font-weight": 700 });
+  txt(mc, 150, 180, "casein micelle (sub-micelles held by calcium phosphate)", { "text-anchor": "middle", class: "axis-label" });
+  $("#cd-r-ph").textContent = fmt(R.ph);
+  $("#cd-r-caught").textContent = Math.round(R.caught * 100) + "%";
+  $("#cd-r-mass").textContent = fmt(R.wet) + " g";
+  $("#cd-r-best").textContent = fmt(best.w) + " g";
+  const v = $("#cd-verdict"); v.className = "verdict";
+  if (R.ph > 5.3) { v.classList.add("bad"); v.textContent = "Barely curdled. The pH is still too high, so most casein stays dissolved. Add more acid."; }
+  else if (R.ph < 4.3) { v.classList.add("warn"); v.textContent = "Overshot. Past pH 4.6, curds shrink and get rubbery. Use fewer drops."; }
+  else if (s === 3) { v.classList.add("warn"); v.textContent = "Vigorous stirring broke the curds into fines that wash through the cloth and squeezed out water. Stir gently."; }
+  else if (R.wet < best.w * 0.95) { v.classList.add("warn"); v.textContent = "Close. Nudge the drops toward the sweet spot on the chart."; }
+  else v.textContent = "Right at the sweet spot. Write this drop count on your note sheet for " + CD.milk[m].name + " milk.";
+}
+cdUpdate();
+
+/* =============== BUTTER =============== */
+const btFat = seg("bt-fat", btUpdate);
+onInput(["bt-temp", "bt-rate", "bt-vol", "bt-time"], btUpdate);
+const STAGES = [
+  { p: 0, name: "Liquid cream", tip: "Sloshing. Fat globules are still wrapped in their membranes." },
+  { p: .25, name: "Soft whipped cream", tip: "Air bubbles are trapped. It's getting quieter." },
+  { p: .55, name: "Stiff whipped cream", tip: "The jar goes quiet: the foam doesn't move. Keep shaking!" },
+  { p: .82, name: "Breaking", tip: "Membranes rupture, the foam collapses. Listen for sloshing to come back." },
+  { p: 1, name: "Butter + buttermilk", tip: "Yellow butter grains in thin buttermilk. Stop and pour off the liquid." }
+];
+function btModel(T, rate, vol, fat) {
+  const phi = vol / 550;
+  const tb = 9 * Math.exp(-(T - 13) / 9) * Math.pow(150 / rate, 0.85) * (1 + 8 * Math.pow(Math.max(0, phi - 0.3), 2) + 30 * Math.pow(Math.max(0, phi - 0.5), 2)) * Math.pow(36 / fat, 1.5);
+  let eff = 0.95;
+  if (T > 15) eff -= 0.012 * Math.pow(T - 15, 1.2);
+  if (T < 8) eff -= 0.01 * (8 - T);
+  const moist = 0.16 + 0.006 * Math.max(0, T - 13);
+  const fatG = vol * 1.0 * fat / 100;
+  const mass = fatG * eff / (1 - moist);
+  return { tb, eff, moist, mass, fatG };
+}
+function btUpdate() {
+  const T = num("bt-temp"), rate = num("bt-rate"), vol = num("bt-vol"), fat = +btFat(), t = num("bt-time");
+  $("#bt-temp-o").textContent = T + " °C (" + Math.round(T * 9 / 5 + 32) + " °F)";
+  $("#bt-rate-o").textContent = rate + " / min"; $("#bt-vol-o").textContent = vol + " mL of 550 mL";
+  $("#bt-fat-o").textContent = fat + "% fat"; $("#bt-time-o").textContent = fmt(t, 2).replace(/\.?0+$/, "") + " min";
+  const M = btModel(T, rate, vol, fat), p = t / M.tb;
+  let si = 0; STAGES.forEach((s, i) => { if (p >= s.p) si = i; });
+  // jar
+  const j = $("#bt-jar"); j.innerHTML = "";
+  el("rect", { x: 55, y: 18, width: 90, height: 16, rx: 4, fill: css("--muted") }, j);
+  el("rect", { x: 45, y: 34, width: 110, height: 186, rx: 18, fill: "none", stroke: css("--milk-edge"), "stroke-width": 3 }, j);
+  const inner = 180, base = 218;
+  const liq = inner * (vol / 550);
+  const foam = si === 1 ? 1.5 : si === 2 ? 1.9 : si === 3 ? 1.3 : 1;
+  const h = Math.min(inner, liq * foam);
+  if (si < 4) {
+    el("rect", { x: 48, y: base - h, width: 104, height: h, rx: 14, fill: si === 0 ? css("--milk") : `color-mix(in srgb, ${css("--milk")} 85%, ${css("--butter")})` }, j);
+    if (si >= 1 && si <= 2) for (let i = 0; i < 14; i++) el("circle", { cx: 58 + (i * 37) % 86, cy: base - h + 10 + (i * 23) % Math.max(10, h - 20), r: 3, fill: "none", stroke: css("--milk-edge") }, j);
+    if (si === 3) for (let i = 0; i < 16; i++) el("circle", { cx: 58 + (i * 29) % 86, cy: base - 10 - (i * 17) % Math.max(10, h - 20), r: 2.5, fill: css("--butter") }, j);
+  } else {
+    const bmH = liq * (1 - M.mass / vol * 0.95);
+    el("rect", { x: 48, y: base - bmH, width: 104, height: bmH, rx: 14, fill: `color-mix(in srgb, ${css("--milk")} 70%, #b9cbe0)` }, j);
+    el("ellipse", { cx: 100, cy: base - bmH, rx: 34, ry: 16 + M.mass / 8, fill: css("--butter"), stroke: `color-mix(in srgb, ${css("--butter")} 70%, #000)` }, j);
+  }
+  // stages bar
+  const sg = $("#bt-stages"); sg.innerHTML = "";
+  STAGES.forEach((s, i) => {
+    const x = 10 + i * 70;
+    el("rect", { x, y: 20, width: 62, height: 34, rx: 10, fill: i <= si ? (i === 4 ? css("--butter") : css("--blue-soft")) : css("--bg"), stroke: i === si ? css("--berry") : css("--line"), "stroke-width": i === si ? 2.5 : 1 }, sg);
+    txt(sg, x + 31, 42, ["🥛", "☁️", "🍦", "💥", "🧈"][i], { "text-anchor": "middle", "font-size": 16 });
+    const words = s.name.split(" ");
+    txt(sg, x + 31, 72, words.slice(0, 2).join(" "), { "text-anchor": "middle", class: "axis-label" });
+    if (words.length > 2) txt(sg, x + 31, 85, words.slice(2).join(" "), { "text-anchor": "middle", class: "axis-label" });
+    txt(sg, x + 31, 110, fmt(s.p * M.tb) + " min", { "text-anchor": "middle", class: "axis-label", "font-weight": 800 });
+  });
+  $("#bt-stage").innerHTML = "<b>" + STAGES[si].name + ":</b> " + STAGES[si].tip;
+  $("#bt-r-tb").textContent = fmt(M.tb) + " min";
+  $("#bt-r-eff").textContent = Math.round(M.eff * 100) + "%";
+  $("#bt-r-mass").textContent = si === 4 ? fmt(M.mass) + " g" : "not yet";
+  $("#bt-r-bm").textContent = si === 4 ? Math.round(vol - M.mass) + " mL" : "–";
+  const v = $("#bt-verdict"); v.className = "verdict";
+  if (M.tb > 15) { v.classList.add("bad"); v.textContent = "At these settings butter takes about " + fmt(M.tb, 0) + " minutes, which might not fit in the event. Warm the cream toward 13 °C, shake faster, or leave more headspace."; }
+  else if (T > 18) { v.classList.add("warn"); v.textContent = "Fast, but warm cream leaves more fat in the buttermilk and makes soft, greasy butter. Cooler cream gives a better yield."; }
+  else if (T < 8) { v.classList.add("warn"); v.textContent = "Cold fat is too solid to clump quickly. It works, but slowly."; }
+  else if (vol / 550 > 0.45) { v.classList.add("warn"); v.textContent = "Not enough headspace. The cream can't slam around the jar, and whipped foam fills it up. Less cream or a bigger jar churns faster."; }
+  else v.textContent = "Good settings: about " + fmt(M.tb, 0) + " minutes to butter with a solid fat recovery. Drag the time slider or press Shake it.";
+}
+let btTimer = null;
+$("#bt-play").addEventListener("click", () => {
+  const s = $("#bt-time"), b = $("#bt-play");
+  if (btTimer) { clearInterval(btTimer); btTimer = null; b.textContent = "▶ Shake it"; return; }
+  const M = btModel(num("bt-temp"), num("bt-rate"), num("bt-vol"), +btFat());
+  const end = Math.min(20, M.tb * 1.1); if (+s.value >= end) s.value = 0;
+  b.textContent = "⏸ Pause";
+  btTimer = setInterval(() => {
+    s.value = Math.min(end, +s.value + end / 80); btUpdate();
+    if (+s.value >= end) { clearInterval(btTimer); btTimer = null; b.textContent = "▶ Shake it"; }
+  }, 60);
+});
+btUpdate();
+
+/* =============== MILK COMPOSITION =============== */
+const MK = [
+  ["Skim milk", 90.8, 0.1, 3.4, 5.0, 0.7],
+  ["Whole milk", 88.1, 3.3, 3.2, 4.7, 0.7],
+  ["Half & half", 80.6, 11.5, 3.0, 4.3, 0.6],
+  ["Heavy cream", 58.6, 36.0, 2.1, 2.8, 0.5],
+  ["Butter", 16.2, 81.1, 0.9, 0.1, 1.7],
+  ["Ice cream", 61.0, 11.0, 3.5, 23.6, 0.9],
+  ["Greek yogurt", 85.1, 0.4, 10.2, 3.6, 0.7],
+  ["Cheddar", 37.0, 33.1, 24.9, 1.3, 3.7],
+  ["Buttermilk", 90.1, 0.9, 3.3, 4.8, 0.9]
+];
+const MKC = [["Water", "--ice"], ["Fat", "--butter"], ["Protein", "--mint"], ["Sugars/carbs", "--berry"], ["Minerals", "--muted"]];
+const mkBox = $("#mk-pick"); mkBox.dataset.multi = "1";
+MK.forEach((r, i) => { const b = document.createElement("button"); b.textContent = r[0]; b.dataset.v = i; b.setAttribute("aria-pressed", [0, 1, 3, 4, 7].includes(i) ? "true" : "false"); mkBox.appendChild(b); });
+const mkGet = seg("mk-pick", mkUpdate);
+function mkUpdate() {
+  const sel = mkGet().map(Number);
+  const svg = $("#mk-chart"); svg.innerHTML = "";
+  const rowH = 34, x0 = 120, w = 490, n = Math.max(1, sel.length);
+  svg.setAttribute("viewBox", `0 0 640 ${n * rowH + 70}`);
+  MKC.forEach((c, i) => { const x = x0 + i * 100; el("rect", { x, y: 6, width: 14, height: 14, rx: 3, fill: css(c[1]) }, svg); txt(svg, x + 20, 18, c[0], { class: "axis-label" }); });
+  sel.forEach((idx, row) => {
+    const r = MK[idx], y = 36 + row * rowH;
+    txt(svg, x0 - 8, y + 18, r[0], { "text-anchor": "end", "font-size": 13, "font-weight": 700 });
+    let x = x0;
+    for (let k = 1; k <= 5; k++) {
+      const ww = r[k] / 100 * w;
+      el("rect", { x, y, width: Math.max(0, ww - 1), height: rowH - 8, fill: css(MKC[k - 1][1]) }, svg);
+      if (ww > 34) txt(svg, x + ww / 2, y + 17, fmt(r[k], r[k] < 10 ? 1 : 0), { "text-anchor": "middle", "font-size": 11, "font-weight": 800, fill: "#222" });
+      x += ww;
+    }
+  });
+  if (!sel.length) txt(svg, 320, 60, "Pick one or more products above", { "text-anchor": "middle", class: "axis-label" });
+  txt(svg, x0, n * rowH + 60, "Notice how fat and water trade places as you go from milk to cream to butter.", { class: "axis-label" });
+}
+mkUpdate();
+
+/* =============== PASTEURIZATION =============== */
+const PS = [[63, 1800], [72, 15], [89, 1], [90, 0.5], [94, 0.1], [96, 0.05], [100, 0.01]];
+function psTime(T) {
+  for (let i = 0; i < PS.length - 1; i++) {
+    const [t1, s1] = PS[i], [t2, s2] = PS[i + 1];
+    if (T >= t1 && T <= t2) { const f = (T - t1) / (t2 - t1); return Math.pow(10, Math.log10(s1) + f * (Math.log10(s2) - Math.log10(s1))); }
+  }
+  return T < 63 ? 1800 : 0.01;
+}
+function psFmt(s) { if (s >= 60) return fmt(s / 60, s >= 600 ? 0 : 1) + " min"; if (s >= 1) return fmt(s, s >= 10 ? 0 : 1) + " s"; return fmt(s, s >= 0.1 ? 2 : 3) + " s"; }
+onInput(["ps-temp"], psUpdate);
+function psUpdate() {
+  const T = num("ps-temp"), s = psTime(T);
+  $("#ps-temp-o").textContent = T + " °C (" + Math.round(T * 9 / 5 + 32) + " °F)";
+  $("#ps-r-time").textContent = psFmt(s);
+  const svg = $("#ps-chart"); svg.innerHTML = "";
+  const L = v => Math.log10(v);
+  const A = axes(svg, { x0: 56, y0: 12, w: 470, h: 200, xmin: 60, xmax: 145, ymin: -2.3, ymax: 3.5, xticks: [60, 70, 80, 90, 100, 110, 120, 130, 140], yticks: [-2, -1, 0, 1, 2, 3], xlabel: "temperature (°C)", ylabel: "hold time (log scale)", yfmt: v => { const x = Math.pow(10, v); return x >= 1 ? x + " s" : x + " s"; } });
+  const pts = []; for (let t = 63; t <= 100; t += 0.5) pts.push([A.X(t), A.Y(L(psTime(t)))]);
+  el("path", { d: path(pts), fill: "none", stroke: css("--warm"), "stroke-width": 3 }, svg);
+  [[63, 1800, "LTLT"], [72, 15, "HTST"], [89, 1, "HHST"]].forEach(([t, v, n]) => { el("circle", { cx: A.X(t), cy: A.Y(L(v)), r: 5, fill: css("--warm") }, svg); txt(svg, A.X(t) + 8, A.Y(L(v)) - 6, n, { "font-size": 12, "font-weight": 800 }); });
+  el("circle", { cx: A.X(138), cy: A.Y(L(2)), r: 6, fill: css("--berry") }, svg);
+  txt(svg, A.X(138), A.Y(L(2)) - 12, "UHT", { "text-anchor": "middle", "font-size": 12, "font-weight": 800 });
+  txt(svg, A.X(138), A.Y(L(2)) + 20, "(sterilizing,", { "text-anchor": "middle", class: "axis-label" });
+  txt(svg, A.X(138), A.Y(L(2)) + 33, "kills spores)", { "text-anchor": "middle", class: "axis-label" });
+  el("circle", { cx: A.X(T), cy: A.Y(L(s)), r: 7, fill: "none", stroke: css("--ink"), "stroke-width": 2.5 }, svg);
+}
+psUpdate();
+
+/* =============== FLASHCARDS =============== */
+const FC = [
+  ["Ice cream", "Why does salt make ice colder?", "Dissolved salt lowers the freezing point of water. Ice keeps melting but can't refreeze, and melting absorbs heat, so the slush drops below 0 °C."],
+  ["Ice cream", "What is a colligative property?", "A property that depends on the number of dissolved particles, not their identity. Examples: freezing point depression, boiling point elevation."],
+  ["Ice cream", "What is the van 't Hoff factor (i) for NaCl?", "About 2, because NaCl splits into Na⁺ and Cl⁻ ions. Sugar stays as one molecule, so i = 1."],
+  ["Ice cream", "What is overrun?", "The extra volume from air whipped into ice cream. 100% overrun means the volume doubled."],
+  ["Curds", "What is the isoelectric point of casein?", "pH 4.6. Micelles have no net charge, stop repelling, and clump into curds."],
+  ["Curds", "Curds vs whey?", "Curds: casein + trapped fat and water. Whey: water, lactose, minerals, and whey proteins."],
+  ["Curds", "What does rennet (chymosin) do?", "It cuts κ-casein on the outside of micelles so they clump without acid. Used for most cheeses."],
+  ["Butter", "Cream vs butter emulsion type?", "Cream is oil-in-water. Butter is water-in-oil. The flip during churning is phase inversion."],
+  ["Butter", "What is the milk fat globule membrane?", "A thin layer of phospholipids and proteins around each fat globule that keeps them from merging."],
+  ["Butter", "Why churn at about 13 °C?", "The fat is partly solid, partly liquid. Crystals break membranes; liquid fat glues globules. Too warm = greasy, fat lost; too cold = slow."],
+  ["Chemistry", "Lactose is made of…?", "Glucose + galactose (a disaccharide). Lactase splits it."],
+  ["Chemistry", "What reaction forms a triglyceride?", "Esterification: glycerol + 3 fatty acids, releasing 3 water molecules. The reverse is hydrolysis."],
+  ["Chemistry", "Saturated vs unsaturated fat?", "Saturated: no C=C double bonds, straight chains, solid at room temp. Unsaturated: one or more C=C bonds, kinked, liquid."],
+  ["Chemistry", "Benedict's test detects…?", "Reducing sugars like glucose and lactose (blue → green → orange → brick red when heated). Biuret detects protein (violet)."],
+  ["Health", "Lactose intolerance vs milk allergy?", "Intolerance: not enough lactase enzyme, digestive. Allergy: immune reaction to milk proteins, can be dangerous."],
+  ["Health", "Why is vitamin D added to milk?", "It helps the body absorb calcium. Deficiency causes rickets."],
+  ["Safety", "HTST pasteurization?", "72 °C (161 °F) for 15 seconds. Kills pathogens, not all bacteria."],
+  ["Safety", "What does homogenization do?", "Forces milk through tiny openings to break fat globules into smaller ones so cream doesn't separate. It does not kill bacteria."],
+  ["Products", "Bacteria in yogurt?", "Streptococcus thermophilus and Lactobacillus bulgaricus. They ferment lactose into lactic acid."],
+  ["Products", "What is ghee?", "Butter heated to remove water and milk solids. Nearly pure butterfat with a high smoke point."]
+];
+let fcOrder = FC.map((_, i) => i);
+function fcRender() {
+  const box = $("#fc"); box.innerHTML = "";
+  fcOrder.forEach(i => {
+    const [cat, q, a] = FC[i];
+    const b = document.createElement("button"); b.className = "flash"; b.setAttribute("aria-label", "Flashcard: " + q);
+    b.innerHTML = `<div class="in"><div class="f"><small>${cat}</small><b>${q}</b></div><div class="b">${a}</div></div>`;
+    b.addEventListener("click", () => b.classList.toggle("flip"));
+    box.appendChild(b);
+  });
+}
+$("#fc-shuffle").addEventListener("click", () => { for (let i = fcOrder.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [fcOrder[i], fcOrder[j]] = [fcOrder[j], fcOrder[i]]; } fcRender(); });
+$("#fc-reset").addEventListener("click", () => document.querySelectorAll(".flash.flip").forEach(f => f.classList.remove("flip")));
+fcRender();
+
+/* =============== SCORE =============== */
+$("#sc-which").dataset.multi = "1";
+const scWhich = seg("sc-which", scUpdate);
+onInput(["sc-nb", "sc-ice", "sc-curd", "sc-but", "sc-test"], scUpdate);
+function scUpdate() {
+  const nb = num("sc-nb"), ice = num("sc-ice"), cu = num("sc-curd"), bu = num("sc-but"), te = num("sc-test"), w = scWhich();
+  $("#sc-nb-o").textContent = nb; $("#sc-ice-o").textContent = ice + " mm"; $("#sc-curd-o").textContent = cu + "%"; $("#sc-but-o").textContent = bu + "%"; $("#sc-test-o").textContent = te + "%";
+  const parts = [
+    ["Notebook", nb * 2, "--blue"],
+    ...(w.includes("ice") ? [["Ice cream", Math.round(ice) * 0.1, "--cold"]] : []),
+    ...(w.includes("curd") ? [["Curds", Math.min(10, cu / 10), "--mint"]] : []),
+    ...(w.includes("but") ? [["Butter", Math.min(10, bu / 10), "--butter"]] : []),
+    ["Test", te / 2, "--berry"]
+  ];
+  const total = parts.reduce((s, p) => s + p[1], 0);
+  const svg = $("#sc-chart"); svg.innerHTML = "";
+  let x = 10; const W = 540, scale = W / Math.max(total, 1);
+  parts.forEach(p => { const ww = p[1] * scale; el("rect", { x, y: 20, width: Math.max(0, ww - 2), height: 46, rx: 8, fill: css(p[2]) }, svg); if (ww > 50) txt(svg, x + ww / 2, 48, fmt(p[1]), { "text-anchor": "middle", "font-weight": 800, fill: "#222" }); x += ww; });
+  txt(svg, 10, 92, "Share of your total score", { class: "axis-label" });
+  $("#sc-ro").innerHTML = parts.map(p => `<div class="ro"><span>${p[0]}</span><b>${fmt(p[1])}</b></div>`).join("") + `<div class="ro big"><span>Total</span><b>${fmt(total)}</b></div>`;
+  const testShare = (te / 2) / Math.max(total, 1);
+  $("#sc-verdict").textContent = `The written test is ${Math.round(testShare * 100)}% of this total. Ten more percent on the test is worth 5 points, the same as ${Math.round(5 / 0.1)} mm of ice cream height.`;
+}
+scUpdate();
+
+/* =============== VIDEOS =============== */
+const VIDS = [
+  { id: "i_IMvzu9BD0", t: "Make ice cream in a bag", s: "Science Buddies · the ice cream task, with the salt science" },
+  { id: "xmNzUEmFZMg", t: "The science of milk", s: "TED-Ed · Jonathan J. O'Sullivan · what milk is made of" },
+  { id: "RF-aET54CGk", t: "Turn milk into plastic", s: "Science Buddies · acid curdles casein, same as the curd task" },
+  { id: "QKae1k1BDdA", t: "A brie(f) history of cheese", s: "TED-Ed · Paul Kindstedt · curds, rennet, and 10,000 years of cheese" },
+  { href: "https://wgbh.org/tv-shows/reactions/dont-drink-raw-milk-but-what-about-raw-milk-cheese-fiw3rw", t: "Don't drink raw milk. But what about raw milk cheese?", s: "PBS / ACS Reactions · pasteurization explained", icon: "🧫" },
+  { q: "ACS Reactions ice cream chemistry", t: "Ice cream chemistry", s: "Search: ACS Reactions (American Chemical Society)", icon: "🍦" },
+  { q: "how butter is made science fat globule phase inversion", t: "How butter forms", s: "Search: churning, fat globules, phase inversion", icon: "🧈" },
+  { q: "paneer milk lemon juice curdling science", t: "Acid curds: paneer and ricotta", s: "Search: curdling milk with acid", icon: "🧀" },
+  { q: "lactose intolerance lactase explained", t: "Lactose intolerance", s: "Search: lactase and lactose", icon: "🥛" },
+  { q: "freezing point depression colligative property explained", t: "Freezing point depression", s: "Search: colligative properties", icon: "❄️" }
+];
+$("#vids").innerHTML = VIDS.map(v => {
+  const href = v.id ? "https://www.youtube.com/watch?v=" + v.id : v.href || "https://www.youtube.com/results?search_query=" + encodeURIComponent(v.q);
+  const thumb = v.id ? `<div class="thumb" style="background-image:url('https://i.ytimg.com/vi/${v.id}/hqdefault.jpg')"></div>` : `<div class="thumb search${v.href ? " ext" : ""}">${v.icon}</div>`;
+  return `<a class="vid" href="${href}" target="_blank" rel="noopener">${thumb}<div class="t"><b>${v.t}</b><span>${v.s}</span></div></a>`;
+}).join("");
+
+/* =============== CHECKLIST =============== */
+const CK = [
+  "Category C goggles (indirect vent, marked Z87)", "Lab coat or apron", "Long sleeves, long pants, closed-toe shoes", "Hair tie",
+  "Note sheet (8.5×11\", one per person)", "Calculator(s) (no phones/watches)", "Pint zip-top bag (plus spares)", "Gallon zip-top bag (plus spares)",
+  "500–600 mL container with tight lid", "Cheesecloth, ~30 cm square (plus a spare)", "Beakers and graduated cylinder (from the Div B chemistry list)",
+  "Dropper / pipette for acid drops", "Stirring rod or spoon", "Thermometer", "Timer or stopwatch", "Towel or insulated gloves for the ice bag",
+  "Paper towels and a trash bag for cleanup", "Experiment notebook (impounded at check-in)", "Drop counts for each milk type written on note sheet", "Pencils"
+];
+let ckState = {};
+try { ckState = JSON.parse(localStorage.getItem("fs-checklist") || "{}"); } catch (e) {}
+$("#ck").innerHTML = CK.map((c, i) => `<label><input type="checkbox" data-i="${i}" ${ckState[i] ? "checked" : ""}><span>${c}</span></label>`).join("");
+$("#ck").addEventListener("change", e => { ckState[e.target.dataset.i] = e.target.checked; try { localStorage.setItem("fs-checklist", JSON.stringify(ckState)); } catch (err) {} });
+$("#ck-clear").addEventListener("click", () => { ckState = {}; document.querySelectorAll("#ck input").forEach(i => i.checked = false); try { localStorage.removeItem("fs-checklist"); } catch (err) {} });
+
+// re-render colors when theme flips
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { icUpdate(); cdUpdate(); btUpdate(); mkUpdate(); psUpdate(); scUpdate(); });
+})();
+</script>
+</body>
+</html>
