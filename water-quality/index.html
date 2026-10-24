@@ -1,0 +1,1621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Tide Pool Lab: Water Quality</title>
+<meta name="description" content="Study guide and interactive lab exhibits for the Science Olympiad Water Quality event (2027, Division B): estuaries, oceans, coral reefs, water tests, and building a salinometer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef6f6; --paper:#fbfefe; --ink:#14262e; --muted:#566b73; --line:#d3e3e6;
+  --coral:#e0523f; --coral-soft:#fde3dd;
+  --sand:#d9a32e; --sand-soft:#f8edcc;
+  --kelp:#2b9466; --kelp-soft:#d9f1e5;
+  --sea:#1f78b4; --sea-soft:#dcecf7;
+  --fresh:#bfe3f2; --salt:#173f6b; --deep:#0e2a47;
+  --shadow:0 1px 2px rgba(10,40,50,.05),0 8px 24px rgba(10,40,50,.07);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1619; --paper:#152227; --ink:#e4f0f2; --muted:#9db2b8; --line:#28393f;
+    --coral:#ff7a66; --coral-soft:#3d221e;
+    --sand:#f2c45a; --sand-soft:#382f16;
+    --kelp:#4cc893; --kelp-soft:#143127;
+    --sea:#6cb6ec; --sea-soft:#172c3d;
+    --fresh:#2f5568; --salt:#8fc6f0; --deep:#0a1520;
+    --shadow:none; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Nunito",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;line-height:1.15;margin:0}
+a{color:var(--sea)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+.muted{color:var(--muted)}
+small{font-size:.85rem}
+
+/* nav */
+nav.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav.top a{flex:none;text-decoration:none;color:var(--ink);font-weight:700;font-size:.92rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
+nav.top a:hover{border-color:var(--coral);color:var(--coral)}
+
+/* hero */
+.hero{padding:44px 0 28px}
+.eyebrow{display:inline-block;font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--sea);background:var(--sea-soft);padding:4px 10px;border-radius:999px;margin-bottom:14px}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800}
+.hero p.lead{font-size:1.15rem;max-width:720px;margin:14px 0 0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:26px}
+.fact{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)}
+.fact b{display:block;font-family:"Fraunces",serif;font-size:1.6rem}
+.fact span{color:var(--muted);font-size:.9rem}
+.note{border-left:4px solid var(--sand);background:var(--sand-soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:18px 0;font-size:.95rem}
+
+/* sections */
+section{padding:36px 0;border-top:1px dashed var(--line)}
+section > .wrap > h2{font-size:clamp(1.7rem,4vw,2.3rem);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tag{font-family:"Nunito",sans-serif;font-size:.8rem;font-weight:800;padding:3px 10px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase}
+.t-sea{background:var(--sea-soft);color:var(--sea)}
+.t-kelp{background:var(--kelp-soft);color:var(--kelp)}
+.t-sand{background:var(--sand-soft);color:color-mix(in srgb,var(--sand) 70%,var(--ink))}
+.t-coral{background:var(--coral-soft);color:var(--coral)}
+.sub{color:var(--muted);max-width:760px;margin:8px 0 20px}
+h3{font-size:1.3rem;margin:26px 0 10px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow)}
+.card h4{margin:0 0 8px;font-size:1.05rem}
+ol.steps{margin:0;padding-left:22px}
+ol.steps li{margin:4px 0}
+ul.tight{margin:0;padding-left:20px}
+ul.tight li{margin:4px 0}
+.key{display:inline-block;font-weight:800;color:var(--coral)}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:inline-block;margin:6px 0}
+
+/* lab exhibit */
+.lab{background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-top:10px}
+.lab-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.lab-head h3{margin:0}
+.lab-grid{display:grid;grid-template-columns:300px 1fr;gap:18px}
+@media (max-width:860px){.lab-grid{grid-template-columns:1fr}}
+.controls{display:flex;flex-direction:column;gap:14px}
+.ctl label{display:flex;justify-content:space-between;font-weight:700;font-size:.92rem;gap:8px}
+.ctl label output{font-weight:800;color:var(--coral);white-space:nowrap}
+.ctl input[type=range]{width:100%;accent-color:var(--coral)}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.seg button{font:inherit;font-size:.85rem;font-weight:700;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--coral);border-color:var(--coral);color:#fff}
+.hint{font-size:.82rem;color:var(--muted);margin-top:2px}
+.viz{display:flex;flex-direction:column;gap:12px;min-width:0}
+.viz svg{width:100%;height:auto;display:block}
+.pair{display:grid;gap:12px;grid-template-columns:200px 1fr;align-items:center}
+@media (max-width:600px){.pair{grid-template-columns:1fr}.pair > svg:first-child{max-width:220px;margin:0 auto}}
+.readouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.ro{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.ro span{display:block;font-size:.78rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.ro b{font-family:"Fraunces",serif;font-size:1.35rem}
+.ro.big{background:var(--coral-soft);border-color:transparent}
+.ro.big b{color:var(--coral)}
+.verdict{border-radius:12px;padding:10px 14px;font-weight:700;background:var(--kelp-soft);color:var(--ink)}
+.verdict.warn{background:var(--sand-soft)}
+.verdict.bad{background:var(--coral-soft)}
+.btn{font:inherit;font-weight:800;padding:7px 14px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.toy{font-size:.82rem;color:var(--muted);margin-top:10px}
+svg text{font-family:"Nunito",sans-serif;fill:var(--ink)}
+.axis{stroke:var(--line);stroke-width:1}
+.axis-label{font-size:11px;fill:var(--muted)}
+.guess{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.guess input{font:inherit;width:110px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+
+/* organisms */
+.orgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:12px}
+.org{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.org .em{font-size:1.8rem;line-height:1}
+.org b{font-size:1rem}
+.org i{color:var(--muted);font-size:.82rem}
+.org p{margin:2px 0 0;font-size:.9rem}
+.org .rg{align-self:flex-start;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:999px}
+.rg-global{background:var(--sea-soft);color:var(--sea)}
+.rg-indo{background:var(--sand-soft);color:color-mix(in srgb,var(--sand) 70%,var(--ink))}
+.rg-atl{background:var(--kelp-soft);color:var(--kelp)}
+.org a{font-size:.82rem}
+.orgs.quiz .org .nm{filter:blur(6px);cursor:pointer;user-select:none}
+.orgs.quiz .org.show .nm{filter:none}
+
+/* videos */
+.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.vid{display:block;text-decoration:none;color:inherit;background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.vid:hover{border-color:var(--coral)}
+.vid .thumb{aspect-ratio:16/9;background:var(--line) center/cover no-repeat;position:relative;display:flex;align-items:center;justify-content:center;font-size:2rem;background:var(--sea-soft)}
+.vid .thumb::after{content:attr(data-src);position:absolute;inset:auto auto 10px 10px;background:rgba(0,0,0,.65);color:#fff;font-size:.8rem;padding:3px 9px;border-radius:999px}
+.vid div.t{padding:10px 12px}
+.vid b{display:block;font-size:.95rem;line-height:1.3}
+.vid span{font-size:.82rem;color:var(--muted)}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+
+/* flashcards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.flash{perspective:900px;min-height:150px;cursor:pointer;border:0;padding:0;background:none;font:inherit;color:inherit;text-align:left}
+.flash .in{position:relative;width:100%;height:100%;min-height:150px;transition:transform .45s;transform-style:preserve-3d}
+.flash.flip .in{transform:rotateY(180deg)}
+.flash .f,.flash .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;padding:14px 16px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
+.flash .f{background:var(--paper)}
+.flash .f small{color:var(--coral);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.72rem;margin-bottom:6px}
+.flash .b{background:var(--kelp-soft);transform:rotateY(180deg);font-size:.93rem}
+@media (prefers-reduced-motion:reduce){.flash .in{transition:none}}
+
+/* checklist */
+.check{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.check label{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:9px 12px;cursor:pointer}
+.check input{margin-top:5px;accent-color:var(--kelp);width:18px;height:18px;flex:none}
+.check label:has(input:checked){opacity:.6;text-decoration:line-through}
+
+/* kid-friendly additions */
+.term{border-bottom:2px dotted var(--coral);cursor:help;border-radius:2px}
+.term:hover,.term:focus{background:var(--coral-soft);outline:none}
+#gloss-pop{position:absolute;z-index:50;max-width:300px;background:var(--paper);color:var(--ink);border:2px solid var(--coral);border-radius:14px;padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.18);font-size:.92rem;line-height:1.45;display:none}
+#gloss-pop b{display:block;color:var(--coral);font-family:"Fraunces",serif;font-size:1.02rem;margin-bottom:2px}
+#gloss-pop a{font-size:.8rem}
+.plain{background:var(--sea-soft);border-radius:14px;padding:12px 16px;margin:12px 0;font-size:.97rem}
+.plain::before{content:"💡 In plain words";display:block;font-weight:800;color:var(--sea);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.plain.howto::before{content:"📈 How to read this"}
+.plain.example::before{content:"🧮 Worked example"}
+.plain.why::before{content:"🤔 Why it matters"}
+.plain p{margin:6px 0}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.gloss div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 14px;scroll-margin-top:80px}
+.gloss div:target{border-color:var(--coral);box-shadow:0 0 0 3px var(--coral-soft)}
+.gloss b{color:var(--coral)}
+.gloss-search{width:100%;max-width:360px;font:inherit;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);margin-bottom:12px}
+.ptable td:nth-child(2),.ptable th:nth-child(2){text-align:right;white-space:nowrap;font-weight:800}
+.pbar{display:flex;height:44px;border-radius:12px;overflow:hidden;margin:10px 0 4px;font-weight:800;font-size:.85rem;color:#222}
+.pbar div{display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.1;padding:0 4px}
+.startcard{background:var(--paper);border:2px solid var(--coral);border-radius:18px;padding:16px 20px;margin-top:22px}
+.startcard ol{margin:6px 0 0;padding-left:22px}
+.timeline{border-left:3px solid var(--line);margin:8px 0 0 8px;padding-left:16px}
+.timeline div{position:relative;margin-bottom:10px}
+.timeline div::before{content:"";position:absolute;left:-23px;top:7px;width:11px;height:11px;border-radius:50%;background:var(--coral)}
+.chain{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.chain span{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:6px 10px;font-size:.9rem;font-weight:700}
+.chain i{font-style:normal;color:var(--muted)}
+footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px dashed var(--line)}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Sections">
+  <div class="wrap">
+    <a href="#overview">Overview</a>
+    <a href="#points">🏅 Points</a>
+    <a href="#ecology">🌊 Estuaries &amp; oceans</a>
+    <a href="#reefs">🪸 Coral reefs</a>
+    <a href="#water">🧪 Water tests</a>
+    <a href="#salinometer">🧂 Salinometer</a>
+    <a href="#flashcards">🃏 Flashcards</a>
+    <a href="#plan">🗺 Game plan</a>
+    <a href="#score">🧮 Score calculator</a>
+    <a href="#videos">▶ Videos &amp; links</a>
+    <a href="#checklist">✅ Checklist</a>
+    <a href="#glossary">📖 Glossary</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Science Olympiad · Water Quality · 2027 · Division B</span>
+    <h1>The Tide Pool Lab</h1>
+    <p class="lead">This year Water Quality is about salt water: estuaries (where rivers meet the sea), the ocean, and coral reefs. At the tournament you'll take a written test with your partner and use a salinometer you built at home to measure how salty a mystery sample is. This page explains the science and has lab exhibits you can play with until it makes sense.</p>
+    <div class="facts">
+      <div class="fact"><b>2</b><span>students per team, about 50 minutes</span></div>
+      <div class="fact"><b>4</b><span>parts: ecology, coral reefs, water tests, salinometer</span></div>
+      <div class="fact"><b>30%</b><span>for each of the three test parts</span></div>
+      <div class="fact"><b>10%</b><span>for the salinometer you build</span></div>
+      <div class="fact"><b>23</b><span>reef animals and plants to know by name</span></div>
+      <div class="fact"><b>1–10%</b><span>salt range your salinometer must read</span></div>
+    </div>
+    <div class="startcard">
+      <b>👋 New here? Start like this:</b>
+      <ol>
+        <li>Read <a href="#overview">How the event works</a> and <a href="#points">Where the points come from</a>.</li>
+        <li><b>Build your salinometer early</b> using the <a href="#salinometer">salinometer section</a>. It's 10 easy points, and the first build almost never works perfectly.</li>
+        <li>Work through the three test parts. Play with each exhibit and change <b>one</b> thing at a time to see what it does.</li>
+        <li>Quiz yourself with the <a href="#flashcards">flashcards</a> and the reef animal cards.</li>
+      </ol>
+      <p style="margin:10px 0 0"><span class="term" tabindex="0" data-g="glossary-demo">Words with a dotted underline</span> are "big words." Tap or hover over one to see what it means. They're all collected in the <a href="#glossary">glossary</a> at the bottom too.</p>
+    </div>
+    <p class="note"><b>Check the official rules.</b> Everything here comes from the 2027 Water Quality materials on the <a href="https://www.soinc.org/water-quality-b">Science Olympiad event page</a> and the <a href="https://scio.ly/docs/water-quality">Scio.ly study guide</a>. The official Rules Manual always wins, and rules get clarified during the season, so check <a href="https://www.soinc.org/events/rules-corrections">rules clarifications</a> before each tournament. Last season (2026) was about fresh water, so older practice tests may be about the wrong kind of water.</p>
+  </div>
+</header>
+
+<!-- ===================== OVERVIEW ===================== -->
+<section id="overview">
+  <div class="wrap">
+    <h2>How the event works</h2>
+    <p class="sub">There's no lab experiment to cook up this year. It's mostly a written test, plus one hands-on part with a gadget you make at home. That gadget is the only part you can finish before you walk in the door.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>Part I: Marine and estuary ecology (30%)</h4>
+        <p>How estuaries and oceans work: the kinds of estuaries, ocean zones, tides and currents, food webs and the 10% rule, the water and nutrient cycles, pollution, invasive species, and how drinking water and sewage get cleaned. Questions are multiple choice, matching, fill in the blank, and short answer.</p>
+      </div>
+      <div class="card">
+        <h4>Part II: Coral reefs (30%)</h4>
+        <p>How coral and its tiny algae partners live together, what makes reefs healthy, what kills them (bleaching, disease, pollution, overfishing), and <b>23 reef organisms</b> you need to recognize from pictures. Scientists count these 23 to judge a reef's health.</p>
+      </div>
+      <div class="card">
+        <h4>Part III: Water monitoring and analysis (30%)</h4>
+        <p>The 11 things scientists measure in salt water: temperature, salinity, pH, dissolved oxygen, nitrates, phosphates, turbidity, total solids, fecal coliform, BOD, and aragonite saturation. You'll read data tables and graphs and do some math. There are no chemical tests to run at the tournament.</p>
+      </div>
+      <div class="card">
+        <h4>Part IV: Salinometer (10%)</h4>
+        <p>Build a device at home that measures how salty water is (a straw-and-clay float works). Bring it: <b>5 points</b>. Use it on the supervisor's mystery salt water and get within 1% at regionals or 0.5% at state and nationals: <b>5 more points</b>. You'll need goggles for this part.</p>
+      </div>
+      <div class="card">
+        <h4>Bring and wear</h4>
+        <p>One 8.5×11" note sheet per team, both sides, anything on it (it can be in a sheet protector). Up to two non-programmable scientific calculators (like a TI-30X), no graphing calculators or phones. Your salinometer. <b>Category C goggles</b> (chemical splash goggles with covered vents, stamped "Z87") for Part IV. Regular safety glasses don't count. Full list in the <a href="#checklist">checklist</a>.</p>
+      </div>
+      <div class="card">
+        <h4>Division B vs. C</h4>
+        <p>This page is for <b>Division B</b>. Division C also covers traditional ecological knowledge and, at state and nationals, life history strategies (survivorship curves, r and K species). You can skip those.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== POINTS ===================== -->
+<section id="points">
+  <div class="wrap">
+    <h2>Where the points come from</h2>
+    <p class="sub">Each part counts for a fixed share of your score. If Part I is worth 30% and you get 70% of its questions right, you earn 21 of those 30.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>The point table</h4>
+        <div class="tablewrap"><table class="ptable">
+          <tr><th>Part</th><th>Share</th><th>How you earn it</th></tr>
+          <tr><td>🌊 I. Estuaries &amp; oceans</td><td>30</td><td>Percent of Part I correct × 30.</td></tr>
+          <tr><td>🪸 II. Coral reefs</td><td>30</td><td>Percent of Part II correct × 30.</td></tr>
+          <tr><td>🧪 III. Water tests</td><td>30</td><td>Percent of Part III correct × 30.</td></tr>
+          <tr><td>🧂 IV. Bring a salinometer</td><td>5</td><td>Student-built, works on 1–10% salt water.</td></tr>
+          <tr><td>🎯 IV. Accurate reading</td><td>5</td><td>Within ±1% at regionals, ±0.5% at state and nationals.</td></tr>
+        </table></div>
+      </div>
+      <div class="card">
+        <h4>How it splits</h4>
+        <div class="pbar" role="img" aria-label="Part one 30, part two 30, part three 30, salinometer 10">
+          <div style="flex:30;background:var(--sea);color:#fff">I · 30</div>
+          <div style="flex:30;background:var(--coral);color:#fff">II · 30</div>
+          <div style="flex:30;background:var(--kelp);color:#fff">III · 30</div>
+          <div style="flex:10;background:var(--sand)">IV</div>
+        </div>
+        <p class="muted"><small>Ties are broken by questions the supervisor picks ahead of time, so every question can matter.</small></p>
+        <div class="plain why">
+          <p>The salinometer is only 10%, but it's the <b>easiest 10%</b> on the test. Just showing up with a working one is 5 points, about the same as getting 17% more of Part I right. Teams that forget it or build it the night before throw those points away.</p>
+        </div>
+      </div>
+    </div>
+    <div class="plain example">
+      <p>Maya and Leo go to a regional.</p>
+      <ul class="tight">
+        <li>Part I: 70% correct → 0.70 × 30 = <b>21</b></li>
+        <li>Part II: 60% correct → 0.60 × 30 = <b>18</b></li>
+        <li>Part III: 50% correct → 0.50 × 30 = <b>15</b></li>
+        <li>They brought a salinometer: <b>5</b></li>
+        <li>The mystery sample was 5.0%. They read 4.4%. That's 0.6 off, inside the ±1 regional window: <b>5</b></li>
+      </ul>
+      <p>Total: 21 + 18 + 15 + 5 + 5 = <b>64 out of 100</b>. At state, that same 4.4% reading would be too far off (more than 0.5) and they'd lose 5 points. Try your own numbers in the <a href="#score">score calculator</a>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PART I ===================== -->
+<section id="ecology">
+  <div class="wrap">
+    <h2>Part I: Estuaries and oceans <span class="tag t-sea">30%</span></h2>
+    <p class="sub">Where rivers meet the sea, how the ocean is layered, and how energy and pollution move through food webs.</p>
+
+    <div class="cols">
+      <div class="card">
+        <h4>What's an estuary?</h4>
+        <p>An <b>estuary</b> is a partly enclosed place where a river's fresh water mixes with salty ocean water: bays, lagoons, sounds, and river mouths. The water is <b>brackish</b> (somewhere between fresh and salty), and its saltiness changes with the tides every day.</p>
+        <p>Estuaries are nurseries. Most of the fish and shellfish people catch in the US (salmon, herring, oysters, crabs) spend part of their lives in one. Marsh grasses, mangroves, and oyster reefs filter out mud and pollution before it reaches the ocean, and they soften storm waves. And 22 of the world's 32 biggest cities sit on estuaries, which is why they're under so much pressure.</p>
+        <div class="plain"><p>Picture a river running into the ocean. Fresh water is lighter than salt water, so it tends to float on top. How much the two mix depends on a tug-of-war between the river pushing out and the tides sloshing in and out. Try it in the exhibit below.</p></div>
+      </div>
+      <div class="card">
+        <h4>Two ways to sort estuaries</h4>
+        <p><b>By how they formed (geology):</b></p>
+        <ul class="tight">
+          <li><b>Coastal plain</b> (drowned river valley): sea level rose and flooded a river valley. Chesapeake Bay.</li>
+          <li><b>Bar-built:</b> sandbars or barrier islands wall off a lagoon. North Carolina's Outer Banks.</li>
+          <li><b>Fjord:</b> a deep U-shaped valley carved by a glacier, flooded by the sea. Alaska, Norway.</li>
+          <li><b>Tectonic:</b> the ground sank or cracked along a fault. San Francisco Bay.</li>
+          <li><b>Delta:</b> a river drops so much sediment it builds new land in fingers. Mississippi.</li>
+        </ul>
+        <p style="margin-top:10px"><b>By how the water mixes:</b></p>
+        <ul class="tight">
+          <li><b>Salt wedge:</b> strong river, weak tides. Fresh water on top, a wedge of salt water along the bottom. Mississippi, Columbia.</li>
+          <li><b>Partially mixed:</b> medium of both. Saltier at the bottom, but blended. Puget Sound, San Francisco Bay.</li>
+          <li><b>Well mixed:</b> strong tides, weak river. Same saltiness top to bottom, getting saltier toward the sea. Delaware Bay.</li>
+          <li><b>Fjord type:</b> deep basin with a shallow ridge (sill) at the mouth, so deep water barely gets swapped out.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="lab" id="estLab">
+      <div class="lab-head"><h3>🌊 Exhibit: the estuary mixer</h3><span class="muted"><small>River on the left, ocean on the right. Darker = saltier.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="es-river">River flow <output id="es-river-o"></output></label><input id="es-river" type="range" min="0" max="100" step="1" value="80"><div class="hint">Rainy season, snowmelt, or a big river = high.</div></div>
+          <div class="ctl"><label for="es-tide">Tide strength <output id="es-tide-o"></output></label><input id="es-tide" type="range" min="0" max="100" step="1" value="20"><div class="hint">Spring tides (full and new moon) are strongest.</div></div>
+          <div class="ctl"><label for="es-probe">Where you dip your sensor <output id="es-probe-o"></output></label><input id="es-probe" type="range" min="2" max="98" step="1" value="50"></div>
+        </div>
+        <div class="viz">
+          <svg id="es-chart" viewBox="0 0 560 270" role="img" aria-label="Cross-section of an estuary colored by salinity"></svg>
+          <div class="readouts">
+            <div class="ro big"><span>Estuary type</span><b id="es-r-type"></b></div>
+            <div class="ro"><span>Surface salinity</span><b id="es-r-top"></b></div>
+            <div class="ro"><span>Bottom salinity</span><b id="es-r-bot"></b></div>
+            <div class="ro"><span>Top-to-bottom difference</span><b id="es-r-diff"></b></div>
+          </div>
+          <div class="verdict" id="es-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">A simplified picture for building intuition, not a real ocean model. Real estuaries also change with the shape of the basin, wind, and the Earth's spin.</p>
+    </div>
+    <div class="plain howto">
+      <p>Salinity is measured in <b>ppt</b> (parts per thousand, grams of salt in a kilogram of water). River water is near 0, the open ocean is about 35. Turn the river up and the tides down and you get a sharp line between a fresh top and a salty bottom: a salt wedge. Turn the tides up and that line smears out until the whole water column is the same.</p>
+      <p>Why it matters for living things: a bottom-dwelling oyster in a salt wedge estuary may sit in salty water while fish swimming above it are in nearly fresh water. A sharp layer also blocks oxygen from mixing down, which is how <b>dead zones</b> form at the bottom.</p>
+    </div>
+
+    <h3>Estuary habitats</h3>
+    <div class="cols">
+      <div class="card">
+        <ul class="tight">
+          <li><b>Salt marshes:</b> grassy flats flooded by tides (cordgrass, Spartina). Temperate coasts.</li>
+          <li><b>Mangrove forests:</b> salt-tolerant trees on stilt roots. Tropical coasts. Fish nurseries and storm barriers.</li>
+          <li><b>Seagrass beds</b> (submerged aquatic vegetation): underwater meadows. Food for manatees and sea turtles; need clear water.</li>
+          <li><b>Mudflats and sandflats:</b> uncovered at low tide, full of worms and clams that shorebirds eat.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <ul class="tight">
+          <li><b>Oyster reefs:</b> one adult oyster filters up to about 50 gallons of water a day.</li>
+          <li><b>Barrier beaches and islands:</b> shield the estuary behind them from waves.</li>
+          <li><b>Kelp forests and rocky shores:</b> at the salty, cold ocean end of some estuaries.</li>
+          <li><b>Tidal creeks:</b> channels that carry water in and out of marshes twice a day.</li>
+        </ul>
+        <p class="muted"><small>Living things here are adapted to changing salt levels. Animals that handle a wide range of salinity are <b>euryhaline</b> (salmon, blue crabs); ones that need steady salinity are <b>stenohaline</b> (most corals).</small></p>
+      </div>
+    </div>
+
+    <h3>The ocean, top to bottom</h3>
+    <div class="lab">
+      <svg id="zones" viewBox="0 0 640 330" role="img" aria-label="Diagram of ocean zones" style="width:100%;height:auto"></svg>
+    </div>
+    <div class="cols" style="margin-top:14px">
+      <div class="card">
+        <h4>Zones to know</h4>
+        <ul class="tight">
+          <li><b>Intertidal</b> (littoral): between high and low tide. Wet, then dry, twice a day.</li>
+          <li><b>Neritic:</b> the shallow water over the continental shelf. Most of the ocean's life and fishing is here.</li>
+          <li><b>Oceanic:</b> the open ocean past the shelf.</li>
+          <li><b>Pelagic</b> = the open water itself. <b>Benthic</b> = the sea floor.</li>
+          <li>Depth layers: <b>epipelagic</b> (0–200 m, sunlit, the <b>photic zone</b>), <b>mesopelagic</b> (200–1,000 m, twilight), <b>bathypelagic</b> (1,000–4,000 m, dark), <b>abyssopelagic</b> (4,000–6,000 m), <b>hadal</b> (trenches).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Who lives where</h4>
+        <ul class="tight">
+          <li><b>Plankton:</b> drifters that can't swim against currents. Phytoplankton (plant-like, make food from sunlight) and zooplankton (tiny animals). The most numerous living things in the sea and the base of the food web.</li>
+          <li><b>Nekton:</b> strong swimmers: fish, squid, whales, turtles.</li>
+          <li><b>Benthos:</b> bottom dwellers: crabs, clams, worms, sea stars, corals.</li>
+        </ul>
+        <p>Almost all photosynthesis happens in the top 200 m, because that's as far as useful sunlight reaches. That's why the open ocean is a bit of a desert while shallow coasts are packed with life.</p>
+      </div>
+    </div>
+
+    <h3>Moving water: tides, currents, upwelling</h3>
+    <div class="cols">
+      <div class="card">
+        <ul class="tight">
+          <li><b>Tides</b> come from the Moon's (and Sun's) pull. Most coasts get two highs and two lows a day.</li>
+          <li><b>Spring tides</b> (biggest range) happen at full and new moon when Sun and Moon line up. <b>Neap tides</b> (smallest) happen at quarter moons.</li>
+          <li><b>Surface currents</b> are pushed by wind and bent by the Earth's spin into big loops called <b>gyres</b>.</li>
+          <li><b>Thermohaline circulation</b> ("the global conveyor belt") is driven by differences in temperature and salt: cold, salty water is dense and sinks near the poles.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <ul class="tight">
+          <li><b>Upwelling:</b> wind pushes surface water away from a coast, and cold, nutrient-rich deep water rises to replace it. Upwelling zones (Peru, California) are some of the best fishing spots on Earth.</li>
+          <li><b>El Niño:</b> the trade winds weaken, warm water sloshes east across the Pacific, and upwelling off South America shuts down. Fish catches crash, and reefs can bleach from the heat.</li>
+          <li><b>La Niña</b> is the opposite: stronger winds, more upwelling, cooler eastern Pacific.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Food webs and the 10% rule</h3>
+    <p>Each step up a food chain is a <b>trophic level</b>: producers (phytoplankton, seagrass) → primary consumers (zooplankton, grazers) → secondary consumers (small fish) → tertiary consumers (big fish) → top predators (sharks, dolphins, ospreys). Only about <b>10%</b> of the energy at one level makes it to the next. The rest is used for living (moving, staying warm) or lost as heat and waste.</p>
+    <div class="lab" id="pyrLab">
+      <div class="lab-head"><h3>🐟 Exhibit: the energy pyramid</h3><span class="muted"><small>Energy goes down each level. Some poisons go up.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="ep-e">Energy made by producers <output id="ep-e-o"></output></label><input id="ep-e" type="range" min="1000" max="100000" step="1000" value="50000"></div>
+          <div class="ctl"><label for="ep-eff">Energy passed up each level <output id="ep-eff-o"></output></label><input id="ep-eff" type="range" min="5" max="20" step="1" value="10"><div class="hint">About 10% is the rule of thumb on tests.</div></div>
+          <div class="ctl"><label for="ep-mag">How much a poison builds up each level <output id="ep-mag-o"></output></label><input id="ep-mag" type="range" min="1" max="20" step="1" value="10"><div class="hint">Mercury and PCBs stick in fat and don't get peed out, so predators collect them from every meal.</div></div>
+        </div>
+        <div class="viz">
+          <svg id="ep-chart" viewBox="0 0 560 260" role="img" aria-label="Energy pyramid and poison buildup by trophic level"></svg>
+          <div class="verdict" id="ep-verdict"></div>
+        </div>
+      </div>
+    </div>
+    <div class="plain example">
+      <p>A sample test question: "If producers make 50,000 J of energy, how much reaches secondary consumers?"<br>
+      Primary consumers get 10%: 50,000 × 0.1 = 5,000 J. Secondary consumers get 10% of that: 5,000 × 0.1 = <b>500 J</b>. Count the steps carefully: producers are level 1, so secondary consumers are two jumps up.</p>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <h4>Living together</h4>
+        <ul class="tight">
+          <li><b>Mutualism</b> (both win): coral and zooxanthellae; cleaner shrimp and fish.</li>
+          <li><b>Commensalism</b> (one wins, other doesn't care): barnacles riding on a whale.</li>
+          <li><b>Parasitism</b> (one wins, one loses): sea lice on salmon.</li>
+          <li><b>Predation</b> and <b>competition</b> (fighting over food or space).</li>
+          <li>A <b>keystone species</b> has a huge effect for its numbers. Sea otters eat urchins; without otters, urchins eat the kelp forests.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Population growth</h4>
+        <p class="formula">G = r · N</p>
+        <p><b>G</b> is how many individuals the population grows by per unit of time, <b>r</b> is the growth rate, and <b>N</b> is how many there are now.</p>
+        <div class="plain example"><p>A bay has 2,000 oysters and r = 0.15 per year. G = 0.15 × 2,000 = <b>300 new oysters</b> this year. Populations can't grow forever: food, space, and predators set a ceiling called the <b>carrying capacity</b>.</p></div>
+      </div>
+    </div>
+
+    <h3>Cycles</h3>
+    <div class="cols">
+      <div class="card">
+        <h4>💧 Water cycle</h4>
+        <p>Evaporation → condensation (clouds) → precipitation → runoff and infiltration (soaking into groundwater) → back to the sea. Plants add water vapor by <b>transpiration</b>. About <b>97%</b> of Earth's water is in the oceans; most fresh water is frozen in ice caps and glaciers.</p>
+      </div>
+      <div class="card">
+        <h4>🌱 Nitrogen, phosphorus, and carbon</h4>
+        <ul class="tight">
+          <li><b>Nitrogen:</b> bacteria turn N₂ gas into ammonia (<b>nitrogen fixation</b>), then into nitrite and nitrate (<b>nitrification</b>), and back to N₂ gas (<b>denitrification</b>, needs low oxygen).</li>
+          <li><b>Phosphorus:</b> no gas phase. It comes from rocks, soil, fertilizer, and sewage, and ends up in sediment.</li>
+          <li><b>Carbon:</b> the ocean soaks up about a quarter of the CO₂ people put into the air. That's good for the climate but makes the ocean more acidic (see <a href="#water">Part III</a>).</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Too many nutrients: eutrophication and dead zones</h3>
+    <div class="chain" aria-label="Steps of eutrophication">
+      <span>🚜 Fertilizer and sewage wash into the water</span><i>→</i>
+      <span>🟢 Algae bloom</span><i>→</i>
+      <span>☁️ Water gets cloudy, seagrass gets shaded out</span><i>→</i>
+      <span>💀 Algae die and sink</span><i>→</i>
+      <span>🦠 Bacteria decompose them and use up oxygen (BOD rises)</span><i>→</i>
+      <span>🐟 Oxygen drops below 2 mg/L: a dead zone</span>
+    </div>
+    <p>The Gulf of Mexico gets a dead zone every summer from fertilizer carried down the Mississippi. In salt water, <b>nitrogen</b> is usually the nutrient in short supply (so adding it causes blooms); in fresh water it's usually <b>phosphorus</b>.</p>
+
+    <h3>Human impacts</h3>
+    <div class="cols">
+      <div class="card">
+        <ul class="tight">
+          <li><b>Harmful algal blooms</b> (HABs): some algae make toxins. "Red tide" (Karenia brevis in Florida) kills fish and makes people cough on the beach; toxins in shellfish can poison people.</li>
+          <li><b>Sediment</b> from construction, farms, and dredging clouds water, smothers coral and oysters, and carries pollutants along.</li>
+          <li><b>Oil spills</b> coat feathers and fur and poison eggs and larvae.</li>
+          <li><b>Heavy metals</b> (mercury, lead, cadmium) and <b>PCBs</b> build up in food webs: <b>bioaccumulation</b> (in one animal over its life) and <b>biomagnification</b> (higher at each trophic level).</li>
+          <li><b>TBT</b> (tributyltin), an old boat-hull paint, made female snails grow male parts (<b>imposex</b>). It's now banned on most ships.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <ul class="tight">
+          <li><b>Emerging contaminants:</b> medicines, microplastics, and <b>PFAS</b> ("forever chemicals" from nonstick pans and firefighting foam) that water treatment doesn't fully remove.</li>
+          <li><b>Invasive species:</b> lionfish in the Caribbean eat reef fish; green crabs on both US coasts; zebra and quagga mussels in the Great Lakes. Often carried in ships' <b>ballast water</b>. Invasives are the second-biggest threat to biodiversity after habitat loss.</li>
+          <li><b>The five ocean garbage patches</b> sit in the five big gyres: North Pacific (the "Great Pacific Garbage Patch," between Hawaii and California), South Pacific, North Atlantic, South Atlantic, and Indian Ocean. They're mostly tiny bits of plastic, not a floating island.</li>
+          <li><b>Overfishing</b> and <b>bycatch</b> (animals caught by accident, like turtles in shrimp nets).</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Cleaning water</h3>
+    <div class="cols">
+      <div class="card">
+        <h4>🚰 Drinking water treatment</h4>
+        <ol class="steps">
+          <li><b>Coagulation and flocculation:</b> add alum so tiny particles clump into "floc."</li>
+          <li><b>Sedimentation:</b> the floc settles to the bottom.</li>
+          <li><b>Filtration:</b> through sand, gravel, and charcoal.</li>
+          <li><b>Disinfection:</b> chlorine, chloramine, UV light, or ozone kills germs.</li>
+        </ol>
+        <p class="muted"><small>Ordinary filters don't remove dissolved salt. Turning seawater into drinking water (<b>desalination</b>) needs reverse osmosis or distillation.</small></p>
+      </div>
+      <div class="card">
+        <h4>🚽 Wastewater (sewage) treatment</h4>
+        <ol class="steps">
+          <li><b>Preliminary:</b> screens catch rags and sticks; grit settles out.</li>
+          <li><b>Primary:</b> sewage sits in tanks; solids sink as sludge, grease floats off.</li>
+          <li><b>Secondary:</b> bacteria eat the dissolved organic matter (activated sludge). Must remove 85% of the BOD.</li>
+          <li><b>Tertiary:</b> extra cleanup to strip out nitrogen and phosphorus, then disinfection before release.</li>
+        </ol>
+        <p class="muted"><small>A <b>watershed</b> is all the land that drains into one body of water. What happens on land anywhere in it ends up in the estuary.</small></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PART II ===================== -->
+<section id="reefs">
+  <div class="wrap">
+    <h2>Part II: Coral reefs <span class="tag t-coral">30%</span></h2>
+    <p class="sub">A coral is an animal with tiny algae living inside it, building itself a house of rock. Learn how that partnership works, what breaks it, and the 23 reef organisms on the list.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>What is a coral?</h4>
+        <p>A coral is a colony of tiny animals called <b>polyps</b>, relatives of jellyfish and sea anemones. Each polyp is a little tube with a ring of stinging tentacles. Reef-building (<b>hermatypic</b>) corals pull calcium and carbonate out of seawater to build a skeleton of <b>calcium carbonate</b> (aragonite) under themselves. Over thousands of years, those skeletons pile up into a reef.</p>
+        <p>Inside each polyp live <b>zooxanthellae</b>, single-celled algae (dinoflagellates). It's <b>mutualism</b>: the algae photosynthesize and give the coral up to 90% of its food plus oxygen, and they give coral most of its color. The coral gives the algae shelter, CO₂, and nitrogen and phosphorus from its waste.</p>
+        <p>Corals reproduce by <b>budding</b> and breaking apart (asexual), and many species also <b>spawn</b> all at once on a few nights a year, releasing clouds of eggs and sperm. The baby corals (<b>planulae</b>) drift, then settle on hard bottom and start a new colony.</p>
+      </div>
+      <div class="card">
+        <h4>What reefs need</h4>
+        <ul class="tight">
+          <li><b>Warm, steady water:</b> about 23–29 °C (73–84 °F).</li>
+          <li><b>Lots of light</b>, so shallow (most reefs are less than 50 m deep).</li>
+          <li><b>Clear water:</b> low turbidity and little sediment.</li>
+          <li><b>Low nutrients:</b> extra nutrients feed seaweed that crowds coral out.</li>
+          <li><b>Normal ocean salinity</b> (about 32–40 ppt), no big floods of fresh water.</li>
+          <li><b>A hard surface</b> to attach to, and some water movement.</li>
+        </ul>
+        <p style="margin-top:10px"><b>Reef types:</b> <b>fringing</b> reefs hug the shore; <b>barrier</b> reefs are separated from shore by a lagoon (the Great Barrier Reef); <b>atolls</b> are rings of reef around a lagoon where a volcanic island sank.</p>
+        <div class="plain why"><p>Reefs cover less than 1% of the ocean floor but are home to about a quarter of all ocean species. They protect coasts from waves, feed millions of people, and bring in tourism money.</p></div>
+      </div>
+    </div>
+
+    <h3>Coral bleaching</h3>
+    <p>When water stays too hot for too long, the zooxanthellae start making harmful chemicals, and the coral spits them out. Without its algae, the coral turns white (you see the skeleton through clear tissue) and starts starving. If the heat ends soon, the algae can move back in. If not, the coral dies and gets covered in seaweed. Heat is the main cause, but cold snaps, fresh water floods, pollution, and too much sunlight can also cause bleaching.</p>
+    <p>NOAA's Coral Reef Watch tracks heat stress in <b>degree heating weeks</b> (DHW): add up how many degrees above the normal summer maximum the water has been, for each week, over the last 12 weeks. Only weeks at least 1 °C too hot count.</p>
+    <div class="lab" id="blLab">
+      <div class="lab-head"><h3>🪸 Exhibit: the heat wave</h3><span class="muted"><small>Make the water hotter or the heat wave longer.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="bl-hot">Hotter than the normal summer max <output id="bl-hot-o"></output></label><input id="bl-hot" type="range" min="0" max="4" step="0.25" value="1.5"><div class="hint">This is called the HotSpot. If the usual warmest month is 29 °C and the water is 30.5 °C, the HotSpot is 1.5 °C.</div></div>
+          <div class="ctl"><label for="bl-wk">How long the heat wave lasts <output id="bl-wk-o"></output></label><input id="bl-wk" type="range" min="0" max="16" step="1" value="4"></div>
+        </div>
+        <div class="viz">
+          <div class="pair">
+            <svg id="bl-coral" viewBox="0 0 200 180" role="img" aria-label="Coral colony color showing bleaching"></svg>
+            <svg id="bl-chart" viewBox="0 0 380 220" role="img" aria-label="Degree heating weeks over time"></svg>
+          </div>
+          <div class="readouts">
+            <div class="ro"><span>Water temperature</span><b id="bl-r-t"></b></div>
+            <div class="ro big"><span>Degree heating weeks</span><b id="bl-r-dhw"></b></div>
+            <div class="ro"><span>NOAA alert</span><b id="bl-r-lvl"></b></div>
+          </div>
+          <div class="verdict" id="bl-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Assumes a normal summer max of 29 °C and a steady heat wave. NOAA's levels: Watch (a little warm), Warning (DHW above 0), Alert Level 1 (DHW 4+, bleaching likely), Alert Level 2 (DHW 8+, severe bleaching and some coral death likely). In 2023 NOAA added Levels 3–5 for DHW 12, 16, and 20+.</p>
+    </div>
+
+    <div class="cols" style="margin-top:20px">
+      <div class="card">
+        <h4>Other threats</h4>
+        <ul class="tight">
+          <li><b>Ocean acidification:</b> more CO₂ makes seawater less able to give corals the carbonate they need for skeletons (see aragonite in <a href="#water">Part III</a>).</li>
+          <li><b>Coral diseases:</b> white band disease (wiped out much of the Caribbean's elkhorn and staghorn coral) and <b>stony coral tissue loss disease</b> (SCTLD, spreading through Florida and the Caribbean since 2014).</li>
+          <li><b>Crown-of-thorns starfish outbreaks:</b> these starfish eat coral. Nutrient runoff helps their larvae survive, so outbreaks follow pollution.</li>
+          <li><b>Overfishing:</b> take out the parrotfish and urchins that graze algae and seaweed takes over.</li>
+          <li><b>Sediment and nutrient runoff</b> from land.</li>
+          <li><b>Physical damage:</b> boat anchors, careless divers, collecting for souvenirs and aquariums, and destructive fishing with dynamite or cyanide.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>How scientists check a reef's health</h4>
+        <p><b>Reef Check</b> trains volunteer divers to swim a straight line (a <b>transect</b>) and count things. Their checklist uses <b>indicator organisms</b>: species that are easy to spot and that reveal a problem when they're missing or too common. Fewer big groupers or parrotfish = overfishing. Lots of fleshy seaweed = too many nutrients or too few grazers. Fewer butterflyfish = less live coral.</p>
+        <p>They also measure <b>coral cover</b> (percent of the bottom that's live coral), recently killed coral, bleaching, trash, and fish size and biomass. Healthy reefs have plenty of <b>apex predators</b> (big groupers, sharks).</p>
+        <p><b>Protection:</b> marine protected areas and no-take zones, fishing limits, mooring buoys instead of anchors, cleaner runoff, and growing coral in nurseries to replant.</p>
+      </div>
+    </div>
+
+    <h3>The 23 reef organisms</h3>
+    <p class="muted">These are the indicator organisms from the rules. You'll be shown pictures and asked to name them by common name. Turn on <b>Quiz mode</b> to hide the names, then tap a blurred name to check yourself. "See photos" opens an image search, since recognizing the real thing is what's tested.</p>
+    <div class="seg" id="org-filter"><button data-v="all" aria-pressed="true">All 23</button><button data-v="global">Global (15)</button><button data-v="indo">Indo-Pacific only (5)</button><button data-v="atl">Atlantic only (3)</button></div>
+    <div class="seg"><button class="btn ghost" id="org-quiz" aria-pressed="false">🙈 Quiz mode: off</button></div>
+    <div class="orgs" id="orgs"></div>
+  </div>
+</section>
+
+<!-- ===================== PART III ===================== -->
+<section id="water">
+  <div class="wrap">
+    <h2>Part III: Water tests <span class="tag t-kelp">30%</span></h2>
+    <p class="sub">You won't run these tests at the tournament, but you'll be given data and asked what it means. For each one, know what it is, the units, a healthy number, what makes it go bad, and why living things care.</p>
+
+    <div class="card">
+      <div class="tablewrap"><table>
+        <tr><th>Test</th><th>Units</th><th>Healthy salt water</th><th>Warning signs and causes</th></tr>
+        <tr><td><b>Temperature</b></td><td>°C or °F</td><td>Reef corals: about 23–29 °C</td><td>Too hot → coral bleaching, less oxygen. Warm runoff, heat waves.</td></tr>
+        <tr><td><b>Salinity</b></td><td>ppt (g/kg) or %</td><td>Ocean about 35 ppt (3.5%); estuaries 0.5–30; reefs 32–40</td><td>Sudden drops after floods; rises from evaporation in shallow lagoons.</td></tr>
+        <tr><td><b>pH</b></td><td>0–14 scale</td><td>Seawater about 8.1</td><td>Falling pH = ocean acidification from CO₂.</td></tr>
+        <tr><td><b>Dissolved oxygen</b> (DO)</td><td>mg/L (= ppm) or % saturation</td><td>5 mg/L or more</td><td>Below 5 stresses fish; below 2 is hypoxic (dead zone). Over about 110% saturation can give fish gas bubble disease.</td></tr>
+        <tr><td><b>Nitrates</b></td><td>mg/L</td><td>Clean coast: well under 1</td><td>Fertilizer, sewage, manure → algal blooms.</td></tr>
+        <tr><td><b>Phosphates</b></td><td>mg/L</td><td>Very low, under about 0.03</td><td>Sewage, detergents, fertilizer → algal blooms.</td></tr>
+        <tr><td><b>Turbidity</b></td><td>NTU, or Secchi depth (m)</td><td>Reef water often under 1 NTU</td><td>Erosion, dredging, blooms. Blocks light, clogs gills, smothers coral.</td></tr>
+        <tr><td><b>Total solids</b></td><td>mg/L</td><td>Seawater about 35,000 mg/L, nearly all dissolved salt</td><td>Rising suspended solids (mud, plankton) = sediment pollution.</td></tr>
+        <tr><td><b>Fecal coliform</b></td><td>colonies per 100 mL</td><td>Near zero</td><td>Over 200 per 100 mL = more chance of germs. Sewage, septic leaks, manure.</td></tr>
+        <tr><td><b>BOD</b> (biochemical oxygen demand)</td><td>mg/L</td><td>Clean water 1–2; under 5 is OK</td><td>High BOD = lots of rotting organic matter using up oxygen.</td></tr>
+        <tr><td><b>Aragonite saturation</b> (Ω, "omega")</td><td>no units</td><td>Above 4 is great for reefs; 3.5–4 OK</td><td>Below 3 is poor for reefs; below 1 shells dissolve. Caused by acidification.</td></tr>
+      </table></div>
+      <p class="muted"><small>The Water Quality Index used for rivers doesn't apply to the ocean; coastal regions use their own marine indexes. 1 mg/L = 1 ppm in water.</small></p>
+    </div>
+
+    <h3>Dissolved oxygen: why warm, salty water is a problem</h3>
+    <p>Oxygen from the air dissolves into water, and algae add more by photosynthesis. But water can only hold so much. <b>Cold water holds more oxygen than warm water, and fresh water holds more than salt water.</b> That's why summer heat waves, especially in salty, still water, cause fish kills.</p>
+    <div class="lab" id="doLab">
+      <div class="lab-head"><h3>🫧 Exhibit: the oxygen meter</h3><span class="muted"><small>The curve is the most oxygen the water can hold.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="do-t">Water temperature <output id="do-t-o"></output></label><input id="do-t" type="range" min="0" max="35" step="1" value="25"></div>
+          <div class="ctl"><label for="do-s">Salinity <output id="do-s-o"></output></label><input id="do-s" type="range" min="0" max="40" step="1" value="35"><div class="hint">0 = river, 15 = middle of an estuary, 35 = ocean.</div></div>
+          <div class="ctl"><label for="do-m">Oxygen your meter reads <output id="do-m-o"></output></label><input id="do-m" type="range" min="0" max="14" step="0.1" value="5.5"></div>
+        </div>
+        <div class="viz">
+          <svg id="do-chart" viewBox="0 0 560 250" role="img" aria-label="Dissolved oxygen saturation versus temperature"></svg>
+          <div class="readouts">
+            <div class="ro"><span>Most it can hold</span><b id="do-r-sat"></b></div>
+            <div class="ro big"><span>% saturation</span><b id="do-r-pct"></b></div>
+            <div class="ro"><span>Condition</span><b id="do-r-st"></b></div>
+          </div>
+          <div class="verdict" id="do-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Saturation values use the standard oxygen solubility equation (APHA) at sea-level air pressure.</p>
+    </div>
+    <div class="plain example">
+      <p>% saturation = measured DO ÷ the most the water can hold × 100.<br>
+      Water at 25 °C and 35 ppt can hold about 6.8 mg/L. Your meter reads 5.5 mg/L. 5.5 ÷ 6.8 × 100 = <b>81%</b> saturated. Fine for fish. The same 5.5 mg/L in 10 °C fresh water (which can hold 11.3) would be only 49%, which tells you something is using up the oxygen.</p>
+    </div>
+
+    <div class="cols">
+      <div class="card">
+        <h4>pH and ocean acidification</h4>
+        <p>pH measures how acidic water is. Below 7 is acidic, 7 is neutral, above 7 is basic. Each step is <b>10 times</b>: pH 7 is 10× more acidic than pH 8, and 100× more than pH 9.</p>
+        <p>When CO₂ dissolves in seawater it makes <b>carbonic acid</b>:</p>
+        <p class="formula">CO₂ + H₂O → H₂CO₃ → H⁺ + HCO₃⁻</p>
+        <p>The extra H⁺ grabs carbonate ions (CO₃²⁻) that corals, clams, and some plankton need to build shells. Ocean pH has dropped from about 8.2 to 8.1 since the 1700s. That sounds tiny, but it's about <b>30% more acidic</b>.</p>
+        <p>Aragonite saturation (Ω) tells you how easy it is to build shells. Ω above 1 means shells can form; Ω below 1 means they start to dissolve. Reefs grow best above 4.</p>
+      </div>
+      <div class="card">
+        <h4>Math you might see</h4>
+        <ul class="tight">
+          <li><b>pH and pOH:</b> pH + pOH = 14. pH = −log[H⁺].</li>
+          <li><b>Salinity from chlorinity:</b> S = 1.80655 × Cl (both in ppt). If Cl = 19.2 ppt, S ≈ 34.7 ppt.</li>
+          <li><b>BOD:</b> DO on day 0 − DO after 5 days in the dark at 20 °C. 8.0 − 3.5 = 4.5 mg/L.</li>
+          <li><b>Secchi depth:</b> lower the disk until it disappears, raise it until it reappears, and average the two depths. Light reaches about 2.7 × that depth. Smaller depth = murkier water.</li>
+          <li><b>Total solids</b> = dissolved solids + suspended solids.</li>
+          <li><b>Percent and unit conversions:</b> 35 ppt = 3.5% = 35 g/kg = 35,000 ppm.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Germs: fecal coliform and friends</h4>
+        <p>Fecal coliform bacteria live in the guts of warm-blooded animals. They're mostly harmless themselves, but finding them means poop got in the water, and the germs that cause stomach bugs, hepatitis, and ear infections may be there too. Counts are reported per 100 mL. For ocean beaches, the EPA prefers testing for <b>enterococci</b>, which survive better in salt water.</p>
+      </div>
+      <div class="card">
+        <h4>Reading data tables and graphs</h4>
+        <ul class="tight">
+          <li>Look for things that move together: hot afternoon → low DO; heavy rain → low salinity, high turbidity and coliform.</li>
+          <li>DO often swings daily: high in the afternoon (algae photosynthesize), lowest just before dawn (everything respires all night).</li>
+          <li>Always read the units and axis labels first. mg/L vs % saturation and °C vs °F are easy traps.</li>
+          <li>Process skills count: independent vs dependent variable, controls, and whether the data supports a conclusion.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PART IV ===================== -->
+<section id="salinometer">
+  <div class="wrap">
+    <h2>Part IV: Build a salinometer <span class="tag t-sand">10 points</span></h2>
+    <p class="sub">The only points you can lock in before the tournament. Five for bringing a working one, five for getting the mystery sample right.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>How it works</h4>
+        <p>Salt water is <b>denser</b> (heavier for its size) than fresh water, so it pushes up harder on things floating in it. That's <b>buoyancy</b>. A floating object sinks until it pushes aside water weighing as much as itself. In denser, saltier water it doesn't have to sink as far, so it <b>floats higher</b>.</p>
+        <p>A float that measures density is called a <b>hydrometer</b>. Mark where the water line sits in known salt solutions and you've made a salinometer.</p>
+        <div class="plain"><p>It's like floating in a swimming pool versus floating in the ocean. You bob higher in the ocean because salty water pushes up harder. Your straw does the same thing, and you measure how high it bobs.</p></div>
+        <p class="muted"><small>The rules also allow electronic salinometers that measure how well the water conducts electricity, as long as you build it and it has nothing programmable and no Wi-Fi. A float is simpler and plenty accurate.</small></p>
+      </div>
+      <div class="card">
+        <h4>Build it</h4>
+        <ol class="steps">
+          <li>You need: a clear plastic straw, modeling clay, a fine-tip permanent marker, a tall clear glass or graduated cylinder, salt, water (distilled is best), and a kitchen scale.</li>
+          <li>Plug one end of the straw with clay, pressed in tight with no air bubbles and no leaks.</li>
+          <li>Float it clay-end down in plain water. Add or pinch off clay until it floats straight up with most of the straw underwater.</li>
+          <li>Mark the water line: that's <b>0%</b>.</li>
+          <li>Float it in a 10% standard and mark that line: <b>10%</b>.</li>
+          <li>Float it in more standards (2, 4, 6, 8%) and mark each one. Real marks beat guessed ones.</li>
+          <li>Label your marks, write your names on it, and pack it in a tube so it can't get bent.</li>
+        </ol>
+        <p class="muted"><small>Upgrade: turn a plastic transfer pipette upside down, put sand in the bulb for weight, and seal it. The fat bulb with a thin stem spreads your marks much farther apart. Try both in the exhibit below.</small></p>
+      </div>
+    </div>
+
+    <div class="lab" id="smLab">
+      <div class="lab-head"><h3>🧂 Exhibit: the float test</h3>
+        <span><button class="btn" id="sm-mystery">🎲 Mystery sample</button></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Design <output id="sm-d-o"></output></label>
+            <div class="seg" id="sm-d"><button data-v="thin">Thin straw</button><button data-v="reg" aria-pressed="true">Regular straw</button><button data-v="wide">Boba straw</button><button data-v="pip">Pipette + sand</button></div></div>
+          <div class="ctl"><label for="sm-w">Clay or sand <output id="sm-w-o"></output></label><input id="sm-w" type="range" min="1" max="20" step="0.1" value="5"><div class="hint">Too little and it lies on its side. Too much and it sinks.</div></div>
+          <div class="ctl"><label for="sm-c">Salt in the beaker <output id="sm-c-o"></output></label><input id="sm-c" type="range" min="0" max="10" step="0.1" value="3.5"><div class="hint">Percent mass/volume: 3.5% means 3.5 g of salt in every 100 mL.</div></div>
+          <div class="ctl" id="sm-guessbox" hidden><label for="sm-g">Your reading (%)</label>
+            <div class="guess"><input id="sm-g" type="number" min="0" max="10" step="0.1" inputmode="decimal" placeholder="e.g. 4.5"><button class="btn" id="sm-check">Check</button><button class="btn ghost" id="sm-exit">Done</button></div>
+            <div class="hint">Read the zoomed-in stem: where does the water line fall between your marks? Estimate to the nearest tenth.</div></div>
+        </div>
+        <div class="viz">
+          <div class="pair">
+            <svg id="sm-beaker" viewBox="0 0 200 330" role="img" aria-label="Float in a beaker of salt water"></svg>
+            <svg id="sm-zoom" viewBox="0 0 300 330" role="img" aria-label="Zoomed view of the calibration marks"></svg>
+          </div>
+          <div class="readouts">
+            <div class="ro"><span>Water density</span><b id="sm-r-rho"></b></div>
+            <div class="ro"><span>Gap from 0% to 10%</span><b id="sm-r-gap"></b></div>
+            <div class="ro big"><span>Reads as</span><b id="sm-r-read"></b></div>
+          </div>
+          <div class="verdict" id="sm-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Densities are approximate for table salt at room temperature. The zoom panel shows the marks you'd get by calibrating at 0, 2, 4, 6, 8, and 10%.</p>
+    </div>
+    <div class="plain howto">
+      <p>The trick to a good salinometer is <b>big gaps between marks</b>. If 0% and 10% are only 9 mm apart, each 1% is less than a millimeter and you can't read it to 0.5%. Two things spread the marks out: having <b>more of the float underwater</b> (heavier, longer) and having a <b>thin stem on top of a fat bottom</b> (the pipette design). That's exactly how the glass hydrometers in science labs are shaped.</p>
+    </div>
+
+    <div class="cols">
+      <div class="card">
+        <h4>Making standard solutions</h4>
+        <p><b>10% mass/volume</b> means 10 g of salt in 100 mL of <b>solution</b>, not 10 g plus 100 mL of water.</p>
+        <ol class="steps">
+          <li>Weigh 10.0 g of salt into a measuring cup.</li>
+          <li>Add water until the total is 100 mL. Stir until fully dissolved.</li>
+          <li>That's your 10% stock. Make the rest by diluting it:</li>
+        </ol>
+        <p class="formula">C₁ × V₁ = C₂ × V₂</p>
+        <div class="tablewrap"><table>
+          <tr><th>Want</th><th>10% stock</th><th>Add water to make</th></tr>
+          <tr><td>2%</td><td>20 mL</td><td>100 mL</td></tr>
+          <tr><td>4%</td><td>40 mL</td><td>100 mL</td></tr>
+          <tr><td>6%</td><td>60 mL</td><td>100 mL</td></tr>
+          <tr><td>8%</td><td>80 mL</td><td>100 mL</td></tr>
+        </table></div>
+        <p class="muted"><small>Use plain (non-iodized) salt; the supervisor will most likely use NaCl. A scale that reads to 0.1 g helps a lot.</small></p>
+      </div>
+      <div class="card">
+        <h4>Reading it like a pro</h4>
+        <ul class="tight">
+          <li>Make sure it floats <b>straight up</b> and isn't touching the side of the beaker.</li>
+          <li>Tap it gently to knock off air bubbles, which make it float too high.</li>
+          <li>Get your eye level with the water line. Read the bottom of the curve (the <b>meniscus</b>).</li>
+          <li>Rinse and dry it between samples so salt doesn't crust on and add weight.</li>
+          <li>Calibrate at room temperature. Warm water is a little less dense and reads low.</li>
+          <li>Re-check your 0% mark the morning of the tournament. Clay can shift or soak up water.</li>
+          <li>Estimate to the nearest tenth. If the line is a third of the way from 4 to 6, say 4.7.</li>
+          <li>Bring spare clay and your calibration numbers on your note sheet.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FLASHCARDS ===================== -->
+<section id="flashcards">
+  <div class="wrap">
+    <h2>Flashcards</h2>
+    <p class="sub">Tap a card to flip it. <button class="btn ghost" id="fc-shuffle" style="margin-left:6px">Shuffle</button> <button class="btn ghost" id="fc-reset">Flip all back</button></p>
+    <div class="cards" id="fc"></div>
+  </div>
+</section>
+
+<!-- ===================== GAME PLAN ===================== -->
+<section id="plan">
+  <div class="wrap">
+    <h2>Game plan</h2>
+    <p class="sub">How to practice, how to split up the test with your partner, and what to put on your note sheet.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>🗓 A practice schedule</h4>
+        <div class="timeline">
+          <div><b>8+ weeks out:</b> Read this page. Build a first salinometer this week, just to learn what goes wrong.</div>
+          <div><b>6–8 weeks out:</b> Make proper standards and build your real salinometer. Test it on a sample a parent mixes without telling you the answer.</div>
+          <div><b>4–6 weeks out:</b> One test part per week: estuaries and oceans, then reefs, then water tests. Learn the 23 organisms with quiz mode.</div>
+          <div><b>2–4 weeks out:</b> Take practice tests (use 2027 marine and estuary ones, not 2026 freshwater ones). Make your note sheet from the questions you missed.</div>
+          <div><b>Last week:</b> Re-check your salinometer marks. Pack it safely. Review flashcards.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h4>👯 Splitting 50 minutes between two partners</h4>
+        <ul class="tight">
+          <li>Divide the test before the tournament. One common split: <b>Partner A</b> owns Part I and Part III; <b>Partner B</b> owns Part II (reefs and organism IDs) and the salinometer reading.</li>
+          <li>Pull the test apart if the supervisor allows it, so you both work at once.</li>
+          <li>Do the salinometer reading early when the station is free, so it's not rushed at the end.</li>
+          <li>Save the <b>last 5 minutes</b> to swap and check each other's answers. A blank answer is always wrong; a guess might be right.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>📄 What to put on your note sheet</h4>
+        <ul class="tight">
+          <li>The parameter table (healthy values and units) from Part III.</li>
+          <li>Estuary types by geology and by mixing, with one example each.</li>
+          <li>Ocean zones with depths; plankton, nekton, benthos.</li>
+          <li>The 23 organisms with one identifying feature and what each one indicates.</li>
+          <li>NOAA bleaching alert levels; aragonite Ω ranges.</li>
+          <li>Formulas: G = rN, S = 1.80655 × Cl, % saturation, pH + pOH = 14, C₁V₁ = C₂V₂.</li>
+          <li>Your salinometer's calibration readings.</li>
+        </ul>
+        <p class="muted"><small>One sheet per team, both sides. Small, neat writing or a printed sheet fits a lot.</small></p>
+      </div>
+      <div class="card">
+        <h4>📏 Units cheat sheet</h4>
+        <div class="tablewrap"><table>
+          <tr><td>ppt (‰)</td><td>parts per thousand = g per kg</td></tr>
+          <tr><td>35 ppt</td><td>3.5% ≈ seawater</td></tr>
+          <tr><td>1% salt (m/v)</td><td>1 g per 100 mL = 10 g per L</td></tr>
+          <tr><td>ppm</td><td>parts per million = mg/L in water</td></tr>
+          <tr><td>°C → °F</td><td>× 9/5, then + 32 (29 °C = 84 °F)</td></tr>
+          <tr><td>1 meter</td><td>3.28 feet</td></tr>
+          <tr><td>1 fathom</td><td>6 feet (old ocean depth unit)</td></tr>
+        </table></div>
+      </div>
+      <div class="card">
+        <h4>🦺 Practicing safely at home</h4>
+        <ul class="tight">
+          <li>Wear your goggles when you practice with the salinometer so they feel normal on tournament day.</li>
+          <li>Salt water stings eyes: rinse with plain water for a few minutes.</li>
+          <li>Don't drink your standards, and wash up after handling clay.</li>
+          <li>Wipe up spills; salty water on the floor is slippery.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SCORE ===================== -->
+<section id="score">
+  <div class="wrap">
+    <h2>Score calculator</h2>
+    <p class="sub">Plug in your practice test results and see where your points come from.</p>
+    <div class="lab">
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="sc-1">Part I correct <output id="sc-1-o"></output></label><input id="sc-1" type="range" min="0" max="100" step="1" value="65"></div>
+          <div class="ctl"><label for="sc-2">Part II correct <output id="sc-2-o"></output></label><input id="sc-2" type="range" min="0" max="100" step="1" value="60"></div>
+          <div class="ctl"><label for="sc-3">Part III correct <output id="sc-3-o"></output></label><input id="sc-3" type="range" min="0" max="100" step="1" value="55"></div>
+          <div class="ctl"><label for="sc-err">How far off your salinity reading was <output id="sc-err-o"></output></label><input id="sc-err" type="range" min="0" max="3" step="0.1" value="0.4"></div>
+          <div class="ctl"><label>Salinometer</label>
+            <div class="seg" id="sc-bring"><button data-v="yes" aria-pressed="true">Brought one</button><button data-v="no">Forgot it</button></div></div>
+          <div class="ctl"><label>Tournament</label>
+            <div class="seg" id="sc-lvl"><button data-v="reg" aria-pressed="true">Regional (±1%)</button><button data-v="state">State / nationals (±0.5%)</button></div></div>
+        </div>
+        <div class="viz">
+          <svg id="sc-chart" viewBox="0 0 560 120" role="img" aria-label="Score breakdown"></svg>
+          <div class="readouts" id="sc-ro"></div>
+          <div class="verdict" id="sc-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Assumes the reading gets all 5 points inside the window and none outside it. Some tournaments may give partial credit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VIDEOS ===================== -->
+<section id="videos">
+  <div class="wrap">
+    <h2>Videos and links</h2>
+    <p class="sub">Videos first, then reading. The "search" tiles open a YouTube search for topics with lots of good short videos.</p>
+    <h3>Watch</h3>
+    <div class="vids" id="vids"></div>
+    <h3>Read and practice</h3>
+    <div class="cols">
+      <div class="card">
+        <h4>Rules and event resources</h4>
+        <ul class="tight">
+          <li><a href="https://www.soinc.org/water-quality-b">Science Olympiad: Water Quality event page</a> (handouts for each part, a sample tournament, the supervisor guide)</li>
+          <li><a href="https://www.soinc.org/sites/default/files/uploaded_files/8-27-WQ-SAMPLE_MARINE-ESTUARYdocx.pdf">Official 2027 sample tournament (PDF)</a> with answers</li>
+          <li><a href="https://www.soinc.org/sites/default/files/uploaded_files/7-WQ-HANDOUT-P4-SALINOMETER.pdf">Official salinometer handout (PDF)</a></li>
+          <li><a href="https://www.soinc.org/sites/default/files/uploaded_files/13-REEF_INDICATOR_ORGANISMS.pdf">Reef indicator organisms (PDF)</a></li>
+          <li><a href="https://scio.ly/docs/water-quality">Scio.ly Water Quality guide</a> (very detailed)</li>
+          <li><a href="https://scio.ly/practice">Scio.ly practice questions</a></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Learn more</h4>
+        <ul class="tight">
+          <li><a href="https://oceanservice.noaa.gov/facts/estuary.html">NOAA: What is an estuary?</a></li>
+          <li><a href="https://coast.noaa.gov/estuaries/curriculum/">NOAA Estuary Education</a> (lessons and data)</li>
+          <li><a href="https://coralreefwatch.noaa.gov/">NOAA Coral Reef Watch</a> (real heat stress maps)</li>
+          <li><a href="https://www.reefcheck.org/">Reef Check</a> (how volunteer reef surveys work)</li>
+          <li><a href="https://www.epa.gov/wqs-tech">EPA water quality standards</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+  <div class="wrap">
+    <h2>Tournament-day checklist</h2>
+    <p class="sub">Tick things off as you pack. Your checks are saved on this device. <button class="btn ghost" id="ck-clear">Clear all</button></p>
+    <div class="check" id="ck"></div>
+  </div>
+</section>
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+  <div class="wrap">
+    <h2>Glossary</h2>
+    <p class="sub">Every big word on this page, in plain language. Type to filter.</p>
+    <input class="gloss-search" id="gl-q" type="search" placeholder="Search words…" aria-label="Search glossary">
+    <div class="gloss" id="gl"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Made for studying the Science Olympiad Water Quality event (2027, Division B). Not an official Science Olympiad resource; the official Rules Manual takes precedence. Lab exhibits are simplified models for building intuition.</p>
+    <p><a href="../">← All science pages</a></p>
+  </div>
+</footer>
+
+<script>
+(() => {
+"use strict";
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function txt(parent, x, y, s, attrs = {}) { const t = el("text", { x, y, ...attrs }, parent); t.textContent = s; return t; }
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const fmt = (v, d = 1) => Number(v).toFixed(d);
+
+// segmented buttons -> value getter
+function seg(id, onChange) {
+  const box = document.getElementById(id);
+  box.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (box.dataset.multi) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    else box.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    onChange();
+  });
+  return () => {
+    if (box.dataset.multi) return [...box.querySelectorAll("button[aria-pressed=true]")].map(b => b.dataset.v);
+    const b = box.querySelector("button[aria-pressed=true]"); return b ? b.dataset.v : null;
+  };
+}
+const num = id => parseFloat(document.getElementById(id).value);
+function onInput(ids, fn) { ids.forEach(id => document.getElementById(id).addEventListener("input", fn)); }
+
+// simple line chart helper
+function axes(svg, { x0, y0, w, h, xmin, xmax, ymin, ymax, xticks, yticks, xlabel, ylabel, xfmt = v => v, yfmt = v => v }) {
+  const X = v => x0 + (v - xmin) / (xmax - xmin) * w;
+  const Y = v => y0 + h - (v - ymin) / (ymax - ymin) * h;
+  yticks.forEach(v => { el("line", { x1: x0, x2: x0 + w, y1: Y(v), y2: Y(v), class: "axis" }, svg); txt(svg, x0 - 6, Y(v) + 4, yfmt(v), { "text-anchor": "end", class: "axis-label" }); });
+  xticks.forEach(v => txt(svg, X(v), y0 + h + 15, xfmt(v), { "text-anchor": "middle", class: "axis-label" }));
+  if (xlabel) txt(svg, x0 + w / 2, y0 + h + 30, xlabel, { "text-anchor": "middle", class: "axis-label" });
+  if (ylabel) txt(svg, 12, y0 + h / 2, ylabel, { "text-anchor": "middle", class: "axis-label", transform: `rotate(-90 12 ${y0 + h / 2})` });
+  return { X, Y };
+}
+const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join("");
+// mix two #rrggbb colors
+function mix(a, b, t) {
+  const p = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+  const A = p(a), B = p(b);
+  return "#" + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, "0")).join("");
+}
+
+/* =============== ESTUARY =============== */
+onInput(["es-river", "es-tide", "es-probe"], esUpdate);
+// salinity (ppt) at distance x (0 river .. 1 ocean) and depth z (0 top .. 1 bottom)
+function esSal(x, z, mixing) {
+  const mean = 35 * smooth(0, 1, x * 1.05);
+  const iface = 1 - 0.95 * Math.pow(x, 0.7);             // salt wedge creeps in along the bottom
+  const w = 0.03 + 0.5 * mixing;
+  const strat = 35 * smooth(iface - w, iface + w, z) * (0.35 + 0.65 * x) + 35 * x * x * 0.2;
+  return clamp((1 - mixing) * strat + mixing * mean, 0, 35);
+}
+function esUpdate() {
+  const river = num("es-river"), tide = num("es-tide"), probe = num("es-probe") / 100;
+  $("#es-river-o").textContent = river < 25 ? "low" : river < 60 ? "medium" : "high";
+  $("#es-tide-o").textContent = tide < 25 ? "weak" : tide < 60 ? "medium" : "strong";
+  $("#es-probe-o").textContent = probe < .33 ? "up the river" : probe < .67 ? "middle" : "near the sea";
+  const mixing = clamp((tide + 5) / (tide + river + 10), 0, 1) ** 1.3;
+  const svg = $("#es-chart"); svg.innerHTML = "";
+  const x0 = 20, y0 = 40, W = 520, H = 170, nx = 52, nz = 17;
+  const fresh = css("--fresh"), salt = css("--salt");
+  for (let i = 0; i < nx; i++) for (let j = 0; j < nz; j++) {
+    const s = esSal((i + .5) / nx, (j + .5) / nz, mixing);
+    el("rect", { x: x0 + i * W / nx, y: y0 + j * H / nz, width: W / nx + .6, height: H / nz + .6, fill: mix(fresh, salt, s / 35) }, svg);
+  }
+  // land / labels
+  txt(svg, x0, 24, "⛰ River", { "font-weight": 800, "font-size": 13 });
+  txt(svg, x0 + W, 24, "Ocean 🌊", { "font-weight": 800, "font-size": 13, "text-anchor": "end" });
+  txt(svg, x0 + W / 2, 24, "surface", { class: "axis-label", "text-anchor": "middle" });
+  txt(svg, x0 + W / 2, y0 + H + 16, "bottom", { class: "axis-label", "text-anchor": "middle" });
+  // flow arrows
+  const ar = (x, y, dir, s) => txt(svg, x, y, dir > 0 ? "→" : "←", { "font-size": s, "font-weight": 800, fill: "#fff", "text-anchor": "middle", opacity: .85 });
+  if (river > 10) ar(x0 + 70, y0 + 18, 1, 12 + river / 6);
+  if (tide > 10) ar(x0 + W - 70, y0 + H - 10, -1, 12 + tide / 6);
+  // probe
+  const px = x0 + probe * W;
+  el("line", { x1: px, x2: px, y1: y0 - 6, y2: y0 + H, stroke: css("--coral"), "stroke-width": 3, "stroke-dasharray": "6 4" }, svg);
+  el("circle", { cx: px, cy: y0 + 3, r: 5, fill: css("--coral") }, svg);
+  el("circle", { cx: px, cy: y0 + H - 3, r: 5, fill: css("--coral") }, svg);
+  // legend
+  const lg = el("g", {}, svg);
+  for (let k = 0; k <= 10; k++) el("rect", { x: x0 + k * 18, y: y0 + H + 26, width: 18, height: 10, fill: mix(fresh, salt, k / 10) }, lg);
+  txt(lg, x0, y0 + H + 50, "0 ppt", { class: "axis-label" }); txt(lg, x0 + 198, y0 + H + 50, "35 ppt", { class: "axis-label", "text-anchor": "end" });
+  const top = esSal(probe, 0.03, mixing), bot = esSal(probe, 0.97, mixing), diff = bot - top;
+  const type = mixing < 0.3 ? "Salt wedge" : mixing < 0.6 ? "Partially mixed" : "Well mixed";
+  $("#es-r-type").textContent = type;
+  $("#es-r-top").textContent = fmt(top, 0) + " ppt";
+  $("#es-r-bot").textContent = fmt(bot, 0) + " ppt";
+  $("#es-r-diff").textContent = fmt(diff, 0) + " ppt";
+  const v = $("#es-verdict");
+  v.className = "verdict" + (mixing < 0.3 ? " warn" : "");
+  v.textContent = mixing < 0.3
+    ? "Salt wedge: the river wins. Light fresh water slides out over a heavy salty layer. Little mixing means the bottom water can run out of oxygen."
+    : mixing < 0.6
+      ? "Partially mixed: tides stir the layers but the bottom is still saltier. Most estuaries, like Chesapeake Bay, are like this."
+      : "Well mixed: the tides win. Top and bottom are about the same, and salinity rises steadily as you head out to sea.";
+}
+esUpdate();
+
+/* =============== OCEAN ZONES =============== */
+function zonesDraw() {
+  const svg = $("#zones"); svg.innerHTML = "";
+  const W = 640, top = 40;
+  const sea = css("--sea"), deep = css("--deep");
+  const bands = [["Epipelagic · 0–200 m · sunlit", 40, .15], ["Mesopelagic · 200–1,000 m · twilight", 50, .4], ["Bathypelagic · 1,000–4,000 m · dark", 70, .65], ["Abyssopelagic · 4,000–6,000 m", 50, .85], ["Hadal · trenches", 45, 1]];
+  let y = top;
+  bands.forEach(([n, h, t]) => { el("rect", { x: 0, y, width: W, height: h, fill: mix(css("--fresh"), deep, t) }, svg); txt(svg, W - 10, y + h / 2 + 4, n, { "text-anchor": "end", "font-size": 12, "font-weight": 700, fill: t > .5 ? "#fff" : css("--ink") }); y += h; });
+  // seafloor: beach, shelf, slope, abyssal plain, trench
+  const floor = [[0, top - 8], [60, top + 4], [180, top + 22], [215, top + 40], [300, top + 175], [380, top + 205], [450, top + 210], [478, top + 255], [500, top + 210], [W, top + 210], [W, 330], [0, 330]];
+  el("path", { d: path(floor) + "Z", fill: css("--sand"), opacity: .9 }, svg);
+  // tides
+  el("line", { x1: 0, x2: 90, y1: top - 4, y2: top - 4, stroke: css("--coral"), "stroke-width": 2, "stroke-dasharray": "4 3" }, svg);
+  txt(svg, 4, 16, "Intertidal", { "font-size": 11, "font-weight": 800, fill: css("--coral") });
+  // neritic / oceanic brackets
+  el("line", { x1: 60, x2: 215, y1: 28, y2: 28, stroke: css("--ink"), "stroke-width": 2 }, svg);
+  txt(svg, 137, 22, "Neritic (over the shelf)", { "text-anchor": "middle", "font-size": 12, "font-weight": 800 });
+  el("line", { x1: 220, x2: W - 6, y1: 28, y2: 28, stroke: css("--ink"), "stroke-width": 2 }, svg);
+  txt(svg, 430, 22, "Oceanic (open ocean)", { "text-anchor": "middle", "font-size": 12, "font-weight": 800 });
+  txt(svg, 120, top + 60, "Continental shelf", { "font-size": 11, "text-anchor": "middle", fill: "#222", "font-weight": 700 });
+  txt(svg, 262, top + 150, "Slope", { "font-size": 11, "text-anchor": "middle", fill: "#222", "font-weight": 700, transform: `rotate(57 262 ${top + 150})` });
+  txt(svg, 380, top + 235, "Benthic zone: the sea floor", { "font-size": 12, "text-anchor": "middle", fill: "#222", "font-weight": 800 });
+  txt(svg, 489, top + 280, "Trench", { "font-size": 11, "text-anchor": "middle", fill: "#222", "font-weight": 700 });
+  txt(svg, 10, 322, "Not to scale. Everything in the water itself is the pelagic zone.", { class: "axis-label", fill: "#222" });
+}
+zonesDraw();
+
+/* =============== ENERGY PYRAMID =============== */
+onInput(["ep-e", "ep-eff", "ep-mag"], epUpdate);
+const EP = [["Producers", "phytoplankton, seagrass", "🌿"], ["Primary consumers", "zooplankton, grazers", "🦐"], ["Secondary consumers", "small fish", "🐟"], ["Tertiary consumers", "big fish (tuna)", "🐠"], ["Top predators", "dolphins, ospreys", "🐬"]];
+function epUpdate() {
+  const E = num("ep-e"), eff = num("ep-eff") / 100, mag = num("ep-mag");
+  $("#ep-e-o").textContent = E.toLocaleString() + " J"; $("#ep-eff-o").textContent = Math.round(eff * 100) + "%"; $("#ep-mag-o").textContent = mag + "×";
+  const svg = $("#ep-chart"); svg.innerHTML = "";
+  const cx = 230, maxW = 300, rowH = 44, y0 = 18;
+  const logMax = Math.log10(E) + 0.5;
+  txt(svg, cx, 12, "Energy (bar width on a log scale)", { "text-anchor": "middle", class: "axis-label" });
+  txt(svg, 495, 12, "Poison level", { "text-anchor": "middle", class: "axis-label" });
+  const toxin0 = 0.001;
+  EP.forEach((lv, i) => {
+    const e = E * eff ** i, row = EP.length - 1 - i, y = y0 + row * (rowH + 4);
+    const w = Math.max(16, maxW * (Math.log10(Math.max(e, 0.01)) + 2.5) / (logMax + 2.5));
+    el("rect", { x: cx - w / 2, y, width: w, height: rowH, rx: 8, fill: mix(css("--kelp"), css("--sea"), i / 4) }, svg);
+    txt(svg, cx, y + 18, `${lv[2]} ${lv[0]}`, { "text-anchor": "middle", "font-weight": 800, "font-size": 12, fill: "#fff" });
+    txt(svg, cx, y + 35, e >= 10 ? Math.round(e).toLocaleString() + " J" : fmt(e, e >= 1 ? 1 : 2) + " J", { "text-anchor": "middle", "font-size": 12, fill: "#fff" });
+    const tox = toxin0 * mag ** i;
+    const tw = clamp(8 + 14 * Math.log10(tox / toxin0 + 1), 8, 100);
+    el("rect", { x: 450, y: y + 10, width: tw, height: rowH - 20, rx: 5, fill: css("--coral") }, svg);
+    txt(svg, 450 + tw + 5, y + rowH / 2 + 4, tox < 1 ? fmt(tox, 3) : fmt(tox, tox < 10 ? 1 : 0), { "font-size": 11, "font-weight": 700 });
+  });
+  const top = E * eff ** 4;
+  $("#ep-verdict").textContent = `Only ${fmt(top / E * 100, top / E * 100 < 0.01 ? 4 : 2)}% of the producers' energy reaches the top predators (${top >= 1 ? Math.round(top).toLocaleString() : fmt(top, 2)} J). That's why there are millions of plankton but only a few sharks. Meanwhile a poison that builds up ${mag}× per level is ${(mag ** 4).toLocaleString()}× stronger in the top predator than in the plankton.`;
+}
+epUpdate();
+
+/* =============== BLEACHING =============== */
+onInput(["bl-hot", "bl-wk"], blUpdate);
+function blUpdate() {
+  const hot = num("bl-hot"), wk = num("bl-wk"), MMM = 29;
+  $("#bl-hot-o").textContent = "+" + fmt(hot, 2).replace(/0$/, "") + " °C"; $("#bl-wk-o").textContent = wk + " week" + (wk === 1 ? "" : "s");
+  const counts = hot >= 1;
+  const dhwAt = t => counts ? hot * Math.min(t, 12) : 0;
+  const dhw = dhwAt(wk);
+  // chart
+  const svg = $("#bl-chart"); svg.innerHTML = "";
+  const ymax = 20;
+  const { X, Y } = axes(svg, { x0: 40, y0: 10, w: 320, h: 160, xmin: 0, xmax: 16, ymin: 0, ymax, xticks: [0, 4, 8, 12, 16], yticks: [0, 4, 8, 12, 16, 20], xlabel: "weeks of heat wave", ylabel: "DHW" });
+  el("rect", { x: X(0), y: Y(ymax), width: X(16) - X(0), height: Y(8) - Y(ymax), fill: css("--coral-soft") }, svg);
+  el("rect", { x: X(0), y: Y(8), width: X(16) - X(0), height: Y(4) - Y(8), fill: css("--sand-soft") }, svg);
+  txt(svg, X(0.3), Y(8) - 5, "Alert 2: severe bleaching, corals die", { "font-size": 10, "font-weight": 700, fill: css("--coral") });
+  txt(svg, X(0.3), Y(4) - 5, "Alert 1: bleaching likely", { "font-size": 10, "font-weight": 700 });
+  const pts = []; for (let t = 0; t <= 16; t += 0.25) pts.push([X(t), Y(Math.min(dhwAt(t), ymax))]);
+  el("path", { d: path(pts), fill: "none", stroke: css("--muted"), "stroke-width": 1.5, "stroke-dasharray": "4 4" }, svg);
+  const pn = []; for (let t = 0; t <= wk; t += 0.25) pn.push([X(t), Y(Math.min(dhwAt(t), ymax))]);
+  el("path", { d: path(pn), fill: "none", stroke: css("--coral"), "stroke-width": 3 }, svg);
+  el("circle", { cx: X(wk), cy: Y(Math.min(dhw, ymax)), r: 5, fill: css("--coral") }, svg);
+  // coral
+  const c = $("#bl-coral"); c.innerHTML = "";
+  const health = clamp(1 - dhw / 9, 0, 1), dead = dhw >= 12;
+  const tissue = dead ? "#8a9a7a" : mix("#f4f1ea", "#c47a3e", health);
+  el("rect", { x: 0, y: 150, width: 200, height: 30, fill: css("--sand") }, c);
+  const br = [[100, 150, 100, 70], [100, 110, 60, 60], [100, 100, 140, 50], [60, 60, 40, 30], [60, 60, 75, 25], [140, 50, 160, 22], [140, 50, 125, 18], [100, 70, 100, 30]];
+  br.forEach(([a, b, d, e]) => el("line", { x1: a, y1: b, x2: d, y2: e, stroke: tissue, "stroke-width": 16, "stroke-linecap": "round" }, c));
+  if (!dead) for (let i = 0; i < 26; i++) { const [a, b, d, e] = br[i % br.length], t = ((i * 37) % 10) / 10; el("circle", { cx: a + (d - a) * t + ((i * 13) % 7) - 3, cy: b + (e - b) * t + ((i * 7) % 5) - 2, r: 1.8, fill: "#6b3d14", opacity: health }, c); }
+  if (dead) for (let i = 0; i < 14; i++) { const [a, b, d, e] = br[i % br.length], t = ((i * 29) % 10) / 10; el("circle", { cx: a + (d - a) * t, cy: b + (e - b) * t, r: 5, fill: "#5c7a3a", opacity: .8 }, c); }
+  txt(c, 100, 172, dead ? "dead, algae-covered" : health > .8 ? "healthy" : health > .35 ? "pale" : "bleached", { "text-anchor": "middle", "font-weight": 800, "font-size": 12, fill: "#222" });
+  // readouts
+  $("#bl-r-t").textContent = fmt(MMM + hot, 1) + " °C";
+  $("#bl-r-dhw").textContent = fmt(dhw, 1);
+  const lvl = hot <= 0 || wk === 0 ? "No stress" : !counts ? "Watch" : dhw < 4 ? "Warning" : dhw < 8 ? "Alert 1" : dhw < 12 ? "Alert 2" : dhw < 16 ? "Alert 3" : dhw < 20 ? "Alert 4" : "Alert 5";
+  $("#bl-r-lvl").textContent = lvl;
+  const v = $("#bl-verdict");
+  v.className = "verdict" + (dhw >= 8 ? " bad" : dhw >= 4 ? " warn" : "");
+  v.textContent = !counts && hot > 0 && wk > 0 ? "A little warmer than normal, but under 1 °C, so it doesn't add to the heat stress total. NOAA calls this a Watch."
+    : dhw === 0 ? "Normal summer water. The zooxanthellae are happy and the coral keeps its color."
+    : dhw < 4 ? `${fmt(dhw, 1)} degree heating weeks: stress is building. Corals may start to look pale. If it cools off now, they'll recover.`
+    : dhw < 8 ? `${fmt(dhw, 1)} DHW: bleaching is likely. The coral has spit out many of its algae and is starving, but it can still recover if the heat breaks soon.`
+    : `${fmt(dhw, 1)} DHW: severe, widespread bleaching, and many corals will die. ${wk > 12 ? "DHW stops growing after 12 weeks because it only counts the last 12." : ""}`;
+}
+blUpdate();
+
+/* =============== ORGANISMS =============== */
+const ORG = [
+  ["🦐", "Banded coral shrimp", "Stenopus hispidus", "global", "Red-and-white striped cleaner shrimp with long white antennae. Collected for aquariums, so missing shrimp can mean over-collecting."],
+  ["🐠", "Butterflyfish", "Chaetodontidae", "global", "Flat, bright yellow-and-white fish, often with a dark eye stripe. Many eat coral polyps, so few butterflyfish = little live coral. Also taken for aquariums."],
+  ["⭐", "Crown-of-thorns starfish", "Acanthaster planci", "global", "Big spiny sea star with up to 20 arms that eats coral. Outbreaks follow nutrient pollution and the loss of its predators."],
+  ["🌿", "Fleshy algae", "red, green, and brown seaweeds", "global", "Seaweed taller than about 3 cm. Lots of it means too many nutrients or too few grazers (overfishing)."],
+  ["🐟", "Grouper (over 30 cm)", "Serranidae", "global", "Thick-bodied predator with a huge mouth. Big ones get fished first, so missing large groupers = overfishing."],
+  ["🪸", "Hard (stony) coral", "Scleractinia", "global", "The reef builders, with calcium carbonate skeletons. Live coral cover is the main measure of reef health."],
+  ["🦞", "Lobster", "spiny and slipper lobsters", "global", "Hides in reef holes with only its antennae showing. A prized food, so few lobsters = overharvesting."],
+  ["✴️", "Long-spined black sea urchin", "Diadema", "global", "Black urchin with very long, thin spines. Grazes algae off the reef. A 1983 Caribbean die-off let seaweed take over many reefs."],
+  ["🐍", "Moray eel", "Muraenidae", "global", "Snake-like fish that peeks out of crevices with its mouth opening and closing (that's how it breathes). Fished and collected; needs a reef full of holes."],
+  ["🦜", "Parrotfish (over 20 cm)", "Scaridae", "global", "Colorful fish with a beak made of fused teeth. Scrapes algae off coral and poops out white sand. Big ones get speared, so missing ones = overfishing."],
+  ["🖍️", "Pencil urchin", "Eucidaris and relatives", "global", "Urchin with thick, blunt spines like pencils or crayons. Collected for the curio and aquarium trade."],
+  ["🎣", "Snapper", "Lutjanidae", "global", "Medium food fish, often in schools near the reef. Fewer snappers = fishing pressure."],
+  ["🧽", "Sponges", "Demospongiae", "global", "Simple animals that filter water through tiny pores. Barrel and tube sponges are common. Their numbers shift with water quality."],
+  ["👄", "Sweetlips and grunts", "Haemulidae", "global", "Fish with thick lips (sweetlips in the Pacific, grunts in the Atlantic). Popular food fish, so they're an overfishing indicator."],
+  ["🐚", "Triton snail", "Charonia", "global", "Huge snail with a beautiful spiral shell. One of the few animals that eats crown-of-thorns starfish. Collected for shells."],
+  ["🐡", "Barramundi cod", "Cromileptes altivelis", "indo", "White grouper with black polka dots and a humped back. Prized in the live reef fish food trade, so very rare on fished reefs."],
+  ["🦬", "Bumphead parrotfish", "Bolbometopon muricatum", "indo", "The biggest parrotfish (over 1 m), with a bump on its forehead. Bites off chunks of coral. Easy to spear while sleeping at night, so it's overfished."],
+  ["🦪", "Giant clam", "Tridacna", "indo", "Huge clam with wavy, colorful lips. Has zooxanthellae like coral. Harvested for meat and shells."],
+  ["🐋", "Humphead wrasse", "Cheilinus undulatus", "indo", "Giant fish (up to 2 m) with thick lips and a bump on its head. Endangered from the live reef fish trade. Eats crown-of-thorns starfish."],
+  ["🥒", "Sea cucumber", "Thelenota ananas, Stichopus chloronotus", "indo", "Soft, sausage-shaped animals on the sand that clean the sea floor. Dried and sold as food, so heavily harvested."],
+  ["🌾", "Gorgonians (sea fans)", "Gorgonia", "atl", "Soft corals shaped like purple lacy fans or bushes that sway in the current. Collected as decorations and hit by disease."],
+  ["💅", "Flamingo tongue snail", "Cyphoma gibbosum", "atl", "Small snail covered in a cream-and-orange spotted 'skin' that lives on and eats sea fans. Collected for its shell, which ruins its spots."],
+  ["🐟", "Nassau grouper", "Epinephelus striatus", "atl", "Brown-and-white striped grouper with a dark spot near the tail. Critically endangered because fishers targeted its huge spawning gatherings."]
+];
+const RG = { global: ["Global", "rg-global"], indo: ["Indo-Pacific", "rg-indo"], atl: ["Atlantic", "rg-atl"] };
+const orgFilter = seg("org-filter", orgRender);
+let orgQuiz = false;
+function orgRender() {
+  const f = orgFilter();
+  $("#orgs").classList.toggle("quiz", orgQuiz);
+  $("#orgs").innerHTML = ORG.filter(o => f === "all" || o[3] === f).map(([em, n, sci, r, d]) =>
+    `<div class="org"><span class="em" aria-hidden="true">${em}</span><span class="rg ${RG[r][1]}">${RG[r][0]}</span><b class="nm" tabindex="0">${n}</b><i>${sci}</i><p>${d}</p><a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(n.replace(/\s*\(.*\)/, "") + " " + sci.split(",")[0] + " reef")}" target="_blank" rel="noopener">See photos ↗</a></div>`).join("");
+}
+$("#orgs").addEventListener("click", e => { const n = e.target.closest(".nm"); if (n && orgQuiz) n.closest(".org").classList.toggle("show"); });
+$("#orgs").addEventListener("keydown", e => { const n = e.target.closest(".nm"); if (n && orgQuiz && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); n.closest(".org").classList.toggle("show"); } });
+$("#org-quiz").addEventListener("click", e => { orgQuiz = !orgQuiz; e.currentTarget.setAttribute("aria-pressed", orgQuiz); e.currentTarget.textContent = orgQuiz ? "🙈 Quiz mode: on" : "🙈 Quiz mode: off"; orgRender(); });
+orgRender();
+
+/* =============== DISSOLVED OXYGEN =============== */
+onInput(["do-t", "do-s", "do-m"], doUpdate);
+// APHA / Benson-Krause oxygen solubility, mg/L at 1 atm
+function doSat(t, S) {
+  const T = t + 273.15;
+  return Math.exp(-139.34411 + 1.575701e5 / T - 6.642308e7 / T ** 2 + 1.2438e10 / T ** 3 - 8.621949e11 / T ** 4 - S * (0.017674 - 10.754 / T + 2140.7 / T ** 2));
+}
+function doUpdate() {
+  const t = num("do-t"), S = num("do-s"), m = num("do-m");
+  $("#do-t-o").textContent = t + " °C (" + Math.round(t * 9 / 5 + 32) + " °F)"; $("#do-s-o").textContent = S + " ppt"; $("#do-m-o").textContent = fmt(m) + " mg/L";
+  const svg = $("#do-chart"); svg.innerHTML = "";
+  const { X, Y } = axes(svg, { x0: 46, y0: 12, w: 490, h: 190, xmin: 0, xmax: 35, ymin: 0, ymax: 15, xticks: [0, 5, 10, 15, 20, 25, 30, 35], yticks: [0, 2, 5, 10, 15], xlabel: "water temperature (°C)", ylabel: "oxygen (mg/L)" });
+  el("rect", { x: X(0), y: Y(2), width: X(35) - X(0), height: Y(0) - Y(2), fill: css("--coral-soft") }, svg);
+  el("rect", { x: X(0), y: Y(5), width: X(35) - X(0), height: Y(2) - Y(5), fill: css("--sand-soft") }, svg);
+  txt(svg, X(34.5), Y(1) + 4, "dead zone (hypoxic)", { "text-anchor": "end", "font-size": 10, "font-weight": 700, fill: css("--coral") });
+  txt(svg, X(34.5), Y(3.5) + 4, "stressful for fish", { "text-anchor": "end", "font-size": 10, "font-weight": 700 });
+  const curve = s => { const p = []; for (let tt = 0; tt <= 35; tt += 0.5) p.push([X(tt), Y(doSat(tt, s))]); return path(p); };
+  el("path", { d: curve(0), fill: "none", stroke: css("--fresh"), "stroke-width": 2.5 }, svg);
+  el("path", { d: curve(35), fill: "none", stroke: css("--salt"), "stroke-width": 2.5 }, svg);
+  el("path", { d: curve(S), fill: "none", stroke: css("--coral"), "stroke-width": 2, "stroke-dasharray": "6 4" }, svg);
+  txt(svg, X(1), Y(doSat(1, 0)) - 6, "fresh water", { "font-size": 10, "font-weight": 700 });
+  txt(svg, X(1), Y(doSat(1, 35)) + 14, "seawater", { "font-size": 10, "font-weight": 700 });
+  const sat = doSat(t, S), pct = m / sat * 100;
+  el("line", { x1: X(t), x2: X(t), y1: Y(sat), y2: Y(Math.min(m, 15)), stroke: css("--muted"), "stroke-dasharray": "2 3" }, svg);
+  el("circle", { cx: X(t), cy: Y(sat), r: 4, fill: "none", stroke: css("--coral"), "stroke-width": 2 }, svg);
+  el("circle", { cx: X(t), cy: Y(Math.min(m, 15)), r: 6, fill: css("--coral") }, svg);
+  $("#do-r-sat").textContent = fmt(sat) + " mg/L";
+  $("#do-r-pct").textContent = Math.round(pct) + "%";
+  const st = m < 2 ? "Hypoxic" : m < 5 ? "Stressed" : pct > 110 ? "Supersaturated" : "Healthy";
+  $("#do-r-st").textContent = st;
+  const v = $("#do-verdict");
+  v.className = "verdict" + (m < 2 ? " bad" : m < 5 || pct > 110 ? " warn" : "");
+  v.textContent = m < 2 ? "Below 2 mg/L: a dead zone. Fish and crabs leave or die; only some worms and bacteria cope."
+    : m < 5 ? "Between 2 and 5 mg/L: fish are stressed and the most sensitive ones leave. Often caused by rotting algae (high BOD) or hot, still water."
+    : pct > 110 ? `${Math.round(pct)}% saturated: more oxygen than the water should hold. This happens on sunny afternoons in algae blooms, or below dams and waterfalls. Above about 110% fish can get gas bubble disease.`
+    : `${Math.round(pct)}% saturated. Good for most sea life. Notice that ${t} °C ${S >= 30 ? "seawater" : S > 0 ? "brackish water" : "fresh water"} can only hold ${fmt(sat)} mg/L at most.`;
+}
+doUpdate();
+
+/* =============== SALINOMETER =============== */
+// A float is a sealed bottom (plug or bulb, volume V0) under a stem of cross-section A (cm²) and length L (cm).
+const SM = {
+  thin: { name: "thin straw", A: Math.PI * 0.225 ** 2, V0: 0.25, L: 20, m0: 0.25, w: 2.4, unit: "clay" },
+  reg:  { name: "regular straw", A: Math.PI * 0.325 ** 2, V0: 0.6, L: 20, m0: 0.4, w: 5.0, unit: "clay" },
+  wide: { name: "boba straw", A: Math.PI * 0.55 ** 2, V0: 1.6, L: 20, m0: 0.9, w: 13.5, unit: "clay" },
+  pip:  { name: "pipette + sand", A: Math.PI * 0.15 ** 2, V0: 4.2, L: 15, m0: 1.2, w: 3.9, unit: "sand" }
+};
+const rho = c => 0.9982 + 0.00683 * c;   // g/mL for NaCl at ~20 °C, c in % m/v
+let smMystery = null;
+const smDesign = seg("sm-d", () => { $("#sm-w").value = SM[smDesign()].w; smUpdate(); });
+onInput(["sm-w", "sm-c"], smUpdate);
+function smFloat(d, M, r) {     // stem length underwater, or null if it sinks / lies flat
+  const Vs = M / r;
+  if (Vs <= d.V0) return { state: "flat", Ls: 0 };
+  const Ls = (Vs - d.V0) / d.A;
+  if (Ls > d.L - 0.3) return { state: "sink", Ls: d.L };
+  if (Ls < d.L * 0.35) return { state: "tippy", Ls };
+  return { state: "ok", Ls };
+}
+function smUpdate() {
+  const d = SM[smDesign()], wv = num("sm-w"), M = d.m0 + wv;
+  const c = smMystery !== null ? smMystery : num("sm-c");
+  $("#sm-d-o").textContent = d.name; $("#sm-w-o").textContent = fmt(wv) + " g " + d.unit;
+  $("#sm-c-o").textContent = smMystery !== null ? "? (mystery)" : fmt(c) + "%";
+  const r = rho(c), f = smFloat(d, M, r);
+  const cal = [0, 2, 4, 6, 8, 10].map(k => [k, smFloat(d, M, rho(k)).Ls]);
+  const L0 = cal[0][1], L10 = cal[5][1], gap = (L0 - L10) * 10;   // mm
+  // beaker drawing: 1 cm = 12 px
+  const B = $("#sm-beaker"); B.innerHTML = "";
+  const s = 12, wl = 110, bx = 30, bw = 140, bb = 318;
+  el("rect", { x: bx, y: wl, width: bw, height: bb - wl, fill: mix(css("--fresh"), css("--salt"), c / 14), opacity: .55 }, B);
+  el("path", { d: `M${bx} 60 L${bx} ${bb} L${bx + bw} ${bb} L${bx + bw} 60`, fill: "none", stroke: css("--muted"), "stroke-width": 3 }, B);
+  for (let k = 1; k <= 4; k++) { el("line", { x1: bx, x2: bx + 14, y1: bb - k * 48, y2: bb - k * 48, stroke: css("--muted") }, B); txt(B, bx + 18, bb - k * 48 + 4, k * 100 + " mL", { class: "axis-label" }); }
+  const cx = 116, sw = Math.max(5, d.A ** 0.5 * 2 * s * 0.9);
+  let base;
+  if (f.state === "flat") base = wl + 10;
+  else if (f.state === "sink") base = bb - 2;
+  else base = wl + f.Ls * s + (d.V0 > 2 ? 0 : 0);
+  if (f.state === "flat") {
+    el("rect", { x: cx - 60, y: wl - sw / 2 - 2, width: d.L * 4, height: sw, rx: 3, fill: "none", stroke: css("--ink"), "stroke-width": 1.5, transform: `rotate(-8 ${cx} ${wl})` }, B);
+    txt(B, 100, 92, "lying on its side", { "text-anchor": "middle", "font-weight": 800, "font-size": 12, fill: css("--coral") });
+  } else {
+    const stemTop = base - d.L * s;
+    const drawTop = Math.max(stemTop, 4);
+    el("rect", { x: cx - sw / 2, y: drawTop, width: sw, height: base - drawTop, fill: css("--paper"), "fill-opacity": .5, stroke: css("--ink"), "stroke-width": 1.5 }, B);
+    if (d.V0 > 2) el("ellipse", { cx, cy: base + 14, rx: 15, ry: 18, fill: css("--sand"), stroke: css("--ink"), "stroke-width": 1.5 }, B);
+    else el("rect", { x: cx - sw / 2, y: base - Math.max(8, d.V0 / d.A * s), width: sw, height: Math.max(8, d.V0 / d.A * s), fill: "#8c6a4f" }, B);
+    // calibration marks on the stem
+    cal.forEach(([k, Ls]) => { const y = wl - (L0 - Ls) * s + (f.Ls - L0) * s; if (y > 2 && y < bb) el("line", { x1: cx - sw / 2 - 3, x2: cx + sw / 2 + 3, y1: y, y2: y, stroke: css("--coral"), "stroke-width": 1.2 }, B); });
+    if (f.state === "sink") txt(B, 100, 92, "it sank! use less weight", { "text-anchor": "middle", "font-weight": 800, "font-size": 12, fill: css("--coral") });
+    if (f.state === "tippy") txt(B, 100, 92, "floats high: may tip over", { "text-anchor": "middle", "font-weight": 800, "font-size": 11, fill: css("--coral") });
+  }
+  el("line", { x1: bx, x2: bx + bw, y1: wl, y2: wl, stroke: css("--sea"), "stroke-width": 2 }, B);
+  // zoom panel: marks from 0% (bottom) to 10% (top) along the stem, and the water line
+  const Z = $("#sm-zoom"); Z.innerHTML = "";
+  const ok = f.state === "ok" || f.state === "tippy";
+  if (!ok || gap <= 0) {
+    txt(Z, 150, 160, f.state === "sink" ? "Sinks in plain water." : "Can't calibrate yet.", { "text-anchor": "middle", "font-weight": 800 });
+    txt(Z, 150, 182, "Adjust the weight until it floats upright.", { "text-anchor": "middle", class: "axis-label" });
+  } else {
+    // true scale: k px per mm of stem, so a cramped float looks cramped
+    const k = Math.min(5, 260 / gap), base0 = 165 + gap * k / 2;
+    const Yz = Ls => base0 - (L0 - Ls) * 10 * k;
+    const labelEvery = gap * k / 5 >= 16 ? 2 : 10;
+    el("rect", { x: 110, y: 20, width: 80, height: 290, fill: css("--paper"), stroke: css("--ink"), "stroke-width": 1.5 }, Z);
+    el("rect", { x: 110, y: Yz(f.Ls), width: 80, height: 310 - Yz(f.Ls), fill: mix(css("--fresh"), css("--salt"), c / 14), opacity: .5 }, Z);
+    for (let i = 0; i < 5; i++) for (let q = 1; q < 4; q++) { const L = cal[i][1] + (cal[i + 1][1] - cal[i][1]) * q / 4; el("line", { x1: 110, x2: 124, y1: Yz(L), y2: Yz(L), stroke: css("--coral"), "stroke-width": .8 }, Z); }
+    cal.forEach(([pc, Ls]) => { el("line", { x1: 110, x2: 140, y1: Yz(Ls), y2: Yz(Ls), stroke: css("--coral"), "stroke-width": 2 }, Z); if (pc % labelEvery === 0) txt(Z, 100, Yz(Ls) + 4, pc + "%", { "text-anchor": "end", "font-weight": 800, "font-size": 13 }); });
+    el("line", { x1: 96, x2: 210, y1: Yz(f.Ls), y2: Yz(f.Ls), stroke: css("--sea"), "stroke-width": 2.5 }, Z);
+    txt(Z, 214, Yz(f.Ls) + 4, "water line", { "font-size": 11, "font-weight": 800, fill: css("--sea") });
+    txt(Z, 150, 14, `zoomed in ${fmt(k, 0)}×: ${fmt(gap, 0)} mm from 0% to 10%`, { "text-anchor": "middle", class: "axis-label" });
+  }
+  // what a 2-point (0% and 10%) calibration would read
+  let read = null;
+  if (ok && gap > 0) read = (L0 - f.Ls) / (L0 - L10) * 10;
+  $("#sm-r-rho").textContent = smMystery !== null ? "?" : fmt(r, 3) + " g/mL";
+  $("#sm-r-gap").textContent = ok && gap > 0 ? fmt(gap, 0) + " mm" : "—";
+  $("#sm-r-read").textContent = smMystery !== null ? "?" : read === null ? "—" : fmt(read) + "%";
+  const v = $("#sm-verdict");
+  if (smMystery !== null) { v.className = "verdict warn"; v.textContent = "Mystery sample in the beaker. Read the zoomed stem and type your answer."; return; }
+  if (!ok) { v.className = "verdict bad"; v.textContent = f.state === "sink" ? "Too heavy: even plain water can't hold it up. Pinch off some weight." : "Too light: it pokes out and falls over. Add weight so it stands up."; return; }
+  const per = gap / 10;
+  v.className = "verdict" + (per < 1 ? " warn" : "");
+  v.textContent = f.state === "tippy" ? `It floats, but so little is underwater that it may lean against the beaker. More weight would also spread the marks (now ${fmt(per, 1)} mm per 1%).`
+    : per < 1 ? `Each 1% is only ${fmt(per, 1)} mm on the stem, too small to read to 0.5%. Add weight so more of it sits underwater, or try the pipette design.`
+    : `Each 1% is about ${fmt(per, 1)} mm. ${per >= 2.5 ? "Easy to read to a tenth." : "Readable, but a careful eye helps."} Using just a 0% and a 10% mark, this would read ${fmt(read)}% (true: ${fmt(c)}%). The spacing isn't perfectly even, so extra standards help.`;
+}
+$("#sm-mystery").addEventListener("click", () => {
+  smMystery = Math.round((1 + Math.random() * 9) * 10) / 10;
+  $("#sm-guessbox").hidden = false; $("#sm-c").disabled = true; $("#sm-g").value = ""; smUpdate(); $("#sm-g").focus();
+});
+$("#sm-check").addEventListener("click", () => {
+  const g = parseFloat($("#sm-g").value); if (isNaN(g) || smMystery === null) return;
+  const err = Math.abs(g - smMystery), v = $("#sm-verdict");
+  v.className = "verdict" + (err <= 0.5 ? "" : err <= 1 ? " warn" : " bad");
+  v.textContent = `The sample was ${fmt(smMystery)}%. You said ${fmt(g)}%, off by ${fmt(err)}. ` + (err <= 0.5 ? "Full credit at any tournament! 🎉" : err <= 1 ? "Full credit at regionals, but not at state (needs ±0.5)." : "Outside the window. Look for where the line sits between the small tick marks.");
+});
+$("#sm-exit").addEventListener("click", () => { if (smMystery !== null) $("#sm-c").value = smMystery; smMystery = null; $("#sm-guessbox").hidden = true; $("#sm-c").disabled = false; smUpdate(); });
+$("#sm-g").addEventListener("keydown", e => { if (e.key === "Enter") $("#sm-check").click(); });
+smUpdate();
+
+/* =============== FLASHCARDS =============== */
+const FC = [
+  ["Estuaries", "What is an estuary?", "A partly enclosed body of water where fresh river water mixes with salty ocean water. Its water is brackish."],
+  ["Estuaries", "Salt wedge vs well-mixed estuary?", "Salt wedge: strong river, weak tides, fresh water on top of a salty bottom layer. Well mixed: strong tides, same salinity top to bottom."],
+  ["Estuaries", "Four ways estuaries form?", "Coastal plain (drowned river valley), bar-built, fjord (glacier), and tectonic. Deltas are sometimes added as a fifth."],
+  ["Estuaries", "Why are estuaries called nurseries?", "Young fish and shellfish shelter and feed in marshes, seagrass, and mangroves before moving out to sea."],
+  ["Oceans", "Neritic vs oceanic zone?", "Neritic: shallow water over the continental shelf. Oceanic: open ocean beyond the shelf."],
+  ["Oceans", "Plankton, nekton, benthos?", "Plankton drift, nekton swim, benthos live on the bottom."],
+  ["Oceans", "How deep is the photic (epipelagic) zone?", "About 0–200 m. Almost all photosynthesis happens here."],
+  ["Oceans", "What is upwelling?", "Wind pushes surface water away from a coast and cold, nutrient-rich deep water rises. It makes great fishing grounds."],
+  ["Oceans", "What happens in El Niño?", "Trade winds weaken, warm water spreads east across the Pacific, upwelling off South America stops, and fisheries crash."],
+  ["Food webs", "Producers make 50,000 J. How much reaches secondary consumers?", "500 J. 10% to primary consumers (5,000 J), then 10% of that (500 J)."],
+  ["Food webs", "Bioaccumulation vs biomagnification?", "Bioaccumulation: a poison builds up in one animal over its life. Biomagnification: it gets more concentrated at each higher trophic level."],
+  ["Nutrients", "What causes a dead zone?", "Nutrients → algae bloom → algae die → bacteria decompose them and use up oxygen → DO below 2 mg/L."],
+  ["Nutrients", "Which nutrient usually limits algae in salt water? In fresh water?", "Nitrogen in salt water, phosphorus in fresh water."],
+  ["Reefs", "What are zooxanthellae?", "Single-celled algae (dinoflagellates) living in coral polyps. They photosynthesize and feed the coral: mutualism."],
+  ["Reefs", "What is coral bleaching?", "Stressed coral (usually by heat) expels its zooxanthellae and turns white. It can recover if the stress ends quickly."],
+  ["Reefs", "What is a degree heating week?", "1 °C above the normal summer max for 1 week. NOAA adds up the last 12 weeks. DHW 4 = bleaching likely; 8 = severe bleaching and death."],
+  ["Reefs", "Fringing reef, barrier reef, atoll?", "Fringing: right along the shore. Barrier: separated from shore by a lagoon. Atoll: a ring around a lagoon where an island sank."],
+  ["Reefs", "What do lots of fleshy algae on a reef indicate?", "Too many nutrients and/or too few grazers like parrotfish and Diadema urchins."],
+  ["Reefs", "What eats crown-of-thorns starfish?", "Triton snails and humphead wrasse (among a few others). Removing them helps cause outbreaks."],
+  ["Water tests", "What does BOD measure?", "How much oxygen microbes use breaking down organic matter over 5 days at 20 °C in the dark. High BOD = organic pollution."],
+  ["Water tests", "Why does warm water have less oxygen?", "Gases dissolve less in warm water. Warm salty water holds the least."],
+  ["Water tests", "What does fecal coliform tell you?", "Poop from warm-blooded animals is in the water, so disease germs may be too. Over 200 per 100 mL is a concern."],
+  ["Water tests", "How does CO₂ acidify the ocean?", "CO₂ + H₂O makes carbonic acid, which releases H⁺. That lowers pH and grabs carbonate that shell builders need."],
+  ["Water tests", "What does aragonite saturation (Ω) above 4 mean?", "Great conditions for coral to build skeletons. Below 3 is poor; below 1 shells dissolve."],
+  ["Water tests", "Salinity of seawater?", "About 35 ppt (3.5%). Salinity = 1.80655 × chlorinity."],
+  ["Salinometer", "Why does a hydrometer float higher in salt water?", "Salt water is denser, so the float has to push aside less of it to hold up its weight."],
+  ["Salinometer", "How do you make 100 mL of a 4% standard from 10% stock?", "C₁V₁ = C₂V₂: 10% × V₁ = 4% × 100 mL, so V₁ = 40 mL stock, plus water to 100 mL."],
+  ["Treatment", "Four steps of drinking water treatment?", "Coagulation/flocculation, sedimentation, filtration, disinfection."]
+];
+let fcOrder = FC.map((_, i) => i);
+function fcRender() {
+  const box = $("#fc"); box.innerHTML = "";
+  fcOrder.forEach(i => {
+    const [cat, q, a] = FC[i];
+    const b = document.createElement("button"); b.className = "flash"; b.setAttribute("aria-label", "Flashcard: " + q);
+    b.innerHTML = `<div class="in"><div class="f"><small>${cat}</small><b>${q}</b></div><div class="b">${a}</div></div>`;
+    b.addEventListener("click", () => b.classList.toggle("flip"));
+    box.appendChild(b);
+  });
+}
+$("#fc-shuffle").addEventListener("click", () => { for (let i = fcOrder.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [fcOrder[i], fcOrder[j]] = [fcOrder[j], fcOrder[i]]; } fcRender(); });
+$("#fc-reset").addEventListener("click", () => document.querySelectorAll(".flash.flip").forEach(f => f.classList.remove("flip")));
+fcRender();
+
+/* =============== SCORE =============== */
+const scBring = seg("sc-bring", scUpdate), scLvl = seg("sc-lvl", scUpdate);
+onInput(["sc-1", "sc-2", "sc-3", "sc-err"], scUpdate);
+function scUpdate() {
+  const p1 = num("sc-1"), p2 = num("sc-2"), p3 = num("sc-3"), err = num("sc-err"), brought = scBring() === "yes", tol = scLvl() === "reg" ? 1 : 0.5;
+  $("#sc-1-o").textContent = p1 + "%"; $("#sc-2-o").textContent = p2 + "%"; $("#sc-3-o").textContent = p3 + "%"; $("#sc-err-o").textContent = "±" + fmt(err);
+  const parts = [
+    ["Part I", p1 * 0.3, "--sea"],
+    ["Part II", p2 * 0.3, "--coral"],
+    ["Part III", p3 * 0.3, "--kelp"],
+    ["Brought it", brought ? 5 : 0, "--sand"],
+    ["Reading", brought && err <= tol ? 5 : 0, "--sand"]
+  ];
+  const total = parts.reduce((s, p) => s + p[1], 0);
+  const svg = $("#sc-chart"); svg.innerHTML = "";
+  let x = 10; const scale = 540 / 100;
+  parts.forEach(p => { const ww = p[1] * scale; if (ww <= 0) return; el("rect", { x, y: 20, width: Math.max(0, ww - 2), height: 46, rx: 8, fill: css(p[2]) }, svg); if (ww > 30) txt(svg, x + ww / 2, 48, fmt(p[1], p[1] % 1 ? 1 : 0), { "text-anchor": "middle", "font-weight": 800, fill: "#fff" }); x += ww; });
+  if (total < 100) { const ww = (100 - total) * scale; el("rect", { x, y: 20, width: ww, height: 46, rx: 8, fill: "none", stroke: css("--line"), "stroke-width": 2, "stroke-dasharray": "5 4" }, svg); if (ww > 60) txt(svg, x + ww / 2, 48, "not yet: " + fmt(100 - total), { "text-anchor": "middle", class: "axis-label" }); }
+  txt(svg, 10, 92, "The whole bar is 100 points. Colors are points you have; the dashed box is what's left.", { class: "axis-label" });
+  $("#sc-ro").innerHTML = parts.map(p => `<div class="ro"><span>${p[0]}</span><b>${fmt(p[1])}</b></div>`).join("") + `<div class="ro big"><span>Total</span><b>${fmt(total)} <small style="font-size:.8rem">of 100</small></b></div>`;
+  const v = $("#sc-verdict");
+  v.className = "verdict" + (!brought ? " bad" : err > tol ? " warn" : "");
+  v.textContent = !brought ? "Forgetting the salinometer costs 10 points: 5 for bringing it and 5 for the reading. That's like getting a third of Part I wrong."
+    : err > tol ? `Your reading is ${fmt(err)} off, outside the ±${tol} window, so you lose 5 points. ${tol === 0.5 ? "State needs twice the accuracy of regionals: spread your marks farther apart." : "Practice on mystery samples to tighten it up."}`
+    : `${fmt(total)} points. Each 10% more correct on any test part adds 3 points. The salinometer is already giving you its full 10.`;
+}
+scUpdate();
+
+/* =============== VIDEOS =============== */
+const VIDS = [
+  { href: "https://coast.noaa.gov/estuaries/videos/so-what-is-an-estuary-so-now-you-know.html", t: "So what is an estuary?", s: "NOAA Estuarine Research Reserves · short intro", icon: "🌊", src: "NOAA" },
+  { href: "https://coast.noaa.gov/estuaries/videos/", t: "Estuary video library", s: "NOAA · tours of real estuaries and the science", icon: "🦀", src: "NOAA" },
+  { href: "https://fondationtaraocean.org/education/video-coral-bleaching/", t: "Coral bleaching", s: "Tara Ocean Foundation · animated explainer", icon: "🪸", src: "Tara" },
+  { q: "how coral reefs work zooxanthellae symbiosis", t: "How corals and their algae live together", s: "Search: zooxanthellae symbiosis", icon: "🌞" },
+  { q: "ocean acidification explained for kids", t: "Ocean acidification", s: "Search: CO₂ and shells", icon: "🐚" },
+  { q: "dead zone hypoxia gulf of mexico explained", t: "Dead zones", s: "Search: hypoxia and fertilizer runoff", icon: "💀" },
+  { q: "salt wedge estuary mixing animation", t: "How estuaries mix", s: "Search: salt wedge and well-mixed estuaries", icon: "🔀" },
+  { q: "make a hydrometer straw clay salt water density", t: "Build a straw hydrometer", s: "Search: the Part IV device", icon: "🧂" },
+  { q: "Reef Check indicator species survey", t: "How Reef Check surveys work", s: "Search: indicator organisms on transects", icon: "🤿" },
+  { q: "great pacific garbage patch explained", t: "Ocean garbage patches", s: "Search: gyres and microplastics", icon: "🗑️" }
+];
+$("#vids").innerHTML = VIDS.map(v => {
+  const href = v.href || "https://www.youtube.com/results?search_query=" + encodeURIComponent(v.q);
+  return `<a class="vid" href="${href}" target="_blank" rel="noopener"><div class="thumb" data-src="${v.src ? "▶ " + v.src : "search"}">${v.icon}</div><div class="t"><b>${v.t}</b><span>${v.s}</span></div></a>`;
+}).join("");
+
+/* =============== CHECKLIST =============== */
+const CK = [
+  "Category C goggles (indirect vent, marked Z87)", "Salinometer, in a tube or box so it can't bend", "Spare clay or sand and a spare straw",
+  "Calibration readings written on the note sheet", "Note sheet (one 8.5×11\" per team, both sides)", "Calculator(s): non-programmable scientific, like a TI-30X",
+  "No phones, smartwatches, or graphing calculators", "Pencils and an eraser", "Paper towel to dry the salinometer between readings",
+  "Team name and number on the salinometer", "Organism list reviewed with quiz mode", "Water bottle and a snack for between events"
+];
+let ckState = {};
+try { ckState = JSON.parse(localStorage.getItem("wq-checklist") || "{}"); } catch (e) {}
+$("#ck").innerHTML = CK.map((c, i) => `<label><input type="checkbox" data-i="${i}" ${ckState[i] ? "checked" : ""}><span>${c}</span></label>`).join("");
+$("#ck").addEventListener("change", e => { ckState[e.target.dataset.i] = e.target.checked; try { localStorage.setItem("wq-checklist", JSON.stringify(ckState)); } catch (err) {} });
+$("#ck-clear").addEventListener("click", () => { ckState = {}; document.querySelectorAll("#ck input").forEach(i => i.checked = false); try { localStorage.removeItem("wq-checklist"); } catch (err) {} });
+
+
+/* =============== GLOSSARY =============== */
+const G = [
+  ["Acidification", "acidification|acidify", "When seawater becomes more acidic (lower pH) because it absorbs CO₂ from the air."],
+  ["Algal bloom", "algal blooms?|algae blooms?", "A sudden population explosion of algae, usually fed by extra nutrients. Some blooms make toxins (harmful algal blooms, HABs)."],
+  ["Apex predator", "apex predators?", "An animal at the very top of a food chain that nothing else hunts, like a big shark or grouper."],
+  ["Aragonite", "aragonite", "The form of calcium carbonate that corals and many shells are made of."],
+  ["Atoll", "atolls?", "A ring-shaped coral reef around a lagoon, left behind after a volcanic island sank."],
+  ["Ballast water", "ballast water", "Water ships pump in to stay stable and dump out at the next port, often carrying stowaway species."],
+  ["Benthic", "benthic|benthos", "Living on or in the sea floor. The benthos are bottom dwellers like crabs, clams, and worms."],
+  ["Bioaccumulation", "bioaccumulation", "A poison building up in one living thing over its lifetime because it takes it in faster than it gets rid of it."],
+  ["Biomagnification", "biomagnification", "A poison getting more concentrated at each step up a food chain."],
+  ["BOD", "BOD₅|BOD|biochemical oxygen demand", "Biochemical oxygen demand: how much oxygen microbes use up breaking down rotting material. High BOD means lots of organic pollution."],
+  ["Brackish", "brackish", "Water that's saltier than fresh water but less salty than the ocean."],
+  ["Buoyancy", "buoyancy|buoyant", "The upward push a liquid gives anything in it. Denser liquids push harder."],
+  ["Bycatch", "bycatch", "Animals caught by accident while fishing for something else."],
+  ["Calcium carbonate", "calcium carbonate", "CaCO₃, the hard mineral in coral skeletons, shells, and chalk."],
+  ["Carrying capacity", "carrying capacity", "The largest population an environment can support with its food, space, and other resources."],
+  ["Category C goggles", "Category C goggles|Category C", "Chemical splash goggles with covered (indirect) vents, stamped \"Z87.\" Required for Part IV."],
+  ["Coagulation", "coagulation", "Adding a chemical (like alum) to water so tiny particles stick together into clumps that can settle out."],
+  ["Continental shelf", "continental shelf", "The shallow underwater edge of a continent before the sea floor drops off steeply."],
+  ["Coral cover", "coral cover", "The percent of the reef floor covered by living coral. A key measure of reef health."],
+  ["Dead zone", "dead zones?", "An area of water with so little oxygen (under 2 mg/L) that most animals leave or die."],
+  ["Degree heating week", "degree heating weeks?|DHW", "A measure of heat stress on corals: 1 °C above the usual summer maximum for 1 week. Added up over 12 weeks."],
+  ["Denitrification", "denitrification", "Bacteria turning nitrate back into nitrogen gas, which escapes to the air."],
+  ["Density", "density|denser|dense", "How much mass is packed into a space. Salt water has more mass per mL than fresh water."],
+  ["Desalination", "desalination", "Removing salt from seawater to make fresh drinking water."],
+  ["Dinoflagellate", "dinoflagellates?", "A kind of single-celled algae that swims with two tiny whips. Zooxanthellae and red tide algae are dinoflagellates."],
+  ["Dissolved oxygen", "dissolved oxygen","Oxygen gas mixed into water, which fish and other animals breathe through gills."],
+  ["El Niño", "El Niño", "A climate pattern where the eastern Pacific gets unusually warm, cutting off upwelling and nutrients."],
+  ["Enterococci", "enterococci", "Gut bacteria the EPA uses to test ocean beaches for sewage pollution."],
+  ["Estuary", "estuary|estuaries", "A partly enclosed place where a river's fresh water mixes with ocean salt water."],
+  ["Euryhaline", "euryhaline", "Able to handle a wide range of salinity, like salmon and blue crabs."],
+  ["Eutrophication", "eutrophication", "Water getting overloaded with nutrients, leading to algal blooms and low oxygen."],
+  ["Fecal coliform", "fecal coliforms?", "Bacteria from the guts of warm-blooded animals. Finding them means sewage or poop is in the water."],
+  ["Fjord", "fjords?", "A long, deep, narrow inlet carved by a glacier and flooded by the sea."],
+  ["Flocculation", "flocculation|floc", "Gently stirring water so small clumps of particles join into bigger ones (floc) that sink."],
+  ["Gyre", "gyres?", "A huge loop of ocean currents. Trash collects in the middle of gyres."],
+  ["Hermatypic", "hermatypic", "Reef-building. Hermatypic corals have zooxanthellae and build big calcium carbonate skeletons."],
+  ["Hydrometer", "hydrometers?", "A float that measures how dense a liquid is by how high it floats."],
+  ["Hypoxic", "hypoxic|hypoxia", "Having very little dissolved oxygen, usually under 2 mg/L."],
+  ["Imposex", "imposex", "Female snails growing male body parts, caused by the boat paint chemical TBT."],
+  ["Indicator organism", "indicator organisms?|indicator species", "A living thing whose presence, absence, or numbers tells scientists about the health of an environment."],
+  ["Intertidal", "intertidal|littoral", "The shore zone between high and low tide, underwater part of the day and dry the rest."],
+  ["Invasive species", "invasive species|invasives?", "A living thing brought to a new place where it spreads and causes harm."],
+  ["Keystone species", "keystone species", "A species that has a much bigger effect on its ecosystem than its numbers suggest, like sea otters."],
+  ["Meniscus", "meniscus", "The curved surface of water where it meets a container or a straw."],
+  ["Mutualism", "mutualism|mutualistic", "A partnership where both living things benefit, like coral and zooxanthellae."],
+  ["Nekton", "nekton", "Ocean animals that swim strongly enough to go against currents: fish, squid, whales."],
+  ["Neritic", "neritic", "The ocean zone over the continental shelf, shallow and full of life."],
+  ["Nitrification", "nitrification", "Bacteria turning ammonia into nitrite and then nitrate."],
+  ["Nitrogen fixation", "nitrogen fixation", "Bacteria turning nitrogen gas from the air into ammonia that living things can use."],
+  ["NTU", "NTU", "Nephelometric turbidity units: how cloudy water is, measured by how much light bounces off particles."],
+  ["Oceanic zone", "oceanic", "The open ocean beyond the continental shelf."],
+  ["Pelagic", "pelagic", "The open water of the sea, as opposed to the bottom."],
+  ["PFAS", "PFAS", "\"Forever chemicals\" from nonstick pans, waterproof gear, and firefighting foam that don't break down in nature."],
+  ["pH", "pH", "A scale from 0 to 14 for how acidic something is. Lower is more acidic, 7 is neutral, higher is basic. Seawater is about 8.1."],
+  ["Photic zone", "photic zone|epipelagic", "The top layer of the ocean (about 0–200 m) with enough light for photosynthesis."],
+  ["Photosynthesis", "photosynthesis|photosynthesize", "How plants and algae use sunlight, water, and CO₂ to make sugar and oxygen."],
+  ["Phytoplankton", "phytoplankton", "Tiny plant-like drifters that make food from sunlight. The base of most ocean food webs."],
+  ["Plankton", "plankton", "Living things that drift with the current because they can't swim against it."],
+  ["Polyp", "polyps?", "A single coral animal: a tiny tube with a mouth surrounded by stinging tentacles."],
+  ["ppm", "ppm", "Parts per million. In water, 1 ppm = 1 mg per liter."],
+  ["ppt", "ppt", "Parts per thousand. For salinity, grams of salt per kilogram of water. Seawater is about 35 ppt."],
+  ["Salinity", "salinity|salinities", "How much salt is dissolved in water."],
+  ["Salinometer", "salinometers?", "A device that measures salinity. In this event, usually a homemade hydrometer."],
+  ["Salt marsh", "salt marshes|salt marsh", "A grassy coastal wetland flooded by salty tides."],
+  ["Secchi disk", "Secchi", "A black-and-white disk lowered into water. The depth where it disappears tells you how clear the water is."],
+  ["Sediment", "sediments?|sedimentation", "Sand, silt, and mud carried by water and settled on the bottom."],
+  ["Spawn", "spawn|spawning", "Releasing eggs and sperm into the water to reproduce."],
+  ["Spring tide", "spring tides?", "Extra-big tides at full and new moon. Nothing to do with the season."],
+  ["Standard solution", "standards?|standard solution", "A solution with an exactly known concentration, used to calibrate an instrument."],
+  ["Stenohaline", "stenohaline", "Only able to live in a narrow range of salinity, like most corals."],
+  ["Thermohaline circulation", "thermohaline", "Slow, deep ocean currents driven by differences in temperature and salt."],
+  ["Total solids", "total solids", "Everything left after water evaporates: dissolved solids (like salt) plus suspended solids (like mud)."],
+  ["Transect", "transects?", "A straight line along which scientists count living things."],
+  ["Trophic level", "trophic levels?", "A step in a food chain: producers, then primary consumers, and so on."],
+  ["Turbidity", "turbidity|turbid", "How cloudy or murky water is."],
+  ["Upwelling", "upwelling", "Cold, nutrient-rich deep water rising to the surface along a coast."],
+  ["Watershed", "watersheds?", "All the land that drains into a particular river, lake, or bay."],
+  ["Zooplankton", "zooplankton", "Tiny drifting animals, like copepods, krill, and baby fish."],
+  ["Zooxanthellae", "zooxanthellae", "Single-celled algae living inside coral that make food from sunlight and give coral its color."]
+];
+// glossary list
+const glBox = $("#gl");
+const slug = t => "g-" + t.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+glBox.innerHTML = G.map(([t, , d]) => `<div id="${slug(t)}"><b>${t}</b><br>${d}</div>`).join("");
+$("#gl-q").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  glBox.querySelectorAll("div").forEach(d => d.hidden = q && !d.textContent.toLowerCase().includes(q));
+});
+// auto-mark the first use of each term in every section
+const SKIP = "h1,h2,h3,h4,button,label,output,svg,nav,a,.term,.formula,.seg,.ro,.verdict,.hint,#glossary,.fact,.tag,.eyebrow,script,style,input,.org,.flash,.toy,th";
+const rx = new RegExp("(?<![\\w])(" + G.map(g => g[1]).sort((a, b) => b.length - a.length).join("|") + ")(?![\\w])", "i");
+const which = m => G.findIndex(g => new RegExp("^(" + g[1] + ")$", "i").test(m));
+document.querySelectorAll("header.hero, section").forEach(sec => {
+  if (sec.id === "glossary") return;
+  const used = new Set();
+  const walker = document.createTreeWalker(sec, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest(SKIP) || !n.nodeValue.trim() ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    let cur = node;
+    while (cur) {
+      const text = cur.nodeValue; let m, idx = -1, gi = -1, start = 0;
+      const r = new RegExp(rx.source, "gi");
+      while ((m = r.exec(text))) { const k = which(m[1]); if (k >= 0 && !used.has(k)) { idx = m.index; gi = k; start = m[1].length; break; } }
+      if (idx < 0) break;
+      used.add(gi);
+      const after = cur.splitText(idx); const rest = after.splitText(start);
+      const sp = document.createElement("span"); sp.className = "term"; sp.tabIndex = 0; sp.dataset.g = gi; sp.textContent = after.nodeValue;
+      after.replaceWith(sp); cur = rest;
+    }
+  });
+});
+// popover
+const pop = document.createElement("div"); pop.id = "gloss-pop"; pop.setAttribute("role", "tooltip"); document.body.appendChild(pop);
+let popFor = null, shownAt = 0;
+function showPop(t) {
+  const k = t.dataset.g;
+  if (k === "glossary-demo") pop.innerHTML = "<b>Like this!</b>Tap any dotted word to see what it means.";
+  else { const [term, , def] = G[+k]; pop.innerHTML = `<b>${term}</b>${def}<br><a href="#${slug(term)}">See in glossary</a>`; }
+  pop.style.display = "block";
+  const r = t.getBoundingClientRect(), pw = Math.min(300, innerWidth - 24);
+  pop.style.maxWidth = pw + "px";
+  let left = r.left + scrollX; left = Math.max(12 + scrollX, Math.min(left, scrollX + innerWidth - pop.offsetWidth - 12));
+  let top = r.bottom + scrollY + 8;
+  if (r.bottom + pop.offsetHeight + 16 > innerHeight) top = r.top + scrollY - pop.offsetHeight - 8;
+  pop.style.left = left + "px"; pop.style.top = top + "px"; if (popFor !== t) shownAt = Date.now(); popFor = t;
+}
+function hidePop() { pop.style.display = "none"; popFor = null; }
+document.addEventListener("click", e => { const t = e.target.closest(".term"); if (t) { popFor === t && Date.now() - shownAt > 400 ? hidePop() : showPop(t); } else if (!e.target.closest("#gloss-pop")) hidePop(); });
+document.addEventListener("mouseover", e => { const t = e.target.closest(".term"); if (t && matchMedia("(hover:hover)").matches) showPop(t); });
+document.addEventListener("mouseout", e => { const t = e.target.closest(".term"); if (t && matchMedia("(hover:hover)").matches && !e.relatedTarget?.closest?.("#gloss-pop")) hidePop(); });
+document.addEventListener("focusin", e => { const t = e.target.closest(".term"); if (t) showPop(t); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") hidePop(); });
+addEventListener("scroll", () => { if (popFor && !matchMedia("(hover:hover)").matches) showPop(popFor); }, { passive: true });
+
+// re-render colors when theme flips
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { esUpdate(); zonesDraw(); epUpdate(); blUpdate(); doUpdate(); smUpdate(); scUpdate(); });
+})();
+</script>
+</body>
+</html>
