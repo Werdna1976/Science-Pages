@@ -149,6 +149,31 @@ th{font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:var(--mut
 .check input{margin-top:5px;accent-color:var(--mint);width:18px;height:18px;flex:none}
 .check label:has(input:checked){opacity:.6;text-decoration:line-through}
 
+/* kid-friendly additions */
+.term{border-bottom:2px dotted var(--berry);cursor:help;border-radius:2px}
+.term:hover,.term:focus{background:var(--berry-soft);outline:none}
+#gloss-pop{position:absolute;z-index:50;max-width:300px;background:var(--paper);color:var(--ink);border:2px solid var(--berry);border-radius:14px;padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.18);font-size:.92rem;line-height:1.45;display:none}
+#gloss-pop b{display:block;color:var(--berry);font-family:"Fraunces",serif;font-size:1.02rem;margin-bottom:2px}
+#gloss-pop a{font-size:.8rem}
+.plain{background:var(--blue-soft);border-radius:14px;padding:12px 16px;margin:12px 0;font-size:.97rem}
+.plain::before{content:"💡 In plain words";display:block;font-weight:800;color:var(--blue);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.plain.howto::before{content:"📈 How to read this"}
+.plain.example::before{content:"🧮 Worked example"}
+.plain.why::before{content:"🤔 Why it matters"}
+.plain p{margin:6px 0}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.gloss div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 14px;scroll-margin-top:80px}
+.gloss div:target{border-color:var(--berry);box-shadow:0 0 0 3px var(--berry-soft)}
+.gloss b{color:var(--berry)}
+.gloss-search{width:100%;max-width:360px;font:inherit;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);margin-bottom:12px}
+.ptable td:nth-child(2),.ptable th:nth-child(2){text-align:right;white-space:nowrap;font-weight:800}
+.pbar{display:flex;height:44px;border-radius:12px;overflow:hidden;margin:10px 0 4px;font-weight:800;font-size:.85rem;color:#222}
+.pbar div{display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.1;padding:0 4px}
+.startcard{background:var(--paper);border:2px solid var(--berry);border-radius:18px;padding:16px 20px;margin-top:22px}
+.startcard ol{margin:6px 0 0;padding-left:22px}
+.timeline{border-left:3px solid var(--line);margin:8px 0 0 8px;padding-left:16px}
+.timeline div{position:relative;margin-bottom:10px}
+.timeline div::before{content:"";position:absolute;left:-23px;top:7px;width:11px;height:11px;border-radius:50%;background:var(--berry)}
 footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px dashed var(--line)}
 </style>
 </head>
@@ -157,14 +182,17 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
 <nav class="top" aria-label="Sections">
   <div class="wrap">
     <a href="#overview">Overview</a>
+    <a href="#points">🏅 Points</a>
     <a href="#ice-cream">🍦 Ice cream</a>
     <a href="#curds">🧀 Curds</a>
     <a href="#butter">🧈 Butter</a>
     <a href="#test">📝 Test topics</a>
     <a href="#notebook">📓 Notebook</a>
-    <a href="#score">🏅 Score</a>
+    <a href="#plan">🗺 Game plan</a>
+    <a href="#score">🧮 Score calculator</a>
     <a href="#videos">▶ Videos & links</a>
     <a href="#checklist">✅ Checklist</a>
+    <a href="#glossary">📖 Glossary</a>
   </div>
 </nav>
 
@@ -172,13 +200,24 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
   <div class="wrap">
     <span class="eyebrow">Science Olympiad · Food Science · 2027 · Division B</span>
     <h1>The Dairy Lab</h1>
-    <p class="lead">Food Science is about the chemistry of milk. You'll make three dairy products under time pressure, show a notebook of experiments you ran at home, and take a written test. This page explains the science behind each task and has lab exhibits you can play with to figure out how to win each one.</p>
+    <p class="lead">Food Science is about the chemistry of milk. At the tournament you'll make a dairy product (ice cream, curds, or butter) against the clock, hand in a notebook of experiments you ran at home, and take a written test. This page explains the science behind each one and has lab exhibits you can play with to figure out how to win.</p>
     <div class="facts">
       <div class="fact"><b>2</b><span>students per team, about 50 minutes</span></div>
       <div class="fact"><b>3</b><span>lab tasks to prepare: ice cream, curds, butter</span></div>
       <div class="fact"><b>18</b><span>points for your experiment notebook</span></div>
-      <div class="fact"><b>10</b><span>points (about) per lab task</span></div>
+      <div class="fact"><b>~10</b><span>points for each lab task you're given</span></div>
       <div class="fact"><b>50</b><span>points for the written test</span></div>
+      <div class="fact"><b>~78</b><span>total points at a 1-task tournament (<a href="#points">see how</a>)</span></div>
+    </div>
+    <div class="startcard">
+      <b>👋 New here? Start like this:</b>
+      <ol>
+        <li>Read <a href="#overview">How the event works</a> and <a href="#points">Where the points come from</a>.</li>
+        <li>For each task, read the steps and the science, then play with the exhibit. Change <b>one</b> thing at a time and watch what happens.</li>
+        <li>Try the real thing in the kitchen and write it up for your <a href="#notebook">notebook</a>.</li>
+        <li>Study the <a href="#test">test topics</a> and quiz yourself with the flashcards.</li>
+      </ol>
+      <p style="margin:10px 0 0"><span class="term" tabindex="0" data-g="glossary-demo">Words with a dotted underline</span> are "big words." Tap or hover over one to see what it means. They're all collected in the <a href="#glossary">glossary</a> at the bottom too.</p>
     </div>
     <p class="note"><b>Check the official rules.</b> Everything here comes from the 2027 Food Science rules as summarized by <a href="https://www.scio.ly/docs/food-science">Scio.ly</a> and the <a href="https://www.soinc.org/food-science-b">Science Olympiad event page</a>. The official Rules Manual always wins, and rules get clarified during the season, so check <a href="https://www.soinc.org/food-science-b">soinc.org</a> before each tournament.</p>
   </div>
@@ -192,24 +231,76 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
     <div class="cols">
       <div class="card">
         <h4>1. Experiment notebook (before the tournament)</h4>
-        <p>Run <b>at least 3 experiments for each of the 3 lab tasks</b> (9 total) and record them on the official <a href="https://www.soinc.org/food-science-b">Food Science Experiment Form</a>. Change only <b>one variable</b> per experiment. Only the first 3 per task are graded, 2 points each, so 18 points max. The notebook is impounded (handed in) at check-in and returned at the end.</p>
+        <p>Run <b>at least 3 experiments for each of the 3 lab tasks</b> (9 total) and record them on the official <a href="https://www.soinc.org/food-science-b">Food Science Experiment Form</a>. Change only <b>one variable</b> (one thing) per experiment. Only the first 3 per task are graded, 2 points each, so 18 points max. The notebook is impounded: you hand it in at check-in and get it back at the end, so you can't use it during the event.</p>
       </div>
       <div class="card">
         <h4>2. Lab tasks (at the tournament)</h4>
         <p>You won't know which task you'll get until you're there. Regionals and invitationals usually run 1 task, states 1 or 2, nationals 2 or 3. So practice all three until they're automatic.</p>
         <ul class="tight">
-          <li><b>Ice cream:</b> 0.1 point per millimeter of height of a scoop that stands on its own for 5 seconds.</li>
-          <li><b>Curds and butter:</b> (your mass ÷ supervisor's mass) × 10, max 10.</li>
+          <li><b>Ice cream:</b> 0.1 point per millimeter of height of a scoop that stands on its own for 5 seconds. So a 60 mm scoop (about 2⅓ inches) = 6 points.</li>
+          <li><b>Curds and butter:</b> compared to the supervisor's own batch. Match their mass and you get 10, the max. Half their mass gets 5.</li>
         </ul>
       </div>
       <div class="card">
         <h4>3. Written test</h4>
-        <p>Dairy science: milk chemistry, fats, sugars, proteins, vitamins and minerals, emulsions, pasteurization, probiotics, types of dairy products, lactose intolerance and allergies, labels, and health benefits. Score is your percent correct ÷ 2, so up to 50 points. That's the single biggest chunk, which is why there's a whole <a href="#test">test topics</a> section below.</p>
+        <p>Dairy science: milk chemistry, fats, sugars, proteins, vitamins and minerals, emulsions, pasteurization, probiotics, types of dairy products, lactose intolerance and allergies, labels, and health benefits. Score is your percent correct ÷ 2, so 100% = 50 points and 70% = 35 points. That's the biggest chunk by far, which is why there's a whole <a href="#test">test topics</a> section below.</p>
       </div>
       <div class="card">
         <h4>Bring and wear</h4>
-        <p>Category C (indirect-vent, Z87) goggles, lab coat or apron, skin covered neck to wrist to toes, long hair tied back. One 8.5×11" note sheet each (both sides), up to two non-phone calculators. Your own pint bag, gallon bag, 500–600 mL lidded container, and a ~30 cm square of cheesecloth. Losing points for cleanup (up to 10%) or safety is the easiest way to throw away a medal. Full list in the <a href="#checklist">checklist</a>.</p>
+        <p>Category C goggles (the kind with covered air vents, stamped "Z87"), a lab coat or apron, skin covered neck to wrist to toes, long hair tied back. One 8.5×11" note sheet each (both sides), up to two calculators (no phones or watches). Your own pint bag, gallon bag, 500–600 mL lidded container, and a ~30 cm square of cheesecloth. Losing points for cleanup (up to 10%) or safety is the easiest way to throw away a medal. Full list in the <a href="#checklist">checklist</a>.</p>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== POINTS ===================== -->
+<section id="points">
+  <div class="wrap">
+    <h2>Where the points come from</h2>
+    <p class="sub">Your score isn't a grade out of 100. It's a pile of points from different parts, and the team with the biggest pile wins. How big the pile can get depends on how many lab tasks the tournament gives you.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>The point table</h4>
+        <div class="tablewrap"><table class="ptable">
+          <tr><th>Part</th><th>Max</th><th>How you earn it</th></tr>
+          <tr><td>📓 Notebook</td><td>18</td><td>9 experiments (3 per task) × 2 points each. Incomplete ones earn less.</td></tr>
+          <tr><td>📝 Written test</td><td>50</td><td>Your percent correct ÷ 2.</td></tr>
+          <tr><td>🧀 Curds (if given)</td><td>10</td><td>(your curd mass ÷ supervisor's) × 10, never more than 10.</td></tr>
+          <tr><td>🧈 Butter (if given)</td><td>10</td><td>(your butter mass ÷ supervisor's) × 10, never more than 10.</td></tr>
+          <tr><td>🍦 Ice cream (if given)</td><td>no max</td><td>0.1 point per mm of height. 100 mm (about 4 inches) = 10 points; most scoops land around 4–7.</td></tr>
+          <tr><td>🧹 Cleanup penalty</td><td>−10%</td><td>Leave a mess or skip cleanup steps and you can lose up to 10% of the possible points.</td></tr>
+        </table></div>
+      </div>
+      <div class="card">
+        <h4>So what's the total?</h4>
+        <div class="tablewrap"><table class="ptable">
+          <tr><th>Tournament</th><th>About</th><th>Made of</th></tr>
+          <tr><td>Invitational / regional (1 task)</td><td>78</td><td>18 + 50 + 10</td></tr>
+          <tr><td>State (1 or 2 tasks)</td><td>78–88</td><td>18 + 50 + 10 or 20</td></tr>
+          <tr><td>Nationals (2 or 3 tasks)</td><td>88–98</td><td>18 + 50 + 20 or 30</td></tr>
+        </table></div>
+        <p style="margin-bottom:0">At a 1-task tournament the points split like this:</p>
+        <div class="pbar" role="img" aria-label="Test 64 percent, notebook 23 percent, lab task 13 percent">
+          <div style="flex:50;background:var(--berry)">Test 50</div>
+          <div style="flex:18;background:var(--blue);color:#fff">Notebook 18</div>
+          <div style="flex:10;background:var(--butter)">Task 10</div>
+        </div>
+        <p class="muted"><small>Ice cream has no max, so a really tall scoop can earn a little more than 10.</small></p>
+      </div>
+    </div>
+    <div class="plain why">
+      <p>The written test is about <b>two-thirds</b> of your points, and the notebook is almost a quarter. The lab task is the fun part, but it's the smallest slice. Going from 60% to 80% on the test adds 10 points, which is more than a perfect lab task is worth. So study the test topics, and get all 9 notebook experiments done before the tournament.</p>
+      <p><b>Ties</b> are broken by specific test questions the supervisor picks ahead of time, so every test question can matter.</p>
+    </div>
+    <div class="plain example">
+      <p>Ava and Priya go to a regional, and the task is curds.</p>
+      <ul class="tight">
+        <li>Notebook: 8 complete experiments (16 points) plus one missing its conclusion (1 point) = <b>17</b></li>
+        <li>Test: 64% correct → 64 ÷ 2 = <b>32</b></li>
+        <li>Curds: they got 18 g, the supervisor got 20 g → 18 ÷ 20 × 10 = <b>9</b></li>
+        <li>They cleaned up properly, so no penalty.</li>
+      </ul>
+      <p>Total: 17 + 32 + 9 = <b>58 out of about 78</b>. Try your own numbers in the <a href="#score">score calculator</a>.</p>
     </div>
   </div>
 </section>
@@ -230,12 +321,28 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
           <li>After about 5–10 minutes, take out the ice cream.</li>
           <li>The scoop must stand for 5 seconds before it's measured. You're allowed to shape it by hand.</li>
         </ol>
+        <p class="muted"><small>Kitchen measures: 125 mL ≈ ½ cup, 15 mL = 1 tablespoon, 1.2 mL ≈ ¼ teaspoon, 90 mL = 6 tablespoons. A pint bag is the small zip-top bag; a gallon bag is the big one.</small></p>
       </div>
       <div class="card">
         <h4>The science</h4>
         <p>Pure ice sits at 0 °C. When salt dissolves in the thin layer of meltwater on the ice, the dissolved ions get in the way of water molecules locking back into crystals. Ice keeps melting but can't refreeze as easily, and melting <span class="key">absorbs heat</span>, so the salty slush drops well below 0 °C, down to about −21 °C at the limit. That's <b>freezing point depression</b>, a <b>colligative property</b>: it depends on how many particles are dissolved, not what they are.</p>
+        <div class="plain">
+          <p>Salt makes ice melt. Melting needs energy, and the ice steals that energy as heat from whatever is touching it, including your bag of ice cream mix. It's like how sweat cools you off: as it evaporates, it pulls heat out of your skin. Salty ice gets much colder than plain ice, cold enough to freeze the mix fast.</p>
+        </div>
+        <p>Scientists write it as a formula:</p>
         <p class="formula">ΔT<sub>f</sub> = i · K<sub>f</sub> · m</p>
-        <p><small>i = particles per formula unit (NaCl → Na⁺ + Cl⁻, so i ≈ 2), K<sub>f</sub> = 1.86 °C·kg/mol for water, m = molality (moles of solute per kg of water). The sugar in your mix does the same thing on a smaller scale, so sweeter mixes freeze at a lower temperature and come out softer.</small></p>
+        <ul class="tight" style="font-size:.85rem">
+          <li><b>ΔT<sub>f</sub></b> ("delta T f"): how many degrees lower the freezing point goes. Δ (delta) is the Greek letter scientists use for "change in."</li>
+          <li><b>i</b>: how many pieces each unit breaks into when it dissolves. Salt (NaCl) splits into Na⁺ and Cl⁻, so i ≈ 2. Sugar doesn't split, so i = 1.</li>
+          <li><b>K<sub>f</sub></b>: a number for water, 1.86 °C·kg/mol. It's always the same for water.</li>
+          <li><b>m</b>: molality, how much stuff is dissolved: moles of salt per kilogram of water.</li>
+        </ul>
+        <div class="plain example">
+          <p>One mole of salt is 58.4 g (about 3 tablespoons). Dissolve it in 1 kg (1 liter) of water:<br>
+          ΔT<sub>f</sub> = 2 × 1.86 × 1 = <b>3.7 °C</b>, so the water now freezes at −3.7 °C instead of 0 °C.<br>
+          The slush around the ice is much saltier than that, which is why salty ice can reach −10 to −20 °C.</p>
+        </div>
+        <p><small>The sugar in your mix does the same thing on a smaller scale, so sweeter mixes freeze at a lower temperature and come out softer.</small></p>
       </div>
     </div>
 
@@ -262,6 +369,9 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
         </div>
         <div class="viz">
           <svg id="ic-chart" viewBox="0 0 560 230" role="img" aria-label="Temperature of the salty ice and the ice cream mix over time"></svg>
+          <div class="plain howto" style="margin:0">
+            <p>Time goes left to right. The <b style="color:var(--cold)">blue line</b> is the salty ice. It drops fast once the salt dissolves. The <b style="color:var(--berry)">pink line</b> is your mix. It cools until it reaches its freezing point, then goes almost <b>flat</b>: while water is turning into ice, the temperature barely changes because all the cold goes into making ice crystals (that's called latent heat). The <b style="color:var(--mint)">green dashed line</b> shows how much of the water has frozen (read it on the right side). The black line is the shake time you picked.</p>
+          </div>
           <div class="pair">
             <svg id="ic-scoop" viewBox="0 0 200 170" role="img" aria-label="Side view of the finished scoop"></svg>
             <div class="readouts">
@@ -282,7 +392,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
     <div class="cols">
       <div class="card">
         <h4>Height comes from volume and stiffness</h4>
-        <p>A scoop is basically a cone. For the same volume, a stiff mix can be shaped into a tall, skinny tower; a soft one slumps into a pancake. So you want <b>all the mix you're allowed</b> (volume) and a mix that is <b>frozen enough to hold its shape</b> (stiffness). Fat helps: fat droplets partly clump together during shaking and build a network that traps air and holds the shape.</p>
+        <p>Volume means how much space it takes up. Stiffness means how well it holds its shape. A scoop is basically a cone. For the same volume, a stiff mix can be shaped into a tall, skinny tower; a soft one slumps into a pancake. So you want <b>all the mix you're allowed</b> (volume) and a mix that is <b>frozen enough to hold its shape</b> (stiffness). Fat helps: fat droplets partly clump together during shaking and build a network that traps air and holds the shape.</p>
       </div>
       <div class="card">
         <h4>Watch out for these traps</h4>
@@ -325,13 +435,20 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
           <li>Pour through cheesecloth over a beaker and drain for 15 minutes.</li>
           <li>Weigh the curds.</li>
         </ol>
-        <p class="muted"><small>The milk is an "unknown," so it could be skim, 2%, whole, or something else. Practice with all of them.</small></p>
+        <p class="muted"><small>The milk is an "unknown," meaning nobody tells you what kind it is. It could be skim, 2%, whole, or something else. Practice with all of them, and see <a href="#plan">how to tell milks apart</a>.</small></p>
+        <div class="plain">
+          <p><b>What's pH?</b> pH measures how acidic something is, on a scale from 0 to 14. Lower = more acidic (sour). 7 is neutral, like pure water. Each step is 10 times stronger, so pH 4 is ten times more acidic than pH 5.</p>
+          <p>Lemon juice ≈ 2 · vinegar ≈ 2.5 · orange juice ≈ 3.5 · milk ≈ 6.7 · water = 7 · baking soda ≈ 9</p>
+        </div>
       </div>
       <div class="card">
         <h4>The science</h4>
         <p>About 80% of milk protein is <b>casein</b>. Casein clusters into tiny balls called <b>micelles</b> that carry a negative charge on their surface, so they repel each other and stay floating. Milk's normal pH is about 6.7.</p>
         <p>Acid adds H⁺ ions that cancel those negative charges. At pH 4.6, the <span class="key">isoelectric point</span> of casein, the micelles have no net charge, stop repelling, and clump into curds. Fat gets trapped in the clumps. What drains through is <b>whey</b>: water, lactose, minerals, and whey proteins, which don't curdle from acid alone at room temperature.</p>
         <p>Go past pH 4.6 and the casein starts picking up a <b>positive</b> charge, so the micelles begin repelling again and the curd gets smaller and rubbery. <b>More acid is not always better.</b></p>
+        <div class="plain">
+          <p>Milk is full of tiny protein balls. They all carry the same electric charge, so they push each other away, like two magnets with the same ends facing. That keeps them spread out and the milk smooth. Acid cancels the charge. Once they stop pushing apart, they stick together into lumps: curds. Add way too much acid and they get the opposite charge and start pushing apart again.</p>
+        </div>
       </div>
     </div>
 
@@ -360,6 +477,9 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
             <svg id="cd-micelle" viewBox="0 0 300 190" role="img" aria-label="Casein micelles and their surface charge"></svg>
           </div>
           <svg id="cd-chart" viewBox="0 0 560 200" role="img" aria-label="Curd mass versus drops of acid"></svg>
+          <div class="plain howto" style="margin:0">
+            <p><b>Top left:</b> the beaker. Curds appear as white lumps, and the liquid turns yellow-green (whey) when curdling is complete. <b>Top right:</b> two protein balls (micelles) zoomed way in. The − or + signs show their charge. More signs = stronger pushing apart. <b>Bottom:</b> the chart shows how many grams of curds you'd get for every number of drops. The highest point is the sweet spot. Your pink dot is where you are now.</p>
+          </div>
           <div class="readouts">
             <div class="ro"><span>pH</span><b id="cd-r-ph"></b></div>
             <div class="ro"><span>Casein caught</span><b id="cd-r-caught"></b></div>
@@ -424,6 +544,9 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
         <h4>The science</h4>
         <p>Cream is an <b>oil-in-water emulsion</b>: tiny fat globules floating in water, each wrapped in a thin skin called the <b>milk fat globule membrane</b> (made of phospholipids and proteins). The membrane keeps globules from merging.</p>
         <p>Shaking whips in air. The fat globules line up around the bubbles (that's whipped cream). Keep shaking and the partly solid fat crystals poke holes in the membranes, liquid fat leaks out and glues globules together, the foam collapses, and the emulsion <span class="key">flips</span> into a <b>water-in-oil emulsion</b>: butter, plus the leftover buttermilk. This flip is called <b>phase inversion</b>.</p>
+        <div class="plain">
+          <p>Picture cream as millions of tiny oil droplets, each wrapped in a thin skin, floating in water. Shaking tosses them around until their skins tear. The oily insides leak out and glue the droplets together into bigger and bigger clumps. Finally the clumps join into one big lump of fat with little drops of water trapped inside. That's butter. The water and everything else that didn't join the lump pours off as buttermilk.</p>
+        </div>
       </div>
     </div>
 
@@ -445,6 +568,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
           <div class="pair">
             <svg id="bt-jar" viewBox="0 0 200 230" role="img" aria-label="Jar of cream being shaken"></svg>
             <div>
+              <p class="hint" style="margin:0 0 4px">Press <b>Shake it</b> or drag the <b>Time shaking</b> slider to watch the cream change. The boxes show each stage and when it happens.</p>
               <svg id="bt-stages" viewBox="0 0 360 120" role="img" aria-label="Stages of churning"></svg>
               <div class="verdict" id="bt-stage" style="margin-top:8px"></div>
             </div>
@@ -490,12 +614,16 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
 <section id="test">
   <div class="wrap">
     <h2>Written test topics <span class="tag t-test">50 points</span></h2>
-    <p class="sub">The test is worth more than all the lab tasks combined at most tournaments. Here is the core of each topic, plus flashcards at the end.</p>
+    <p class="sub">The test is worth more than all the lab tasks combined. Here is the core of each topic, plus flashcards at the end.</p>
+    <div class="plain">
+      <p><b>Milk in one minute.</b> Milk is mostly water (about 88%). Floating in it are four main things: <b>fat</b> (tiny droplets, which is why milk looks white and creamy), <b>protein</b> (mostly casein, the part that becomes curds and cheese), <b>sugar</b> (lactose), and <b>minerals</b> like calcium. Almost every dairy product is made by separating, concentrating, or changing one of those parts. Cream is milk with extra fat. Butter is almost all fat. Cheese is mostly protein and fat with the water squeezed out. Yogurt is milk where bacteria turned some lactose into acid.</p>
+    </div>
 
     <div class="lab" id="milkLab">
       <div class="lab-head"><h3>🥛 Exhibit: what's in it?</h3><span class="muted"><small>Grams per 100 g. Pick products to compare.</small></span></div>
       <div class="seg" id="mk-pick"></div>
       <svg id="mk-chart" viewBox="0 0 640 360" role="img" aria-label="Composition of dairy products" style="width:100%;height:auto;margin-top:12px"></svg>
+      <div class="plain howto"><p>Each bar is 100 grams of that food, split up by what's inside. A wider colored section means more of that thing. Tap the buttons to add or remove foods. Try comparing skim milk, heavy cream, and butter.</p></div>
       <p class="toy">Typical values from USDA food composition data, rounded. Brands vary.</p>
     </div>
 
@@ -503,12 +631,12 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
     <div class="cols">
       <div class="card">
         <h4>Proteins</h4>
-        <p>Milk is about 3.3% protein: <b>casein</b> (about 80%) and <b>whey proteins</b> (about 20%, mostly β-lactoglobulin and α-lactalbumin). Casein forms micelles held together partly by calcium phosphate and curdles with acid (pH 4.6) or the enzyme <b>rennet/chymosin</b>, which snips κ-casein, the "hairy" outer layer that keeps micelles apart. Whey proteins stay dissolved in acid but <b>denature</b> (unfold) with heat, which is why heated milk forms a skin.</p>
+        <p>Milk is about 3.3% protein: <b>casein</b> (about 80%) and <b>whey proteins</b> (about 20%, mostly β-lactoglobulin and α-lactalbumin). Casein forms micelles held together partly by calcium phosphate and curdles with acid (pH 4.6) or the enzyme <b>rennet/chymosin</b>, which snips κ-casein (κ is the Greek letter "kappa"), the "hairy" outer layer that keeps micelles apart. Whey proteins stay dissolved in acid but <b>denature</b> (unfold) with heat, which is why heated milk forms a skin.</p>
         <p><small>Test for protein: <b>biuret reagent</b> turns violet.</small></p>
       </div>
       <div class="card">
         <h4>Carbohydrates</h4>
-        <p>The sugar in milk is <b>lactose</b>, a disaccharide of <b>glucose + galactose</b> joined by a β(1→4) bond. Sucrose (table sugar) is glucose + fructose. Starches are long chains of glucose, which is how thickeners in some ice creams work.</p>
+        <p>The sugar in milk is <b>lactose</b>, a disaccharide of <b>glucose + galactose</b> joined by a β(1→4) bond (β is the Greek letter "beta"; the numbers say which atoms of each sugar link up). Sucrose (table sugar) is glucose + fructose. Starches are long chains of glucose, which is how thickeners in some ice creams work.</p>
         <p><small>Test for reducing sugars (lactose, glucose): <b>Benedict's</b> solution turns green → orange → brick red when heated. Sucrose is not a reducing sugar. Test for starch: <b>iodine</b> turns blue-black.</small></p>
       </div>
       <div class="card">
@@ -519,6 +647,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
       <div class="card">
         <h4>Emulsions</h4>
         <p>An emulsion is tiny droplets of one liquid spread through another they don't mix with. <b>Milk and cream</b> are oil-in-water. <b>Butter</b> is water-in-oil (the inverse). Emulsifiers sit at the boundary and keep droplets from merging. <b>Homogenization</b> forces milk through tiny holes at high pressure to shrink fat globules so cream doesn't rise to the top. Ice cream is an emulsion <i>and</i> a foam (air) <i>and</i> a suspension of ice crystals.</p>
+        <div class="plain"><p>Shake oil and vinegar salad dressing: it mixes for a moment, then separates. That's an emulsion that falls apart. Add a little mustard or egg yolk (emulsifiers) and it stays mixed. Milk stays mixed because the proteins and phospholipids around each fat droplet act like that mustard.</p></div>
       </div>
     </div>
 
@@ -532,7 +661,9 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
           </div>
           <p class="hint">Times between the legal standards are read off a smooth curve through them. Pasteurization kills disease-causing bacteria (like <i>Listeria</i>, <i>Salmonella</i>, <i>E. coli</i>) but not all bacteria or spores, so pasteurized milk still needs refrigeration.</p>
         </div>
-        <div class="viz"><svg id="ps-chart" viewBox="0 0 560 260" role="img" aria-label="Pasteurization standards on a log time scale"></svg></div>
+        <div class="viz"><svg id="ps-chart" viewBox="0 0 560 260" role="img" aria-label="Pasteurization standards on a log time scale"></svg>
+          <div class="plain howto" style="margin:0"><p>The side of this chart is a <b>log scale</b>: each line up is <b>10 times</b> longer than the one below it (0.01 s, 0.1 s, 1 s, 10 s, 100 s…). That lets one chart show both 30 minutes and a hundredth of a second. The big idea: heat milk a little hotter and it needs a lot less time to be safe. The UHT dot sits off by itself because UHT heats hard enough to kill even bacterial spores.</p></div>
+        </div>
       </div>
       <div class="tablewrap" style="margin-top:12px">
         <table>
@@ -636,6 +767,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
           <li>A <b>conclusion</b> that says whether the hypothesis was right and explains why using the science.</li>
         </ul>
         <p>Use the official <a href="https://www.soinc.org/food-science-b">Experiment Form</a>. Only the first 3 per task are graded, so put your best ones first.</p>
+        <div class="plain"><p>Say you want to know if more salt makes taller ice cream. Salt is the <b>independent variable</b> (the one thing you change). Height is the <b>dependent variable</b> (what you measure, because it "depends" on the salt). Milk, sugar, ice, and shake time are <b>controlled variables</b>: you keep them the same so salt is the only possible reason the height changed.</p></div>
       </div>
       <div class="card">
         <h4>Example data table (curds)</h4>
@@ -652,11 +784,87 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
   </div>
 </section>
 
+<!-- ===================== GAME PLAN ===================== -->
+<section id="plan">
+  <div class="wrap">
+    <h2>Game plan</h2>
+    <p class="sub">The practical stuff: how to practice, how to split up the work with your partner, and what to put on your note sheet.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>🗓 A practice schedule</h4>
+        <div class="timeline">
+          <div><b>8+ weeks out:</b> Read this page. Do each task once in the kitchen just to see how it goes. Gather gear from the <a href="#checklist">checklist</a>.</div>
+          <div><b>6–8 weeks out:</b> Run your 9 notebook experiments (3 per task) and fill in the Experiment Forms. Do about 2 per week.</div>
+          <div><b>4–6 weeks out:</b> Start test study: one topic section per week plus flashcards. Take a practice test from <a href="https://www.scio.ly/practice?event=Food%20Science">Scio.ly</a>.</div>
+          <div><b>2–4 weeks out:</b> Time yourselves doing each task start to finish, including cleanup. Make your note sheet.</div>
+          <div><b>Last week:</b> One timed run of each task. Pack your kit. Review flashcards.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h4>👯 Splitting 50 minutes between two partners</h4>
+        <p>You can work on the lab and the test at the same time. A plan many teams use:</p>
+        <ul class="tight">
+          <li><b>Partner A</b> starts the lab task right away (it has waiting time built in: shaking, standing, draining).</li>
+          <li><b>Partner B</b> starts the test, doing the questions they're surest of first.</li>
+          <li>During waiting times (curds standing 5 min and draining 15 min), A joins the test.</li>
+          <li>Save the <b>last 5 minutes</b> for cleanup and checking that every test answer is filled in. A blank answer is always wrong; a guess might be right.</li>
+        </ul>
+        <p class="muted"><small>Decide who does what before the tournament, and practice it that way.</small></p>
+      </div>
+      <div class="card">
+        <h4>📄 What to put on your note sheet</h4>
+        <ul class="tight">
+          <li>Your drop counts for each milk type (from your curd experiments).</li>
+          <li>Your best ice cream recipe: base, sugar, salt amount, shake time.</li>
+          <li>The butter stages and the "jar goes quiet, then sloshes" tip.</li>
+          <li>Formulas: ΔT<sub>f</sub> = i·K<sub>f</sub>·m and °F = °C × 9/5 + 32.</li>
+          <li>Tables you'll forget: pasteurization times, vitamins and deficiencies, bacteria in each cultured product, pH of common foods.</li>
+          <li>Structures: lactose = glucose + galactose; a triglyceride drawing.</li>
+        </ul>
+        <p class="muted"><small>One 8.5×11" sheet per person, both sides. Two partners = four sides, so split the topics instead of copying the same notes twice.</small></p>
+      </div>
+      <div class="card">
+        <h4>🕵️ Telling unknown milks apart</h4>
+        <ul class="tight">
+          <li><b>Color:</b> skim looks slightly bluish and see-through at the edges; whole and half & half look creamier and more yellow-white.</li>
+          <li><b>Swirl test:</b> swirl it in a clear cup. Fattier milk leaves a thicker white coating on the sides.</li>
+          <li><b>Curds:</b> skim gives small, rubbery curds; whole milk gives bigger, softer ones.</li>
+          <li><b>Powdered milk</b> (mixed with water) may have tiny undissolved bits and tastes "cooked." The supervisor might use it.</li>
+        </ul>
+        <p class="muted"><small>Never taste anything at the tournament unless the supervisor says it's allowed.</small></p>
+      </div>
+      <div class="card">
+        <h4>📏 Units cheat sheet</h4>
+        <div class="tablewrap"><table>
+          <tr><td>1 teaspoon (tsp)</td><td>5 mL</td></tr>
+          <tr><td>1 tablespoon (tbsp)</td><td>15 mL = 3 tsp</td></tr>
+          <tr><td>½ cup</td><td>about 120 mL</td></tr>
+          <tr><td>1 drop</td><td>about 0.05 mL (20 drops ≈ 1 mL)</td></tr>
+          <tr><td>Water</td><td>1 mL weighs 1 g</td></tr>
+          <tr><td>°C → °F</td><td>× 9/5, then + 32 (13 °C = 55 °F)</td></tr>
+          <tr><td>1 inch</td><td>25.4 mm</td></tr>
+        </table></div>
+        <p class="muted"><small>mL measures volume (space). g measures mass (how heavy). Before you weigh, put the empty container on the scale and press "tare" (zero) so you only weigh what's inside.</small></p>
+      </div>
+      <div class="card">
+        <h4>🦺 Practicing safely at home</h4>
+        <ul class="tight">
+          <li>Wear your goggles when practicing, so they feel normal on tournament day.</li>
+          <li>Vinegar or lemon juice in your eyes stings: rinse with water for several minutes.</li>
+          <li>Salty ice gets cold enough to hurt skin. Use a towel or gloves.</li>
+          <li>Keep cream and milk in the fridge until you use them, and don't eat things that sat out for hours.</li>
+          <li>Ask an adult before using the stove for any heating experiments.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===================== SCORE ===================== -->
 <section id="score">
   <div class="wrap">
     <h2>Score calculator</h2>
-    <p class="sub">See where points come from. Plug in your practice results.</p>
+    <p class="sub">Plug in your practice results. Turn on only the tasks your tournament gives (usually one at regionals). The total shows how many points you have out of the most you could get.</p>
     <div class="lab">
       <div class="lab-grid">
         <div class="controls">
@@ -718,6 +926,16 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
     <h2>Tournament-day checklist</h2>
     <p class="sub">Tick things off as you pack. Your checks are saved on this device. <button class="btn ghost" id="ck-clear">Clear all</button></p>
     <div class="check" id="ck"></div>
+  </div>
+</section>
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+  <div class="wrap">
+    <h2>Glossary</h2>
+    <p class="sub">Every big word on this page, in plain language. Type to filter.</p>
+    <input class="gloss-search" id="gl-q" type="search" placeholder="Search words…" aria-label="Search glossary">
+    <div class="gloss" id="gl"></div>
   </div>
 </section>
 
@@ -1158,13 +1376,15 @@ function scUpdate() {
     ["Test", te / 2, "--berry"]
   ];
   const total = parts.reduce((s, p) => s + p[1], 0);
+  const possible = 18 + 50 + 10 * w.length;
   const svg = $("#sc-chart"); svg.innerHTML = "";
-  let x = 10; const W = 540, scale = W / Math.max(total, 1);
-  parts.forEach(p => { const ww = p[1] * scale; el("rect", { x, y: 20, width: Math.max(0, ww - 2), height: 46, rx: 8, fill: css(p[2]) }, svg); if (ww > 50) txt(svg, x + ww / 2, 48, fmt(p[1]), { "text-anchor": "middle", "font-weight": 800, fill: "#222" }); x += ww; });
-  txt(svg, 10, 92, "Share of your total score", { class: "axis-label" });
-  $("#sc-ro").innerHTML = parts.map(p => `<div class="ro"><span>${p[0]}</span><b>${fmt(p[1])}</b></div>`).join("") + `<div class="ro big"><span>Total</span><b>${fmt(total)}</b></div>`;
+  let x = 10; const W = 540, scale = W / Math.max(total, possible);
+  parts.forEach(p => { const ww = p[1] * scale; el("rect", { x, y: 20, width: Math.max(0, ww - 2), height: 46, rx: 8, fill: css(p[2]) }, svg); if (ww > 34) txt(svg, x + ww / 2, 48, fmt(p[1], p[1] % 1 ? 1 : 0), { "text-anchor": "middle", "font-weight": 800, fill: "#222" }); x += ww; });
+  if (possible > total) { const ww = (possible - total) * scale; el("rect", { x, y: 20, width: ww, height: 46, rx: 8, fill: "none", stroke: css("--line"), "stroke-width": 2, "stroke-dasharray": "5 4" }, svg); if (ww > 60) txt(svg, x + ww / 2, 48, "not yet: " + fmt(possible - total), { "text-anchor": "middle", class: "axis-label" }); }
+  txt(svg, 10, 92, "The whole bar is every point you could earn. Colors are points you have; the dashed box is what's left.", { class: "axis-label" });
+  $("#sc-ro").innerHTML = parts.map(p => `<div class="ro"><span>${p[0]}</span><b>${fmt(p[1])}</b></div>`).join("") + `<div class="ro big"><span>Total</span><b>${fmt(total)} <small style="font-size:.8rem">of ~${possible}</small></b></div>`;
   const testShare = (te / 2) / Math.max(total, 1);
-  $("#sc-verdict").textContent = `The written test is ${Math.round(testShare * 100)}% of this total. Ten more percent on the test is worth 5 points, the same as ${Math.round(5 / 0.1)} mm of ice cream height.`;
+  $("#sc-verdict").textContent = `That's about ${Math.round(total / possible * 100)}% of the ~${possible} points possible with ${w.length} task${w.length === 1 ? "" : "s"}. The test is ${Math.round(testShare * 100)}% of your total. Ten more percent on the test = 5 more points, the same as 50 mm of extra ice cream height.`;
 }
 scUpdate();
 
@@ -1200,6 +1420,133 @@ try { ckState = JSON.parse(localStorage.getItem("fs-checklist") || "{}"); } catc
 $("#ck").innerHTML = CK.map((c, i) => `<label><input type="checkbox" data-i="${i}" ${ckState[i] ? "checked" : ""}><span>${c}</span></label>`).join("");
 $("#ck").addEventListener("change", e => { ckState[e.target.dataset.i] = e.target.checked; try { localStorage.setItem("fs-checklist", JSON.stringify(ckState)); } catch (err) {} });
 $("#ck-clear").addEventListener("click", () => { ckState = {}; document.querySelectorAll("#ck input").forEach(i => i.checked = false); try { localStorage.removeItem("fs-checklist"); } catch (err) {} });
+
+
+/* =============== GLOSSARY =============== */
+const G = [
+  ["Acid", "acids?|acidic", "A substance that adds H⁺ ions to water and tastes sour. Vinegar and lemon juice are acids. Acids have a pH below 7."],
+  ["Agitation", "agitation", "Shaking or stirring something hard."],
+  ["Allergen", "allergens?|allergy|allergies", "Something that makes the immune system overreact. Milk protein is a common food allergen."],
+  ["Bacteria", "bacteria|bacterium", "Tiny single-celled living things. Some make us sick (pathogens), and some are helpful, like the ones that make yogurt."],
+  ["Benedict's test", "Benedict's", "A blue chemical that turns green, orange, or brick red when heated with a reducing sugar like glucose or lactose."],
+  ["Biuret test", "biuret", "A blue chemical that turns violet (purple) when protein is present."],
+  ["Brine", "brine", "Very salty water. In the ice cream bag, it's the salty slush around the ice."],
+  ["Buttermilk", "buttermilk", "The thin liquid left after butter forms. Store-bought \"cultured buttermilk\" is milk thickened with bacteria instead."],
+  ["Calcium phosphate", "calcium phosphate", "A mineral that acts like glue holding the small pieces of a casein micelle together. It's also what bones are mostly made of."],
+  ["Carbohydrate", "carbohydrates?|carbs", "Sugars and starches. Made of carbon, hydrogen, and oxygen. Lactose is milk's carbohydrate."],
+  ["Casein", "caseins?", "The main protein in milk (about 80% of it). Casein clumps together to make curds and cheese."],
+  ["Category C goggles", "Category C goggles|Category C", "Chemical splash goggles with covered (indirect) vents, stamped \"Z87.\" Required for this event."],
+  ["Colligative property", "colligative property|colligative", "A property that depends on how many particles are dissolved, not what kind they are. Freezing point depression is one."],
+  ["Controlled variable", "controlled variables?", "Everything you keep the same in an experiment so only one thing changes."],
+  ["Crystal", "crystals?", "Molecules locked into a neat, repeating pattern. Ice is water in crystal form."],
+  ["Culture", "cultures?|cultured", "Live, helpful bacteria (or yeasts) added to milk to ferment it, as in yogurt or cultured butter."],
+  ["Curd", "curds?|curdles?|curdled|curdling", "The soft lumps that form when milk protein clumps together."],
+  ["Denature", "denatures?|denatured", "When a protein unfolds and loses its shape, usually from heat or acid. Cooking an egg denatures its proteins."],
+  ["Dependent variable", "dependent variables?", "What you measure in an experiment. It \"depends\" on the thing you changed."],
+  ["Disaccharide", "disaccharides?", "A sugar made of two small sugars joined together. Lactose (glucose + galactose) and sucrose (glucose + fructose) are disaccharides."],
+  ["Emulsifier", "emulsifiers?|emulsification", "Something that keeps oil and water mixed by sitting where they meet. Phospholipids and some proteins are emulsifiers."],
+  ["Emulsion", "emulsions?", "Tiny droplets of one liquid spread through another liquid it normally won't mix with, like fat droplets in milk."],
+  ["Enzyme", "enzymes?", "A protein that speeds up a chemical reaction without being used up. Lactase and rennet are enzymes."],
+  ["Esterification", "esterification", "The reaction that joins glycerol and fatty acids into a fat, giving off water."],
+  ["Fatty acid", "fatty acids?", "A long chain of carbon atoms with an acid group at one end. Three of them attach to glycerol to make a fat."],
+  ["Fermentation", "fermentation|ferments?|fermented", "When microbes break down sugar for energy, making things like lactic acid, gas, or alcohol."],
+  ["Freezing point", "freezing points?", "The temperature where a liquid turns solid. Pure water freezes at 0 °C (32 °F)."],
+  ["Freezing point depression", "freezing point depression", "Dissolving something in water makes it freeze at a lower temperature. That's why salty ice gets colder than 0 °C."],
+  ["Galactose", "galactose", "A simple sugar. Joined to glucose, it makes lactose."],
+  ["Glucose", "glucose", "The simplest, most common sugar. Your body uses it for energy."],
+  ["Glycerol", "glycerol", "A small molecule that forms the backbone of a fat. Three fatty acids attach to it."],
+  ["Homogenization", "homogenization|homogenized", "Squirting milk through tiny holes at high pressure to break fat into smaller droplets so cream doesn't rise to the top."],
+  ["Hydrolysis", "hydrolysis", "Splitting a molecule apart by adding water. The opposite of esterification."],
+  ["Hypothesis", "hypothesis|hypotheses", "Your best guess about what will happen and why, written before the experiment."],
+  ["Impound", "impounded|impound", "Handed in to the supervisor before the event and kept until the end."],
+  ["Independent variable", "independent variables?", "The one thing you choose to change in an experiment."],
+  ["Ion", "ions?", "An atom or molecule with an electric charge. Salt dissolves into Na⁺ and Cl⁻ ions."],
+  ["Isoelectric point", "isoelectric point", "The pH where a protein has no overall electric charge. For casein it's pH 4.6, the point where it clumps the most."],
+  ["Lactase", "lactase", "The enzyme that splits lactose into glucose and galactose so your body can absorb it."],
+  ["Lactic acid", "lactic acid", "The acid bacteria make from lactose. It gives yogurt its tang."],
+  ["Lactose", "lactose", "The natural sugar in milk."],
+  ["Lactose intolerance", "lactose intolerance", "Not making enough lactase, so lactose upsets your stomach. It's a digestion problem, not an allergy."],
+  ["Latent heat", "latent heat", "Energy that goes into changing ice to water (or water to ice) without changing the temperature. It's why the pink line goes flat while the mix freezes."],
+  ["Lipid", "lipids?", "The science word for fats and oils."],
+  ["Maillard reaction", "Maillard", "A browning reaction between sugars and proteins when food is heated. It makes toast, caramel, and dulce de leche taste rich."],
+  ["Mass", "mass", "How much matter something has, measured in grams on a scale."],
+  ["Micelle", "micelles?", "A tiny ball made of many casein proteins clustered together. Milk has trillions of them."],
+  ["Milk fat globule membrane", "milk fat globule membrane|membranes?", "The thin skin of phospholipids and proteins around each droplet of fat in milk."],
+  ["Molality", "molality", "How concentrated a solution is: moles of dissolved stuff per kilogram of water."],
+  ["Mole", "moles?", "A counting unit for tiny particles, like \"a dozen\" but for atoms: 602,000,000,000,000,000,000,000 of them. One mole of salt weighs 58.4 g."],
+  ["Molecule", "molecules?", "The smallest piece of a substance, made of atoms bonded together."],
+  ["Overrun", "overrun", "Extra volume from air whipped into ice cream. 100% overrun means the volume doubled."],
+  ["Pasteurization", "pasteurization|pasteurized|pasteurize", "Heating milk to a set temperature for a set time to kill germs that cause disease, named after Louis Pasteur."],
+  ["Pathogen", "pathogens?", "A germ that causes disease, like Salmonella or Listeria."],
+  ["pH", "pH", "A scale from 0 to 14 for how acidic something is. Lower is more acidic, 7 is neutral, higher is basic."],
+  ["Phase inversion", "phase inversion", "When an emulsion flips: oil-in-water cream becomes water-in-oil butter."],
+  ["Phospholipid", "phospholipids?", "A fat-like molecule with a water-loving head and two oil-loving tails. Great at keeping oil and water mixed."],
+  ["Probiotic", "probiotics?", "Live microbes that are good for your health, like the bacteria in yogurt and kefir."],
+  ["Protein", "proteins?", "Large molecules made of chains of amino acids. Casein and whey are milk's proteins."],
+  ["Rennet", "rennet|chymosin", "An enzyme (chymosin) that makes milk curdle without acid by snipping the outer layer of casein micelles. Used for most cheeses."],
+  ["Saturated fat", "saturated", "Fat whose carbon chains have no double bonds, so they're straight and pack tightly. Usually solid at room temperature, like butter."],
+  ["Solute", "solutes?", "The stuff that dissolves (like salt or sugar) in a liquid."],
+  ["Spore", "spores?", "A tough, sleeping form of some bacteria that survives heat. UHT kills spores; regular pasteurization doesn't."],
+  ["Starch", "starch(es)?", "A long chain of glucose molecules. Plants store energy as starch."],
+  ["Sucrose", "sucrose", "Table sugar: glucose + fructose."],
+  ["Triglyceride", "triglycerides?", "The main kind of fat: one glycerol plus three fatty acids."],
+  ["Unsaturated fat", "unsaturated", "Fat with one or more double bonds that kink the chain, so it stays liquid, like vegetable oil."],
+  ["Variable", "variables?", "Something in an experiment that can change."],
+  ["Whey", "whey", "The watery liquid left after curds form. It holds lactose, minerals, and whey proteins."]
+];
+// glossary list
+const glBox = $("#gl");
+const slug = t => "g-" + t.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+glBox.innerHTML = G.map(([t, , d]) => `<div id="${slug(t)}"><b>${t}</b><br>${d}</div>`).join("");
+$("#gl-q").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  glBox.querySelectorAll("div").forEach(d => d.hidden = q && !d.textContent.toLowerCase().includes(q));
+});
+// auto-mark the first use of each term in every section
+const SKIP = "h1,h2,h3,h4,button,label,output,svg,nav,a,.term,.formula,.seg,.ro,.verdict,.hint,#glossary,.fact,.tag,.eyebrow,script,style,input";
+const rx = new RegExp("\\b(" + G.map(g => g[1]).sort((a, b) => b.length - a.length).join("|") + ")\\b", "i");
+const which = m => G.findIndex(g => new RegExp("^(" + g[1] + ")$", "i").test(m));
+document.querySelectorAll("header.hero, section").forEach(sec => {
+  if (sec.id === "glossary") return;
+  const used = new Set();
+  const walker = document.createTreeWalker(sec, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest(SKIP) || !n.nodeValue.trim() ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    let cur = node;
+    while (cur) {
+      const text = cur.nodeValue; let m, idx = -1, gi = -1, start = 0;
+      const r = new RegExp(rx.source, "gi");
+      while ((m = r.exec(text))) { const k = which(m[1]); if (k >= 0 && !used.has(k)) { idx = m.index; gi = k; start = m[1].length; break; } }
+      if (idx < 0) break;
+      used.add(gi);
+      const after = cur.splitText(idx); const rest = after.splitText(start);
+      const sp = document.createElement("span"); sp.className = "term"; sp.tabIndex = 0; sp.dataset.g = gi; sp.textContent = after.nodeValue;
+      after.replaceWith(sp); cur = rest;
+    }
+  });
+});
+// popover
+const pop = document.createElement("div"); pop.id = "gloss-pop"; pop.setAttribute("role", "tooltip"); document.body.appendChild(pop);
+let popFor = null, shownAt = 0;
+function showPop(t) {
+  const k = t.dataset.g;
+  if (k === "glossary-demo") pop.innerHTML = "<b>Like this!</b>Tap any dotted word to see what it means.";
+  else { const [term, , def] = G[+k]; pop.innerHTML = `<b>${term}</b>${def}<br><a href="#${slug(term)}">See in glossary</a>`; }
+  pop.style.display = "block";
+  const r = t.getBoundingClientRect(), pw = Math.min(300, innerWidth - 24);
+  pop.style.maxWidth = pw + "px";
+  let left = r.left + scrollX; left = Math.max(12 + scrollX, Math.min(left, scrollX + innerWidth - pop.offsetWidth - 12));
+  let top = r.bottom + scrollY + 8;
+  if (r.bottom + pop.offsetHeight + 16 > innerHeight) top = r.top + scrollY - pop.offsetHeight - 8;
+  pop.style.left = left + "px"; pop.style.top = top + "px"; if (popFor !== t) shownAt = Date.now(); popFor = t;
+}
+function hidePop() { pop.style.display = "none"; popFor = null; }
+document.addEventListener("click", e => { const t = e.target.closest(".term"); if (t) { popFor === t && Date.now() - shownAt > 400 ? hidePop() : showPop(t); } else if (!e.target.closest("#gloss-pop")) hidePop(); });
+document.addEventListener("mouseover", e => { const t = e.target.closest(".term"); if (t && matchMedia("(hover:hover)").matches) showPop(t); });
+document.addEventListener("mouseout", e => { const t = e.target.closest(".term"); if (t && matchMedia("(hover:hover)").matches && !e.relatedTarget?.closest?.("#gloss-pop")) hidePop(); });
+document.addEventListener("focusin", e => { const t = e.target.closest(".term"); if (t) showPop(t); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") hidePop(); });
+addEventListener("scroll", () => { if (popFor && !matchMedia("(hover:hover)").matches) showPop(popFor); }, { passive: true });
 
 // re-render colors when theme flips
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { icUpdate(); cdUpdate(); btUpdate(); mkUpdate(); psUpdate(); scUpdate(); });
