@@ -93,6 +93,24 @@ svg text:not([fill]){fill:var(--ink)}
 .diag li{padding:7px 10px;border-radius:10px;background:var(--led-soft);font-weight:700;font-size:.88rem}
 .diag li.warn{background:var(--volt-soft)}
 .diag li.bad{background:var(--copper-soft)}
+.mmodes{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:8px}
+.mmodes button{font:inherit;font-size:.8rem;font-weight:800;padding:6px 2px;border-radius:10px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.mmodes button[aria-pressed=true]{background:#1d2a24;color:#9fe6b8;border-color:#1d2a24}
+.jacks{display:flex;justify-content:space-between;gap:4px;margin:8px 0 2px;font-size:.72rem;font-weight:800;color:var(--muted);text-align:center}
+.jacks span{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px}
+.jacks i{display:block;width:18px;height:18px;border-radius:50%;border:3px solid #8a8a8a;background:#2b2b2b}
+.jacks .r i{border-color:#d62828;background:#d62828}
+.jacks .k i{border-color:#222;background:#222;box-shadow:0 0 0 2px #bbb}
+.mbtns{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.mbtns .tb{font-size:.78rem;padding:5px 9px}
+.mbtns .tb[aria-pressed=true]{background:var(--copper);border-color:var(--copper);color:#fff}
+.meterp{margin-top:12px;display:grid;gap:4px 16px}
+@media (min-width:700px){.meterp{grid-template-columns:minmax(240px,320px) 1fr}}
+.mtips{margin-top:8px;font-size:.88rem}
+.mtips summary{cursor:pointer;font-weight:800}
+.mtips ul{margin:6px 0 0;padding-left:18px}
+.mtips li{margin:3px 0}
+#board .probe{cursor:grab}
 .meter{font-family:ui-monospace,Menlo,Consolas,monospace;background:#1d2a24;color:#9fe6b8;border-radius:8px;padding:6px 10px;font-size:1.3rem;font-weight:800;text-align:right}
 .goal{background:var(--paper);border:2px solid var(--copper);border-radius:14px;padding:10px 12px;font-size:.93rem}
 .goal h5{color:var(--copper)}
@@ -181,11 +199,19 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
         <div>
           <div class="boardwrap"><svg id="board" viewBox="0 0 900 346" role="img" aria-label="Breadboard"></svg></div>
           <p class="muted" style="margin:6px 2px 0"><small>Simplified model: ideal wires and switches, LEDs with a fixed turn-on voltage, 74HC chips with about 25 Ω outputs. Good for learning what works and what doesn't, not for exact readings.</small></p>
+          <div class="panel meterp" id="meterp"><div class="mleft"><h5>📟 Multimeter</h5>
+            <div class="mmodes" id="mmodes" role="group" aria-label="What the meter measures"><button data-mm="V" title="DC volts">V⎓ Volts</button><button data-mm="A" title="DC current">A⎓ Amps</button><button data-mm="O" title="Resistance">Ω Ohms</button><button data-mm="C" title="Continuity beep">🔔 Beep</button></div>
+            <div class="meter" id="meter">-.-- V</div>
+            <div class="jacks" id="jacks" aria-label="Which jacks the leads plug into"></div>
+            <p id="meter-txt" class="muted"></p>
+            <div class="mbtns"><button class="tb" id="m-red">🔴 Move red</button><button class="tb" id="m-blk">⚫ Move black</button><button class="tb" id="m-swap">⇄ Swap</button><button class="tb" id="m-off">✕ Remove</button></div>
+            </div><details class="mtips" id="mtips-d" open><summary>How to hook it up</summary><div id="mtips"></div></details>
+          </div>
         </div>
         <div class="side">
           <div class="goal" id="goal"></div>
           <div class="panel"><h5>Problems</h5><ul class="diag" id="diag"></ul></div>
-          <div class="panel" id="meterp"><h5>📟 Multimeter</h5><div class="meter" id="meter">-.-- V</div><p id="meter-txt" class="muted"></p></div>
+
           <div class="panel" id="insp"><h5>Selected</h5><div id="insp-body"></div></div>
         </div>
       </div>
@@ -313,6 +339,8 @@ function pinRole(kind, pin) {
 /* =============== STATE =============== */
 const S = { parts: [], V: 5, power: true };
 let tool = "select", pending = null, sel = null, netSel = null, moveEnd = null, probes = { r: null, b: null }, hover = null;
+let mMode = "V", mActive = "r", mFuse = false, drag = null, dragMoved = false, noClickUntil = 0;
+const AMMETER_OHMS = 0.5, FUSE_A = 0.2;
 let hist = [], challenge = null, result = null, hintsShown = 0, flash = null;
 const part = id => S.parts.find(p => p.id === id);
 function nextId(prefix) { let n = 0; S.parts.forEach(p => { const m = new RegExp("^" + prefix + "(\\d+)$").exec(p.id); if (m) n = Math.max(n, +m[1]); }); return prefix + (n + 1); }
@@ -408,6 +436,22 @@ function simulate(parts) {
   return R;
 }
 
+/* resistance between two holes with the battery disconnected (ohms and continuity modes) */
+function ohmsBetween(parts, h1, h2) {
+  const net = netFn(parts), A0 = net(h1), B0 = net(h2);
+  if (A0 === B0) return 0;
+  const edges = parts.filter(p => p.type === "res").map(p => [net(p.pins[0]), net(p.pins[1]), 1 / p.ohms]).filter(e => e[0] !== e[1]);
+  const adj = {}; edges.forEach(([a, b]) => { (adj[a] = adj[a] || []).push(b); (adj[b] = adj[b] || []).push(a); });
+  const seen = new Set([A0]), q = [A0]; while (q.length) { const a = q.pop(); (adj[a] || []).forEach(b => { if (!seen.has(b)) { seen.add(b); q.push(b); } }); }
+  if (!seen.has(B0)) return Infinity;
+  const nodes = [...seen].filter(n => n !== B0), idx = {}; nodes.forEach((n, i) => idx[n] = i);
+  const n = nodes.length, M = Array.from({ length: n }, () => new Array(n).fill(0)), rhs = new Array(n).fill(0);
+  edges.forEach(([a, b, g]) => { const ia = idx[a], ib = idx[b]; if (ia !== undefined) { M[ia][ia] += g; if (ib !== undefined) M[ia][ib] -= g; } if (ib !== undefined) { M[ib][ib] += g; if (ia !== undefined) M[ib][ia] -= g; } });
+  rhs[idx[A0]] = 1;
+  return gauss(M, rhs)[idx[A0]];
+}
+const meterParts = () => mMode === "A" && probes.r && probes.b ? S.parts.concat([{ id: "__AM", type: "res", pins: [probes.r, probes.b], ohms: AMMETER_OHMS }]) : S.parts;
+
 /* =============== DIAGNOSTICS =============== */
 const nm = p => p.label ? `${p.label}` : p.id;
 function diagnose(R) {
@@ -455,7 +499,7 @@ function diagnose(R) {
 
 /* =============== RENDER: STATIC BOARD =============== */
 const svg = $("#board");
-const gBoard = el("g", {}, svg), gHoles = el("g", {}, svg), gHL = el("g", { "pointer-events": "none" }, svg), gParts = el("g", { class: "parts" }, svg), gOver = el("g", { "pointer-events": "none" }, svg);
+const gBoard = el("g", {}, svg), gHoles = el("g", {}, svg), gHL = el("g", { "pointer-events": "none" }, svg), gParts = el("g", { class: "parts" }, svg), gOver = el("g", { "pointer-events": "none" }, svg), gProbe = el("g", {}, svg);
 (function drawBoard() {
   el("rect", { x: 62, y: 6, width: 826, height: 334, rx: 10, fill: "#ece6da", stroke: "#cfc6b5" }, gBoard);
   el("rect", { x: 62, y: 166, width: 826, height: 16, fill: "#d9d1c1" }, gBoard);
@@ -474,7 +518,15 @@ const batOn = txt(gBoard, 29, 46, "ON", { "text-anchor": "middle", "font-weight"
 
 /* =============== RENDER: PARTS =============== */
 function legs(g, a, b) { el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "#9a9a9a", "stroke-width": 2.2, "stroke-linecap": "round" }, g); }
-function pinDot(g, p) { el("circle", { cx: p[0], cy: p[1], r: 3, fill: "#8a8a8a" }, g); }
+function pinDot(g, p) { el("circle", { cx: p[0], cy: p[1], r: 4.2, fill: "#d9d9d9", stroke: "#4a4a4a", "stroke-width": 1.4 }, g); el("circle", { cx: p[0], cy: p[1], r: 1.4, fill: "#4a4a4a" }, g); }
+// small + or − badge beside a lead end, pushed away from the part's body
+function polBadge(g, end, other, plus) {
+  const dx = end[0] - other[0], dy = end[1] - other[1], L = Math.hypot(dx, dy) || 1;
+  let px = -dy / L, py = dx / L; if (py > 0 || (py === 0 && px > 0)) { px = -px; py = -py; }
+  const x = end[0] + px * 11 + dx / L * 2, y = end[1] + py * 11 + dy / L * 2;
+  el("circle", { cx: x, cy: y, r: 6, fill: plus ? "#d62828" : "#1d5fd1", stroke: "#fff", "stroke-width": 1.2 }, g);
+  txt(g, x, y + 3.6, plus ? "+" : "−", { "text-anchor": "middle", "font-size": 10.5, "font-weight": 900, fill: "#fff" });
+}
 function renderParts(R) {
   gParts.innerHTML = "";
   const order = { chip: 0, sw: 1, btn: 2, res: 3, led: 4, wire: 5 };
@@ -487,7 +539,7 @@ function renderParts(R) {
       el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "transparent", "stroke-width": 12 }, g);
       if (p.color === "white") el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "#999", "stroke-width": 6, "stroke-linecap": "round" }, g);
       el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: WIRE[p.color], "stroke-width": 4, "stroke-linecap": "round" }, g);
-      pts.forEach(q => el("circle", { cx: q[0], cy: q[1], r: 3.5, fill: "#c9c9c9", stroke: "#777" }, g));
+      pts.forEach(q => { el("circle", { cx: q[0], cy: q[1], r: 4.6, fill: WIRE[p.color], stroke: "#333", "stroke-width": 1.4 }, g); el("circle", { cx: q[0], cy: q[1], r: 1.6, fill: "#e8e8e8" }, g); });
     } else if (p.type === "res" || p.type === "led" || p.type === "btn") {
       const [a, b] = pts, mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, ang = Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
       if (isSel) el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "#c25a22", "stroke-width": 12, opacity: .35, "stroke-linecap": "round" }, g);
@@ -503,7 +555,7 @@ function renderParts(R) {
         if (glow > 0.03 && !burnt) el("circle", { cx: 0, cy: 0, r: 13 + 10 * glow, fill: col, opacity: .25 + .35 * glow }, body);
         el("circle", { cx: 0, cy: 0, r: 8, fill: burnt ? "#555" : col, "fill-opacity": burnt ? 1 : glow > 0.03 ? 1 : .45, stroke: "#555", "stroke-width": 1 }, body);
         el("line", { x1: 5, x2: 5, y1: -7, y2: 7, stroke: "#555", "stroke-width": 1.5 }, body);
-        txt(g, a[0] + (a[0] <= b[0] ? -2 : 2), a[1] - 7, "+", { "text-anchor": "middle", "font-size": 11, "font-weight": 800, fill: "#b02020" });
+        polBadge(g, a, b, true); polBadge(g, b, a, false);
         if (burnt) txt(g, mx, my - 12, "💥", { "text-anchor": "middle", "font-size": 13 });
         if (p.label) txt(g, mx, my + (a[1] === b[1] ? 22 : 4), p.label, { "text-anchor": "middle", "font-size": 12, "font-weight": 800, fill: "#7a2e0e" });
       } else {
@@ -526,6 +578,8 @@ function renderParts(R) {
       txt(g, (x0 + x1) / 2, 172, "74HC" + p.kind, { "text-anchor": "middle", "font-size": 10, "font-weight": 800, fill: "#f0f0f0" });
       txt(g, (x0 + x1) / 2, 184, CHIPS[p.kind].name + (info && info.dead ? " 💥" : ""), { "text-anchor": "middle", "font-size": 9, fill: "#bdbdbd" });
       el("circle", { cx: X(c0), cy: 184, r: 2, fill: "#bdbdbd" }, g);
+      txt(g, x0 + 4, 167, "14 +", { "font-size": 7.5, "font-weight": 800, fill: "#ff8a8a" });
+      txt(g, x1 - 4, 186, "7 −", { "text-anchor": "end", "font-size": 7.5, "font-weight": 800, fill: "#8ab4ff" });
       p.pins.forEach(h => { const [x, y] = hxy(h); el("rect", { x: x - 2.5, y: y < 174 ? y : 189, width: 5, height: y < 174 ? 159 - y : y - 189, fill: "#b8b8b8" }, g); });
     }
   });
@@ -536,19 +590,69 @@ function renderOver(R) {
   if (hover && tool !== "del") { const s = strip(hover); ALLH.forEach(h => { if (strip(h) === s) { const [x, y] = hxy(h); el("rect", { x: x - 6, y: y - 6, width: 12, height: 12, rx: 3, fill: "#2a64c8", opacity: .22 }, gHL); } }); }
   if (netSel) { const n = R.net(netSel); ALLH.forEach(h => { if (R.net(h) === n) ring(h, "#1f9d6b"); }); ring(netSel, "#1f9d6b", 9, 3.5); }
   if (pending) { const [x, y] = hxy(pending); el("circle", { cx: x, cy: y, r: 9, fill: "#c25a22", opacity: .5 }, gOver); }
-  const probe = (h, c, s) => { if (!h) return; const [x, y] = hxy(h); el("circle", { cx: x, cy: y, r: 7, fill: c, stroke: "#fff", "stroke-width": 2 }, gOver); txt(gOver, x, y - 11, s, { "text-anchor": "middle", "font-size": 10, "font-weight": 800, fill: c }); };
-  probe(probes.r, "#d62828", "+"); probe(probes.b, "#222222", "COM");
+  gProbe.innerHTML = "";
+  const probe = (k, c, s) => {
+    const h = drag && drag.k === k ? drag.h : probes[k]; if (!h) return;
+    const [x, y] = hxy(h), g = el("g", { class: "probe", "data-probe": k, "data-hole": h }, gProbe);
+    if (tool === "probe" && mActive === k) el("circle", { cx: x, cy: y, r: 12, fill: "none", stroke: c, "stroke-width": 2, "stroke-dasharray": "3 3" }, g);
+    const up = y > 60 ? -1 : 1, sx = k === "r" ? -1 : 1;
+    el("line", { x1: x, y1: y, x2: x + sx * 7, y2: y + up * 22, stroke: c, "stroke-width": 4, "stroke-linecap": "round" }, g);
+    el("circle", { cx: x, cy: y, r: 7, fill: c, stroke: "#fff", "stroke-width": 2 }, g);
+    txt(g, x + sx * 9, y + up * 25 + (up > 0 ? 8 : 0), s, { "text-anchor": "middle", "font-size": 10, "font-weight": 800, fill: c, stroke: "#fff", "stroke-width": 3, "paint-order": "stroke" });
+  };
+  probe("b", "#222222", "COM"); probe("r", "#d62828", mMode === "A" ? "mA" : "VΩ");
 }
 
 /* =============== PANELS =============== */
 function renderDiag(R) { $("#diag").innerHTML = diagnose(R).map(([lv, t]) => `<li class="${lv === "ok" ? "" : lv}">${t}</li>`).join(""); }
+const MTIPS = {
+  V: ["<b>Plug in:</b> black lead in <b>COM</b>, red lead in <b>VΩ</b>. Turn the dial to <b>V⎓</b> (DC volts), on a range above your battery voltage (20 V).",
+      "<b>Where:</b> touch the probes on <b>both sides</b> of what you're measuring (in parallel). Red goes on the side closer to +, black on the side closer to −. Leave the circuit powered and don't unplug anything.",
+      "To check the battery, probe the + rail and the − rail. For a chip, probe pin 14 (red) and pin 7 (black).",
+      "A minus sign just means the probes are swapped."],
+  A: ["<b>Plug in:</b> black stays in <b>COM</b>; move the red lead to the <b>mA</b> jack. Turn the dial to <b>A⎓</b> (DC mA).",
+      "<b>Where:</b> the current has to flow <b>through</b> the meter (in series). Open the circuit first: select a part, tap <b>Move</b> on one leg, and put that leg in an empty strip. Then put red on the side toward + and black on the leg you moved.",
+      "<b>Never</b> put the meter in amps mode across the battery or across a part. It acts like a wire, so a huge current flows and blows the meter's fuse.",
+      "When you're done, put the leg back and move the red lead back to VΩ. Forgetting this is the classic way to blow the fuse next time."],
+  O: ["<b>Plug in:</b> black in <b>COM</b>, red in <b>VΩ</b>. Turn the dial to <b>Ω</b>.",
+      "<b>Power off first.</b> The meter makes its own small current to measure resistance. A battery in the circuit throws the reading off (and can damage a real meter).",
+      "For an exact reading, take the resistor out (or lift one leg into an empty strip) so other parts don't add extra paths.",
+      "<b>OL</b> means \"over limit\": no connection, or more resistance than the meter can read. LEDs and chips read OL here."],
+  C: ["<b>Plug in:</b> black in <b>COM</b>, red in <b>VΩ</b>. Turn the dial to the <b>🔔 sound symbol</b>.",
+      "<b>Power off first.</b> It beeps when the two points are connected (under about 30 Ω).",
+      "Great for checking a wire end to end, finding which holes are joined, and tracking down a broken connection in the fix-it challenges."]
+};
 function renderMeter(R) {
   const m = $("#meter"), t = $("#meter-txt");
-  if (!probes.r || !probes.b) { m.textContent = "-.-- V"; t.textContent = tool === "probe" ? (probes.r ? "Now tap a hole for the black (COM) probe." : "Tap a hole for the red (+) probe.") : "Pick 📟 Meter, then tap two holes: red probe first, then black."; return; }
-  const dv = R.vh(probes.r) - R.vh(probes.b), same = R.net(probes.r) === R.net(probes.b);
-  m.textContent = R.off ? "0.00 V" : fV(dv);
-  const fl = [probes.r, probes.b].filter(h => !R.dh(h));
-  t.innerHTML = `Red on <b>${probes.r}</b>, black on <b>${probes.b}</b>. Continuity: ${same ? "<b>connected</b> 🔔 (same net)" : "not connected"}.` + (fl.length && !R.off && !R.short ? ` <br>⚠ ${fl.join(" and ")} ${fl.length > 1 ? "aren't" : "isn't"} connected to anything that sets a voltage, so the reading means little.` : "");
+  document.querySelectorAll("#mmodes [data-mm]").forEach(b => b.setAttribute("aria-pressed", b.dataset.mm === mMode ? "true" : "false"));
+  $("#jacks").innerHTML = [["10A", ""], ["mA", mMode === "A" ? "r" : ""], ["COM", "k"], ["VΩ🔔", mMode === "A" ? "" : "r"]].map(([l, c]) => `<span class="${c}"><i></i>${l}</span>`).join("");
+  $("#mtips").innerHTML = "<ul>" + MTIPS[mMode].map(x => `<li>${x}</li>`).join("") + "</ul>";
+  $("#m-red").setAttribute("aria-pressed", tool === "probe" && mActive === "r" ? "true" : "false");
+  $("#m-blk").setAttribute("aria-pressed", tool === "probe" && mActive === "b" ? "true" : "false");
+  $("#m-swap").disabled = $("#m-off").disabled = !(probes.r || probes.b);
+  const unit = { V: "V", A: "mA", O: "Ω", C: "Ω" }[mMode];
+  if (!probes.r || !probes.b) {
+    m.textContent = "-.-- " + unit;
+    t.innerHTML = tool === "probe" ? `Tap a hole for the <b>${mActive === "r" ? "red" : "black (COM)"}</b> probe.` : "Pick 📟 Meter in the toolbar, then tap two holes: red probe first, then black.";
+    return;
+  }
+  const where = `Red on <b>${probes.r}</b>, black on <b>${probes.b}</b>. `;
+  const same = R.net(probes.r) === R.net(probes.b);
+  if (mMode === "V") {
+    m.textContent = R.off ? "0.00 V" : fV(R.vh(probes.r) - R.vh(probes.b));
+    const fl = [probes.r, probes.b].filter(h => !R.dh(h));
+    t.innerHTML = where + (R.off ? "The power is off." : same ? "Both probes are on the same connected strip, so there's no voltage between them." : fl.length && !R.short ? `⚠ ${fl.join(" and ")} ${fl.length > 1 ? "aren't" : "isn't"} connected to anything that sets a voltage, so the reading means little.` : "");
+  } else if (mMode === "A") {
+    const I = R.res.__AM ? R.res.__AM.I : 0;
+    if (mFuse) { m.textContent = "FUSE"; t.innerHTML = where + "💥 Over 200 mA went through the meter, so its fuse blew. In amps mode the meter is almost a wire. Here it shorted the battery or bypassed a part. Move a probe and try again (the fuse is replaced for free here, not at a tournament)."; return; }
+    m.textContent = R.off ? "0.00 mA" : sig(I * 1000, 3) + " mA";
+    t.innerHTML = where + (R.off ? "The power is off." : same ? "Both probes are on the same connected strip. The current takes the wire or strip instead of the meter, so it reads 0. Open the circuit first (see the tips)." : Math.abs(I) < 1e-5 ? "No current flows through the meter. Is it in series, in the gap you opened?" : I < 0 ? "A minus sign means current enters the black probe: the probes are swapped." : "Current flows in red and out black.");
+  } else {
+    if (S.power) { m.textContent = "Err"; t.innerHTML = where + "⚠ Turn the power off first (⚡ button). Ohms and continuity only work on a circuit with no power."; return; }
+    const r = ohmsBetween(S.parts, probes.r, probes.b);
+    if (mMode === "O") { m.textContent = !isFinite(r) || r > 2e6 ? "OL" : r < 0.05 ? "0.0 Ω" : fOhm(r); t.innerHTML = where + (!isFinite(r) ? "No path through wires and resistors between the probes." : same ? "The probes are on holes joined by strips or wires: 0 Ω." : ""); }
+    else { const beep = isFinite(r) && r < 30; m.textContent = beep ? "🔔 " + (r < 0.05 ? "0.0" : sig(r, 2)) + " Ω" : "OL"; t.innerHTML = where + (beep ? "<b>Beep!</b> These two points are connected." : "No beep: these two points aren't connected (or there's too much resistance between them)."); }
+  }
 }
 function opts(list, cur, fmt = x => x) { return list.map(v => `<option value="${v}" ${String(v) === String(cur) ? "selected" : ""}>${fmt(v)}</option>`).join(""); }
 function renderInsp(R) {
@@ -564,10 +668,10 @@ function renderInsp(R) {
   const ends = (labels) => p.locked ? "" : `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${labels.map((l, k) => `<button class="tb" data-act="move" data-k="${k}">Move ${l}</button>`).join("")}<button class="tb" data-act="del">🗑 Delete</button></div>`;
   let h = "";
   if (p.type === "wire") h = `<p><b>Wire ${p.id}</b>: ${p.pins[0]} → ${p.pins[1]}</p><p>Color <select class="opt" data-act="color">${opts(Object.keys(WIRE), p.color)}</select></p>` + lock + ends(["end 1", "end 2"]);
-  else if (p.type === "res") { const r = R.res[p.id]; h = `<p><b>Resistor ${p.id}</b>: ${p.pins[0]} – ${p.pins[1]}</p><p>Value ${p.locked ? fOhm(p.ohms) : `<select class="opt" data-act="ohms">${opts(RVALS, p.ohms, fOhm)}</select>`}</p><p>Voltage across: <b>${fV(Math.abs(r.V))}</b> · Current: <b>${fAmp(r.I)}</b> · Power: <b>${sig(r.P * 1000, 2)} mW</b></p>` + lock + ends(["end 1", "end 2"]); }
+  else if (p.type === "res") { const r = R.res[p.id]; h = `<p><b>Resistor ${p.id}</b>: ${p.pins[0]} – ${p.pins[1]}</p><p>Value ${p.locked ? fOhm(p.ohms) : `<select class="opt" data-act="ohms">${opts(RVALS, p.ohms, fOhm)}</select>`}</p><p>Voltage across: <b>${fV(Math.abs(r.V))}</b> · Current: <b>${fAmp(r.I)}</b> · Power: <b>${sig(r.P * 1000, 2)} mW</b></p><p class="muted"><small>Resistors have no + or − end. Either way round works.</small></p>` + lock + ends(["end 1", "end 2"]); }
   else if (p.type === "led") { const r = R.led[p.id]; h = `<p><b>LED ${nm(p)}</b>: + (anode) ${p.pins[0]}, − (cathode) ${p.pins[1]}</p><p>Color ${p.locked ? p.color : `<select class="opt" data-act="ledc">${opts(Object.keys(LEDS), p.color)}</select>`} · turns on at about ${LEDS[p.color].vf} V</p><p>Current: <b>${fAmp(r.I)}</b> · ${r.I > 0.04 ? "burning out" : r.I > 0.001 ? "lit" : r.vak < -1 ? "dark: backwards" : "dark"}</p>` + lock + (p.locked ? "" : `<button class="tb" data-act="flip" style="margin-top:6px">⇄ Flip direction</button>`) + ends(["+ leg", "− leg"]); }
   else if (p.type === "sw") h = `<p><b>Switch ${p.label || p.id}</b> (SPDT): the middle pin ${p.pins[1]} connects to ${p.pos === "L" ? "the left pin " + p.pins[0] : "the right pin " + p.pins[2]}.</p><button class="tb" data-act="toggle">🎚 Flip it</button>` + lock + (p.locked ? "" : `<div style="margin-top:6px"><button class="tb" data-act="del">🗑 Delete</button></div>`);
-  else if (p.type === "btn") h = `<p><b>Push button ${p.id}</b>: connects ${p.pins[0]} and ${p.pins[1]} only while you hold it down.</p>` + lock + ends(["end 1", "end 2"]);
+  else if (p.type === "btn") h = `<p><b>Push button ${p.id}</b>: connects ${p.pins[0]} and ${p.pins[1]} only while you hold it down. No + or − end.</p>` + lock + ends(["end 1", "end 2"]);
   else if (p.type === "chip") {
     const c = R.chip[p.id] || {};
     const rows = p.pins.map((hh, k) => { const pin = k + 1, role = pinRole(p.kind, pin), v = R.vh(hh); const l = role.startsWith("input") ? c.ins && c.ins[pin] : role.startsWith("output") ? (c.powered && !c.dead ? c.out[pin] : "—") : ""; return `<tr><td>${pin}</td><td>${role}</td><td>${R.off ? "0.00 V" : fV(v)}</td><td>${l === "float" ? "floating" : l === "mid" ? "?" : l}</td></tr>`; }).join("");
@@ -600,7 +704,7 @@ const HINTS = {
   sw: "🎚 Switch: tap a hole for its left pin. It takes that hole and the next two to the right. The middle pin connects to the left or right pin.",
   btn: "🔘 Button: tap the holes for its two legs. It connects them only while held down (in Select mode).",
   chip: "🔲 Chip: tap any hole in the column where pin 1 should go. The chip straddles the center gap and takes 7 columns.",
-  probe: "📟 Meter: tap a hole for the red probe, then one for the black probe.",
+  probe: "📟 Meter: tap a hole to place the highlighted probe. Drag a probe to move it, or tap one to pick which probe moves next. Choose Volts, Amps, Ohms, or Beep in the Multimeter box.",
   del: "🗑 Delete: tap a part to remove it."
 };
 function renderHint() {
@@ -640,7 +744,13 @@ function onHole(h) {
     }
     netSel = netSel === h ? null : h; sel = null; return update();
   }
-  if (tool === "probe") { if (!probes.r || probes.b) probes = { r: h, b: null }; else probes.b = h; return update(); }
+  if (tool === "probe") {
+    const k = probes.r === h ? "r" : probes.b === h ? "b" : null;
+    if (k) { mActive = k; return update(true); }
+    probes[mActive] = h; mFuse = false;
+    if (!probes[mActive === "r" ? "b" : "r"]) mActive = mActive === "r" ? "b" : "r";
+    return update(true);
+  }
   if (tool === "del") return;
   if (occ[h] && h !== pending) { flash = "That hole already has a lead in it. Use another hole in the same strip: all 5 are connected."; return update(); }
   const [r, c] = parseH(h);
@@ -674,7 +784,31 @@ function onPart(id) {
   if (p.type === "sw") p.pos = p.pos === "L" ? "R" : "L";
   sel = id; netSel = null; update();
 }
+const svgHole = e => {
+  const pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY; const q = pt.matrixTransform(svg.getScreenCTM().inverse());
+  const c = Math.round((q.x - 90) / 20) + 1; if (c < 1 || c > COLS) return null;
+  let best = null, bd = 1e9; ROWS.forEach(r => { const d = Math.abs(ROWY[r] - q.y); if (d < bd) { bd = d; best = r; } });
+  return bd < 16 ? best + c : null;
+};
+svg.addEventListener("pointerdown", e => {
+  const pr = e.target.closest("[data-probe]"); if (!pr) { noClickUntil = 0; return; }
+  drag = { k: pr.dataset.probe, h: probes[pr.dataset.probe], id: e.pointerId }; dragMoved = false;
+  try { svg.setPointerCapture(e.pointerId); } catch (x) {}
+  e.preventDefault();
+});
+svg.addEventListener("pointermove", e => {
+  if (!drag) return; const h = svgHole(e);
+  if (h && h !== drag.h) { drag.h = h; dragMoved = true; renderOver(lastR); }
+});
+const endDrag = () => {
+  if (!drag) return; const d = drag; drag = null; noClickUntil = Date.now() + 350;
+  if (dragMoved) { probes[d.k] = d.h; mActive = d.k; mFuse = false; update(true); }
+  else { if (tool === "probe") { mActive = d.k; update(true); } else { onHole(d.h); } }
+};
+svg.addEventListener("pointerup", endDrag);
+svg.addEventListener("pointercancel", () => { drag = null; renderOver(lastR); });
 svg.addEventListener("click", e => {
+  if (Date.now() < noClickUntil) return;
   const pe = e.target.closest("[data-part]"), he = e.target.closest("[data-hole]");
   if (pe && !placing()) return onPart(pe.dataset.part);
   if (he) onHole(he.dataset.hole);
@@ -690,6 +824,11 @@ svg.addEventListener("pointermove", e => {
   if (h !== hover) { hover = h; renderOver(lastR); }
 });
 svg.addEventListener("pointerleave", () => { hover = null; renderOver(lastR); });
+$("#mmodes").addEventListener("click", e => { const b = e.target.closest("[data-mm]"); if (!b) return; mMode = b.dataset.mm; mFuse = false; update(true); });
+$("#m-red").addEventListener("click", () => { mActive = "r"; setTool("probe"); });
+$("#m-blk").addEventListener("click", () => { mActive = "b"; setTool("probe"); });
+$("#m-swap").addEventListener("click", () => { probes = { r: probes.b, b: probes.r }; mFuse = false; update(true); });
+$("#m-off").addEventListener("click", () => { probes = { r: null, b: null }; mActive = "r"; mFuse = false; update(true); });
 $("#undo").addEventListener("click", () => { if (!hist.length) return; S.parts = JSON.parse(hist.pop()); sel = null; moveEnd = null; update(); });
 $("#clear").addEventListener("click", () => { snapshot(); S.parts = S.parts.filter(p => p.locked); sel = null; netSel = null; probes = { r: null, b: null }; update(); });
 $("#power").addEventListener("click", () => { S.power = !S.power; update(); });
@@ -700,7 +839,10 @@ function allowedChips() { return challenge && challenge.chips ? challenge.chips 
 /* =============== UPDATE LOOP =============== */
 let lastR = null;
 function update(light) {
-  const R = simulate(S.parts); lastR = R;
+  let R = simulate(meterParts());
+  if (mMode === "A" && R.res.__AM && Math.abs(R.res.__AM.I) > FUSE_A) { mFuse = true; }
+  if (mFuse) R = simulate(S.parts);
+  lastR = R;
   $("#power").setAttribute("aria-pressed", S.power ? "true" : "false");
   $("#power").textContent = S.power ? "⚡ Power on" : "⏻ Power off";
   $("#o-v").value = String(S.V);
@@ -781,7 +923,7 @@ $("#chal").addEventListener("click", e => { const b = e.target.closest("[data-ch
 const ALLTOOLS = ["wire", "res", "led", "sw", "btn", "chip"];
 function loadChallenge(id) {
   challenge = id === "free" ? null : CH.find(c => c.id === id);
-  hist = []; sel = null; netSel = null; moveEnd = null; pending = null; probes = { r: null, b: null }; result = null; hintsShown = 0; S.power = true;
+  hist = []; sel = null; netSel = null; moveEnd = null; pending = null; probes = { r: null, b: null }; mFuse = false; mActive = "r"; result = null; hintsShown = 0; S.power = true;
   if (challenge) { S.parts = JSON.parse(JSON.stringify(challenge.setup())); S.V = challenge.V; }
   else { let saved = null; try { saved = JSON.parse(localStorage.getItem("cl-breadboard-free") || "null"); } catch (e) {} S.parts = saved && saved.parts ? saved.parts : rails(); S.V = saved && saved.V ? saved.V : 5; }
   const allow = challenge ? challenge.allow : ALLTOOLS;
