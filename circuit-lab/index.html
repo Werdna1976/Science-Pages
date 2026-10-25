@@ -44,6 +44,8 @@ nav.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 
 nav.top .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
 nav.top a{flex:none;text-decoration:none;color:var(--ink);font-weight:700;font-size:.92rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
 nav.top a:hover{border-color:var(--copper);color:var(--copper)}
+@media (min-width:1200px){nav.top .wrap{flex-wrap:wrap;overflow-x:visible;gap:6px 6px}nav.top a{font-size:.86rem;padding:5px 10px}}
+@media (max-width:1199px){nav.top .wrap{-webkit-mask-image:linear-gradient(to right,#000 85%,transparent);mask-image:linear-gradient(to right,#000 85%,transparent)}}
 
 /* hero */
 .hero{padding:44px 0 28px}
@@ -1996,6 +1998,8 @@ addEventListener("scroll", () => { if (popFor && !matchMedia("(hover:hover)").ma
 // re-render colors when theme flips
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { ohUpdate(); pwUpdate(); ckUpdate(); ldUpdate(); lgUpdate(); adUpdate(); clUpdate(); mmUpdate(); ccUpdate(); swUpdate(); scUpdate(); });
 })();
+// keep anchor jumps clear of the sticky nav, whose height changes when it wraps
+(function () { const n = document.querySelector("nav.top"); const f = () => document.documentElement.style.scrollPaddingTop = (n.offsetHeight + 10) + "px"; f(); addEventListener("resize", f); })();
 </script>
 </body>
 </html>
