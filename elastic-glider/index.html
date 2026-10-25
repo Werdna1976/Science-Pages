@@ -1,0 +1,1468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Hang Time Lab: Elastic Launched Glider</title>
+<meta name="description" content="Study guide and interactive lab exhibits for the Science Olympiad Elastic Launched Glider event (2027, Division B): launch energy, glide, balance and trim, turning, building, and the flight log.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef3fa; --paper:#fcfdff; --ink:#16213a; --muted:#56637d; --line:#d5deeb;
+  --sun:#e0601f; --sun-soft:#fde4d4;
+  --sky:#2a74c6; --sky-soft:#dce8f7;
+  --balsa:#c18a2e; --balsa-soft:#f6ead2;
+  --leaf:#2a9466; --leaf-soft:#d8f0e4;
+  --cloud:#cfe3f7; --dusk:#2b3b6b;
+  --shadow:0 1px 2px rgba(20,35,70,.05),0 8px 24px rgba(20,35,70,.07);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0e131d; --paper:#161d2a; --ink:#e6ecf5; --muted:#9eabc0; --line:#2a3446;
+    --sun:#ff8a4c; --sun-soft:#3c2519;
+    --sky:#72aef0; --sky-soft:#18273c;
+    --balsa:#e7b763; --balsa-soft:#352a16;
+    --leaf:#4fc893; --leaf-soft:#143026;
+    --cloud:#22334d; --dusk:#9fb6ea;
+    --shadow:none; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Nunito",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;line-height:1.15;margin:0}
+a{color:var(--sky)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+.muted{color:var(--muted)}
+small{font-size:.85rem}
+
+/* nav */
+nav.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav.top a{flex:none;text-decoration:none;color:var(--ink);font-weight:700;font-size:.92rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
+nav.top a:hover{border-color:var(--sun);color:var(--sun)}
+
+/* hero */
+.hero{padding:44px 0 28px}
+.eyebrow{display:inline-block;font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--sky);background:var(--sky-soft);padding:4px 10px;border-radius:999px;margin-bottom:14px}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800}
+.hero p.lead{font-size:1.15rem;max-width:720px;margin:14px 0 0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:26px}
+.fact{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)}
+.fact b{display:block;font-family:"Fraunces",serif;font-size:1.6rem}
+.fact span{color:var(--muted);font-size:.9rem}
+.note{border-left:4px solid var(--balsa);background:var(--balsa-soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:18px 0;font-size:.95rem}
+
+/* sections */
+section{padding:36px 0;border-top:1px dashed var(--line)}
+section > .wrap > h2{font-size:clamp(1.7rem,4vw,2.3rem);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tag{font-family:"Nunito",sans-serif;font-size:.8rem;font-weight:800;padding:3px 10px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase}
+.t-sky{background:var(--sky-soft);color:var(--sky)}
+.t-leaf{background:var(--leaf-soft);color:var(--leaf)}
+.t-balsa{background:var(--balsa-soft);color:color-mix(in srgb,var(--balsa) 70%,var(--ink))}
+.t-sun{background:var(--sun-soft);color:var(--sun)}
+.sub{color:var(--muted);max-width:760px;margin:8px 0 20px}
+h3{font-size:1.3rem;margin:26px 0 10px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow)}
+.card h4{margin:0 0 8px;font-size:1.05rem}
+ol.steps{margin:0;padding-left:22px}
+ol.steps li{margin:4px 0}
+ul.tight{margin:0;padding-left:20px}
+ul.tight li{margin:4px 0}
+.key{display:inline-block;font-weight:800;color:var(--sun)}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:inline-block;margin:6px 0}
+
+/* lab exhibit */
+.lab{background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-top:10px}
+.lab-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.lab-head h3{margin:0}
+.lab-grid{display:grid;grid-template-columns:300px 1fr;gap:18px}
+@media (max-width:860px){.lab-grid{grid-template-columns:1fr}}
+.controls{display:flex;flex-direction:column;gap:14px}
+.ctl label{display:flex;justify-content:space-between;font-weight:700;font-size:.92rem;gap:8px}
+.ctl label output{font-weight:800;color:var(--sun);white-space:nowrap}
+.ctl input[type=range]{width:100%;accent-color:var(--sun)}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.seg button{font:inherit;font-size:.85rem;font-weight:700;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--sun);border-color:var(--sun);color:#fff}
+.hint{font-size:.82rem;color:var(--muted);margin-top:2px}
+.viz{display:flex;flex-direction:column;gap:12px;min-width:0}
+.viz svg{width:100%;height:auto;display:block}
+.pair{display:grid;gap:12px;grid-template-columns:200px 1fr;align-items:center}
+@media (max-width:600px){.pair{grid-template-columns:1fr}.pair > svg:first-child{max-width:220px;margin:0 auto}}
+.readouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.ro{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.ro span{display:block;font-size:.78rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.ro b{font-family:"Fraunces",serif;font-size:1.35rem}
+.ro.big{background:var(--sun-soft);border-color:transparent}
+.ro.big b{color:var(--sun)}
+.verdict{border-radius:12px;padding:10px 14px;font-weight:700;background:var(--leaf-soft);color:var(--ink)}
+.verdict.warn{background:var(--balsa-soft)}
+.verdict.bad{background:var(--sun-soft)}
+.btn{font:inherit;font-weight:800;padding:7px 14px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.toy{font-size:.82rem;color:var(--muted);margin-top:10px}
+svg text{font-family:"Nunito",sans-serif;fill:var(--ink)}
+.axis{stroke:var(--line);stroke-width:1}
+.axis-label{font-size:11px;fill:var(--muted)}
+.guess{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.guess input{font:inherit;width:110px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+
+/* videos */
+.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.vid{display:block;text-decoration:none;color:inherit;background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.vid:hover{border-color:var(--sun)}
+.vid .thumb{aspect-ratio:16/9;background:var(--line) center/cover no-repeat;position:relative;display:flex;align-items:center;justify-content:center;font-size:2rem;background:var(--sky-soft)}
+.vid .thumb::after{content:attr(data-src);position:absolute;inset:auto auto 10px 10px;background:rgba(0,0,0,.65);color:#fff;font-size:.8rem;padding:3px 9px;border-radius:999px}
+.vid div.t{padding:10px 12px}
+.vid b{display:block;font-size:.95rem;line-height:1.3}
+.vid span{font-size:.82rem;color:var(--muted)}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+
+/* flashcards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.flash{perspective:900px;min-height:150px;cursor:pointer;border:0;padding:0;background:none;font:inherit;color:inherit;text-align:left}
+.flash .in{position:relative;width:100%;height:100%;min-height:150px;transition:transform .45s;transform-style:preserve-3d}
+.flash.flip .in{transform:rotateY(180deg)}
+.flash .f,.flash .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;padding:14px 16px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
+.flash .f{background:var(--paper)}
+.flash .f small{color:var(--sun);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.72rem;margin-bottom:6px}
+.flash .b{background:var(--leaf-soft);transform:rotateY(180deg);font-size:.93rem}
+@media (prefers-reduced-motion:reduce){.flash .in{transition:none}}
+
+/* checklist */
+.check{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.check label{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:9px 12px;cursor:pointer}
+.check input{margin-top:5px;accent-color:var(--leaf);width:18px;height:18px;flex:none}
+.check label:has(input:checked){opacity:.6;text-decoration:line-through}
+
+/* kid-friendly additions */
+.term{border-bottom:2px dotted var(--sun);cursor:help;border-radius:2px}
+.term:hover,.term:focus{background:var(--sun-soft);outline:none}
+#gloss-pop{position:absolute;z-index:50;max-width:300px;background:var(--paper);color:var(--ink);border:2px solid var(--sun);border-radius:14px;padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.18);font-size:.92rem;line-height:1.45;display:none}
+#gloss-pop b{display:block;color:var(--sun);font-family:"Fraunces",serif;font-size:1.02rem;margin-bottom:2px}
+#gloss-pop a{font-size:.8rem}
+.plain{background:var(--sky-soft);border-radius:14px;padding:12px 16px;margin:12px 0;font-size:.97rem}
+.plain::before{content:"💡 In plain words";display:block;font-weight:800;color:var(--sky);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.plain.howto::before{content:"📈 How to read this"}
+.plain.example::before{content:"🧮 Worked example"}
+.plain.why::before{content:"🤔 Why it matters"}
+.plain p{margin:6px 0}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.gloss div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 14px;scroll-margin-top:80px}
+.gloss div:target{border-color:var(--sun);box-shadow:0 0 0 3px var(--sun-soft)}
+.gloss b{color:var(--sun)}
+.gloss-search{width:100%;max-width:360px;font:inherit;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);margin-bottom:12px}
+.ptable td:nth-child(2),.ptable th:nth-child(2){text-align:right;white-space:nowrap;font-weight:800}
+.pbar{display:flex;height:44px;border-radius:12px;overflow:hidden;margin:10px 0 4px;font-weight:800;font-size:.85rem;color:#222}
+.pbar div{display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.1;padding:0 4px}
+.startcard{background:var(--paper);border:2px solid var(--sun);border-radius:18px;padding:16px 20px;margin-top:22px}
+.startcard ol{margin:6px 0 0;padding-left:22px}
+.timeline{border-left:3px solid var(--line);margin:8px 0 0 8px;padding-left:16px}
+.timeline div{position:relative;margin-bottom:10px}
+.timeline div::before{content:"";position:absolute;left:-23px;top:7px;width:11px;height:11px;border-radius:50%;background:var(--sun)}
+.chain{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.chain span{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:6px 10px;font-size:.9rem;font-weight:700}
+.chain i{font-style:normal;color:var(--muted)}
+footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px dashed var(--line)}
+/* glider page additions */
+.logform{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.logform input{font:inherit;width:100%;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.logform label{font-size:.8rem;font-weight:700;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.logtable td,.logtable th{padding:5px 6px;font-size:.88rem}
+.logtable button{font:inherit;font-size:.8rem;border:0;background:none;color:var(--muted);cursor:pointer}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.fixes .seg button{font-size:.82rem}
+
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Sections">
+  <div class="wrap">
+    <a href="#overview">Overview</a>
+    <a href="#points">🏅 Points</a>
+    <a href="#launch">🚀 Launch</a>
+    <a href="#glide">🪂 Glide</a>
+    <a href="#balance">⚖️ Balance</a>
+    <a href="#turning">🔄 Turning</a>
+    <a href="#build">🛠 Build &amp; trim</a>
+    <a href="#log">📓 Flight log</a>
+    <a href="#flashcards">🃏 Flashcards</a>
+    <a href="#plan">🗺 Game plan</a>
+    <a href="#score">🧮 Score calculator</a>
+    <a href="#videos">▶ Videos &amp; links</a>
+    <a href="#checklist">✅ Checklist</a>
+    <a href="#glossary">📖 Glossary</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Science Olympiad · Elastic Launched Glider · 2027 · Division B</span>
+    <h1>The Hang Time Lab</h1>
+    <p class="lead">In Elastic Launched Glider you build a tiny balsa glider at home, test it and keep a flight log, then bring it to the tournament. There you get a 6-minute flight period in a gym. You shoot the glider straight up with a rubber band on a stick, it turns over at the top, and it circles slowly down. The judges time how long it stays in the air. This page explains the science of each part of a flight and has lab exhibits you can play with until it makes sense.</p>
+    <div class="facts">
+      <div class="fact"><b>2</b><span>students per team, about 10 minutes at the event</span></div>
+      <div class="fact"><b>6 min</b><span>flight period to make your official flights</span></div>
+      <div class="fact"><b>5 → 3</b><span>up to 5 official flights; your 3 longest count</span></div>
+      <div class="fact"><b>×1.2</b><span>bonus on every flight for a complete flight log</span></div>
+      <div class="fact"><b>3.5–10 g</b><span>legal glider mass (more than 3.5, less than 10.0)</span></div>
+      <div class="fact"><b>&lt; 1 m</b><span>launch handle length, not counting the rubber</span></div>
+    </div>
+    <div class="startcard">
+      <b>👋 New here? Start like this:</b>
+      <ol>
+        <li>Read <a href="#overview">How the event works</a> and <a href="#points">Where the points come from</a>. The flight log alone is worth 20% extra.</li>
+        <li>Play with the four exhibits in order: <a href="#launch">launch</a>, <a href="#glide">glide</a>, <a href="#balance">balance</a>, <a href="#turning">turning</a>. Change <b>one</b> thing at a time and watch what happens.</li>
+        <li><b>Build your first glider early</b> using the <a href="#build">build and trim guide</a>. The first one teaches you what goes wrong. Plan on building three or four.</li>
+        <li>Every time you fly, write it down. Use the <a href="#log">practice log</a> to see your average and what to change next.</li>
+      </ol>
+      <p style="margin:10px 0 0"><span class="term" tabindex="0" data-g="glossary-demo">Words with a dotted underline</span> are "big words." Tap or hover over one to see what it means. They're all collected in the <a href="#glossary">glossary</a> at the bottom too.</p>
+    </div>
+    <p class="note"><b>Check the official rules.</b> The rule numbers here come from the <a href="https://www.soinc.org/sites/default/files/uploaded_files/Science_Olympiad_Div_B_Rules_2027_for_Web_Secured.pdf">2027 Division B Rules Manual</a> (Elastic Launched Glider, pages B23 to B25) and the <a href="https://www.soinc.org/elastic-launched-glider-b">official event page</a>, which links build and trim guides from the National Free Flight Society. The official Rules Manual always wins, and rules get clarified during the season, so check <a href="https://www.soinc.org/events/rules-corrections">rules clarifications</a> before each tournament. One thing to watch: the manual calls the flight period 6 minutes in one place and 10 minutes in another, so ask your coach or the supervisor which one your tournament uses. This event last ran in Division B from 2019 to 2021, so older guides and videos may show different box sizes, masses, and scoring.</p>
+  </div>
+</header>
+
+<!-- ===================== OVERVIEW ===================== -->
+<section id="overview">
+  <div class="wrap">
+    <h2>How the event works</h2>
+    <p class="sub">Almost all the work happens before the tournament: building, test flying, trimming, and logging. On the day, you have a few minutes to show what your glider can do.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>Before the tournament: build and test</h4>
+        <p>Build up to two gliders from a kit, published plans, or your own design. Kits can't have joints already glued or surfaces already covered. Any material is allowed except boron fibers. Fly it at least <b>10 times</b> and write each flight in your <b>flight log</b>. You also need to be able to answer questions about how you built it and how it works.</p>
+      </div>
+      <div class="card">
+        <h4>Check-in: the box and the scale</h4>
+        <p>You hand over your glider in its <b>measurement box</b>, plus your launch handle and flight log. The box has no lid and its outside must fit in 32.0 × 24.0 × 47.0 cm (about 12.6 × 9.4 × 18.5 inches). The glider must sit completely inside it, ready to fly, without bending it to fit. The supervisor weighs it: <b>more than 3.5 g and less than 10.0 g</b> (a US nickel is 5 g). If their scale reads a little differently from yours, you can add a bit of clay on the spot.</p>
+      </div>
+      <div class="card">
+        <h4>The nose test</h4>
+        <p>For safety the nose must be blunt. The supervisor pushes it into a lip balm cap (about 1.57 cm deep and 1.37 cm wide inside). It <b>must not touch the bottom</b> of the cap. A pointy nose fails. A rounded nose block or a blob of clay wider than the cap's opening passes.</p>
+      </div>
+      <div class="card">
+        <h4>The flight period</h4>
+        <p>The clock starts when the supervisor hands your launch handle back. You get <b>6 minutes</b>. Before each launch, say whether it's an <b>official</b> flight or a <b>trim flight</b> (a practice one). If you don't say, it counts as official. You get up to <b>5 official flights</b> with one or both gliders. You can fix and adjust during the period, but the clock doesn't stop for repairs. A flight that starts before time runs out gets to finish.</p>
+      </div>
+      <div class="card">
+        <h4>How a flight is timed</h4>
+        <p>The clock runs from the moment the glider leaves your hand until any part of it touches the floor, or it gets stuck somewhere it isn't flying (a girder, a basketball hoop), or the supervisor calls it. Usually three timers each time it and the <b>middle time</b> (the median) counts. If your glider collides with another team's, you can ask for a re-flight, and that one doesn't use up your 6 minutes.</p>
+      </div>
+      <div class="card">
+        <h4>Bring and wear</h4>
+        <p>Up to 2 gliders, your launch handle(s), at least one measurement box, your flight log, and tools for repairs. The supervisor supplies the scale and the timers. <b>Category B eye protection</b>: safety glasses with side shields marked "Z87+" (goggles also work). Once you're in the flying area, only you and your partner can touch the gliders, and nobody can hand you anything or coach you. Full list in the <a href="#checklist">checklist</a>.</p>
+      </div>
+      <div class="card">
+        <h4>The launch handle</h4>
+        <p>A stick with a rubber loop on the end, like a slingshot with one arm. Without the rubber it must be <b>less than 1 m</b> long (39 inches). The rubber can't be metal, has to stay touching the glider during the launch, and has to stay on the handle. If the rubber flies off with the glider, that flight's timing ends. You must launch standing on the floor: no ladders, no chairs.</p>
+      </div>
+      <div class="card">
+        <h4>Division B vs. C</h4>
+        <p>This page is for <b>Division B</b>. You'll find Division C glider guides online from 2013 and 2014, and Division B ones from 2015, 2016, and 2019 to 2021. The physics is the same, but the size, mass, and scoring rules have changed, so always check numbers against the 2027 manual.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== POINTS ===================== -->
+<section id="points">
+  <div class="wrap">
+    <h2>Where the points come from</h2>
+    <p class="sub">There's no test. Your score is just seconds in the air, with a bonus for good record keeping. Highest score wins.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>The point table</h4>
+        <div class="tablewrap"><table class="ptable">
+          <tr><th>Piece</th><th>Points</th><th>How you earn it</th></tr>
+          <tr><td>⏱ Each official flight</td><td>1 per second</td><td>Flight time × your log bonus = flight score.</td></tr>
+          <tr><td>🥇 Final score</td><td>Best 3</td><td>Add up your three highest flight scores out of up to 5.</td></tr>
+          <tr><td>📓 Complete flight log</td><td>×1.2</td><td>10+ test flights with peak height, rubber length, time, and one more thing you chose.</td></tr>
+          <tr><td>📝 Partial flight log</td><td>×1.1</td><td>A log that's missing something. The manual doesn't say exactly what counts as partial.</td></tr>
+          <tr><td>🚫 No log</td><td>×1.0</td><td>Just your times.</td></tr>
+          <tr><td>⚖️ Tiebreaker</td><td>4th best</td><td>Your longest official flight that <i>didn't</i> count breaks a tie.</td></tr>
+        </table></div>
+        <p class="muted"><small>Breaking a rule that has no specific penalty (mass, box, nose, launch handle) puts you <b>below every team that followed the rules</b>, no matter how long you fly.</small></p>
+      </div>
+      <div class="card">
+        <h4>How it splits</h4>
+        <p>A team that flies 20, 18, and 16 seconds and has a complete log:</p>
+        <div class="pbar" role="img" aria-label="Flight one 20, flight two 18, flight three 16, log bonus 10.8">
+          <div style="flex:20;background:var(--sky);color:#fff">20 s</div>
+          <div style="flex:18;background:var(--sky);color:#fff;opacity:.85">18 s</div>
+          <div style="flex:16;background:var(--sky);color:#fff;opacity:.7">16 s</div>
+          <div style="flex:10.8;background:var(--balsa)">log +10.8</div>
+        </div>
+        <p class="muted"><small>54 seconds of flying plus 10.8 bonus points = 64.8.</small></p>
+        <div class="plain why">
+          <p>The flight log is the <b>cheapest 20%</b> in the event. It's just writing things down while you practice. To get the same 20% from flying, you'd have to make every flight 20% longer: in a gym, that's like finding an extra 1.5 m of ceiling. Teams that skip the log or lose it on the way to the tournament throw those points away.</p>
+        </div>
+      </div>
+    </div>
+    <div class="plain example">
+      <p>Two teams fly at a regional.</p>
+      <ul class="tight">
+        <li><b>Ava and Sam</b> fly 18.4, 22.1, 9.0 (it hit a wall), 20.5, and 23.0 seconds. Their three best: 23.0 + 22.1 + 20.5 = 65.6 s. They have a complete log: 65.6 × 1.2 = <b>78.7 points</b>.</li>
+        <li><b>Jordan and Mia</b> have a better glider: 26.0, 25.0, and 24.0 s are their three best. But they left their log at home: 75.0 × 1.0 = <b>75.0 points</b>.</li>
+      </ul>
+      <p>Ava and Sam win by 3.7 points with a glider that's 3 seconds slower per flight. If they tied, the 18.4 s flight (their best one that didn't count) would break it. Try your own numbers in the <a href="#score">score calculator</a>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LAUNCH ===================== -->
+<section id="launch">
+  <div class="wrap">
+    <h2>The launch: rubber to height <span class="tag t-sun">Climb</span></h2>
+    <p class="sub">Every flight starts with energy you put into the rubber. The higher the glider goes, the more time it has to come down. But the ceiling is a hard limit.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>The science: energy changes form</h4>
+        <p>When you stretch the rubber, you store <b>elastic potential energy</b> in it. Let go and it turns into <b>kinetic energy</b> (energy of motion): the glider leaves at 15 to 25 meters per second, about 35 to 55 mph. As it climbs, gravity slows it down and the motion turns into <b>gravitational potential energy</b> (energy of height). At the top it's almost stopped, and it has to turn over into a glide. That turn is called the <b>transition</b>.</p>
+        <div class="chain"><span>🤚 Stretch</span><i>→</i><span>Elastic energy</span><i>→</i><span>Speed</span><i>→</i><span>Height</span><i>→</i><span>Glide time</span></div>
+        <p>Not all the energy makes it. The rubber wastes some as heat and spends some flinging itself forward. <b>Drag</b> (air pushing back) steals more on the way up, and it steals more from fast, light gliders.</p>
+      </div>
+      <div class="card">
+        <h4>The formulas, term by term</h4>
+        <p class="formula">Stored energy ≈ ½ × k × x²</p>
+        <p><b>k</b> is how stiff the rubber is (newtons per meter), and <b>x</b> is how far you stretch it (meters). Twice the stretch gives <b>four times</b> the energy.</p>
+        <p class="formula">Height (no air) = energy ÷ (m × g)</p>
+        <p><b>m</b> is the glider's mass in kilograms (6 g = 0.006 kg), and <b>g</b> is 9.8 m/s², the pull of gravity.</p>
+        <div class="plain example"><p>Medium rubber with k = 15 N/m, stretched 0.6 m: ½ × 15 × 0.6 × 0.6 = 2.7 joules stored. If about a third reaches the glider (0.95 J), a 6 g glider could climb 0.95 ÷ (0.006 × 9.8) = <b>16 m</b> with no air. Drag cuts that to about 7 m above your hand, so the peak is near 9 m (29 feet) off the floor. That's about right for a strong gym launch.</p></div>
+      </div>
+    </div>
+
+    <div class="lab" id="lnLab">
+      <div class="lab-head"><h3>🚀 Exhibit: how high will it go?</h3></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="ln-pull">Stretch <output id="ln-pull-o"></output></label><input id="ln-pull" type="range" min="20" max="90" step="1" value="50"><div class="hint">How far you pull the glider back from the end of the handle.</div></div>
+          <div class="ctl"><label>Rubber <output id="ln-band-o"></output></label>
+            <div class="seg" id="ln-band"><button data-v="thin">Thin loop</button><button data-v="med" aria-pressed="true">Medium</button><button data-v="thick">Thick loop</button></div>
+            <div class="hint">Thicker rubber is stiffer: more energy for the same stretch.</div></div>
+          <div class="ctl"><label for="ln-mass">Glider mass <output id="ln-mass-o"></output></label><input id="ln-mass" type="range" min="3" max="11" step="0.1" value="6"><div class="hint">Legal: more than 3.5 g and less than 10.0 g.</div></div>
+          <div class="ctl"><label for="ln-ceil">Ceiling height <output id="ln-ceil-o"></output></label><input id="ln-ceil" type="range" min="5" max="16" step="0.5" value="9"><div class="hint">The tournament announces the room size ahead of time. A middle school gym is often 7 to 10 m.</div></div>
+        </div>
+        <div class="viz">
+          <svg id="ln-pic" viewBox="0 0 560 300" role="img" aria-label="Side view of the launch and climb"></svg>
+          <div class="readouts">
+            <div class="ro"><span>Stored in rubber</span><b id="ln-r-e"></b></div>
+            <div class="ro"><span>Launch speed</span><b id="ln-r-v"></b></div>
+            <div class="ro big"><span>Peak height</span><b id="ln-r-h"></b></div>
+            <div class="ro"><span>Room to spare</span><b id="ln-r-gap"></b></div>
+          </div>
+          <div class="verdict" id="ln-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Simplified model: a third of the rubber's energy reaches the glider, and drag is a simple loss that hurts light gliders more. Real rubber isn't a perfect spring. Use it to see the trade-offs, then measure your own launches.</p>
+    </div>
+    <div class="plain">
+      <p>A lighter glider leaves faster, but fast things get hit harder by the air. A heavier glider leaves slower but plows through. So the lightest glider doesn't always climb highest. Where it really pays to be light is the glide, coming up next.</p>
+    </div>
+    <div class="plain howto">
+      <p>In a low gym, you'll often have <b>more</b> launch power than you need. Then the game is control: pull the same distance every time, and pick a stretch that gets you about <b>1 m below the ceiling</b>. Hitting the ceiling costs time and can break the glider. Your flight log records peak height and rubber length so you can do this on purpose.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GLIDE ===================== -->
+<section id="glide">
+  <div class="wrap">
+    <h2>The glide: coming down slowly <span class="tag t-sky">Descent</span></h2>
+    <p class="sub">Most of your time aloft is the glide. The slower your glider sinks, the more seconds you get from every meter of height.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>The science: lift, drag, and sink rate</h4>
+        <p>A glider has no motor. It's always sliding <b>downhill through the air</b>, trading height for speed. Its wing pushes air down, and the air pushes the wing up: that's <b>lift</b>. Lift holds up the glider's weight, and drag tries to slow it.</p>
+        <p>The number that matters is the <b>sink rate</b>: how many meters it drops each second. Two things set it:</p>
+        <ul class="tight">
+          <li><b>Wing loading</b>: mass per wing area. A big wing on a light glider can fly slowly, and a slow glider sinks slowly.</li>
+          <li><b>Glide ratio</b> (lift-to-drag, or L/D): how far forward it goes for each meter down. A smooth, thin, slightly curved wing beats a flat, rough one.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>The formulas, term by term</h4>
+        <p class="formula">Speed = √( 2 × W ÷ (ρ × S × C<sub>L</sub>) )</p>
+        <p><b>W</b> is weight in newtons (mass in kg × 9.8). <b>ρ</b> ("rho") is air density, 1.2 kg/m³. <b>S</b> is wing area in m². <b>C<sub>L</sub></b> is the lift coefficient, about 0.6 for a well-trimmed glider.</p>
+        <p class="formula">Sink rate = speed ÷ glide ratio</p>
+        <p class="formula">Time aloft ≈ climb time + height ÷ sink rate</p>
+        <div class="plain example"><p>A 6 g glider (W = 0.059 N) with 180 cm² of wing (0.018 m²): speed = √(2 × 0.059 ÷ (1.2 × 0.018 × 0.6)) = 3.0 m/s, about 7 mph. With a glide ratio of 8, it sinks 3.0 ÷ 8 = 0.38 m/s. From 7 m that's about 18 seconds of glide plus 1 to 2 seconds of climb.</p></div>
+      </div>
+    </div>
+
+    <div class="lab" id="gdLab">
+      <div class="lab-head"><h3>🪂 Exhibit: what makes a long glide?</h3></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="gd-h">Launch height <output id="gd-h-o"></output></label><input id="gd-h" type="range" min="2" max="14" step="0.5" value="7"><div class="hint">The peak height from the launch exhibit, or your best guess in your gym.</div></div>
+          <div class="ctl"><label for="gd-mass">Glider mass <output id="gd-mass-o"></output></label><input id="gd-mass" type="range" min="3" max="11" step="0.1" value="6"><div class="hint">Legal: more than 3.5 g and less than 10.0 g.</div></div>
+          <div class="ctl"><label for="gd-area">Wing area <output id="gd-area-o"></output></label><input id="gd-area" type="range" min="80" max="320" step="5" value="180"><div class="hint">Span × chord. A 30 cm span with a 6 cm chord is 180 cm². The box limits how big it can be.</div></div>
+          <div class="ctl"><label>Wing finish <output id="gd-ld-o"></output></label>
+            <div class="seg" id="gd-ld"><button data-v="6">Flat, square edges</button><button data-v="8" aria-pressed="true">Sanded airfoil</button><button data-v="10">Thin, smooth, cambered</button></div>
+            <div class="hint">Sets the glide ratio (6, 8, or 10). Shaping the wing is how you get the higher numbers.</div></div>
+        </div>
+        <div class="viz">
+          <svg id="gd-chart" viewBox="0 0 560 260" role="img" aria-label="Time aloft versus glider mass"></svg>
+          <div class="readouts">
+            <div class="ro"><span>Wing loading</span><b id="gd-r-wl"></b></div>
+            <div class="ro"><span>Flying speed</span><b id="gd-r-v"></b></div>
+            <div class="ro"><span>Sink rate</span><b id="gd-r-s"></b></div>
+            <div class="ro big"><span>Time aloft</span><b id="gd-r-t"></b></div>
+          </div>
+          <div class="verdict" id="gd-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Simplified model with a fixed lift coefficient (0.6) and glide ratio. It assumes a perfect transition and a smooth, wide circle. Small gliders fly in thick, "syrupy" air for their size, so real glide ratios are lower than for big planes.</p>
+    </div>
+    <div class="plain howto">
+      <p>The orange curve shows time aloft for every mass, keeping your wing and height the same. The shaded ends are illegal. Notice the curve gets steep on the left: shaving a gram off a heavy glider helps a little, but shaving a gram off a light one helps more. That's why builders pick the <b>lightest balsa</b> they can find, and also why they stop right above 3.5 g with a little safety margin for scale differences.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BALANCE ===================== -->
+<section id="balance">
+  <div class="wrap">
+    <h2>Balance: where the clay goes <span class="tag t-balsa">Trim</span></h2>
+    <p class="sub">A glider that's built perfectly can still stall, dive, or flip if it's balanced wrong. Balance and the tail angle work as a pair.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>The science: two balance points</h4>
+        <p>The <b>center of gravity</b> (CG) is the balance point: put a finger there and the glider sits level. You move it forward by adding clay to the nose.</p>
+        <p>The <b>neutral point</b> is where the lift from the wing <i>and</i> the tail adds up. Think of it as the point the air "holds" the glider. For a stable glider, the CG has to be <b>in front of</b> the neutral point. The gap between them is the <b>static margin</b>.</p>
+        <p>The tail (the <b>stabilizer</b>, or stab) is set at a slightly smaller angle than the wing, with its back edge tilted up a little. That difference is the <b>decalage</b>. A nose-heavy glider needs more of it to hold the nose up; a tail-heavy one needs less.</p>
+      </div>
+      <div class="card">
+        <h4>How it works in flight</h4>
+        <ul class="tight">
+          <li><b>Just right</b>: the glider settles into one smooth speed and holds it.</li>
+          <li><b>Stall</b> (too little nose weight or too much up tail): the nose rises, it slows, it drops, it speeds up, and it rises again. That bobbing is called <b>porpoising</b>, and each bob wastes height.</li>
+          <li><b>Dive</b> (too much nose weight or not enough up tail): it flies fast and steep and hits the floor early.</li>
+          <li><b>Tumble</b> (CG behind the neutral point): nothing holds the nose steady, so it flips or flutters down.</li>
+        </ul>
+        <div class="plain"><p>It's like a dart. The heavy point goes in front and the feathers in back. Put the weight in the back and the dart flips around. A glider is a dart that's trying to fly slowly.</p></div>
+      </div>
+    </div>
+
+    <div class="lab" id="cgLab">
+      <div class="lab-head"><h3>⚖️ Exhibit: balance and tail angle</h3>
+        <span><button class="btn" id="cg-mystery">🎲 Diagnose a flight</button></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl" id="cg-ctl-clay"><label for="cg-clay">Nose clay <output id="cg-clay-o"></output></label><input id="cg-clay" type="range" min="0" max="3" step="0.05" value="1"><div class="hint">The glider without clay weighs 5.0 g. Clay sits on the nose, about 1.6 wing chords ahead of the wing.</div></div>
+          <div class="ctl" id="cg-ctl-elev"><label for="cg-elev">Stab back edge up <output id="cg-elev-o"></output></label><input id="cg-elev" type="range" min="-2" max="5" step="0.25" value="2"><div class="hint">Degrees of decalage. You change it by gluing the stab at a new angle or by bending a small tab on its back edge.</div></div>
+          <div class="ctl" id="cg-quiz" hidden><label>What would you change?</label>
+            <div class="seg fixes" id="cg-fix"><button data-v="clay+">Add nose clay</button><button data-v="clay-">Remove nose clay</button><button data-v="up">Tab up</button><button data-v="down">Tab down</button><button data-v="ok">It's fine</button></div>
+            <div class="btnrow" style="margin-top:8px"><button class="btn" id="cg-next">Next flight</button><button class="btn ghost" id="cg-exit">Done</button></div>
+            <div class="hint">Watch the flight path, then pick one change. Any fix that would work counts.</div></div>
+        </div>
+        <div class="viz">
+          <svg id="cg-pic" viewBox="0 0 560 320" role="img" aria-label="Glider side view with balance points, and its flight path"></svg>
+          <div class="readouts">
+            <div class="ro"><span>Balance point (CG)</span><b id="cg-r-cg"></b></div>
+            <div class="ro"><span>Static margin</span><b id="cg-r-sm"></b></div>
+            <div class="ro"><span>Total mass</span><b id="cg-r-m"></b></div>
+            <div class="ro big"><span>Flight</span><b id="cg-r-f"></b></div>
+          </div>
+          <div class="verdict" id="cg-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Simplified model. The neutral point is set at 75% of the wing chord, which is about right for a glider with a big stab. Real gliders often balance between 50% and 70% of the chord. Find your own sweet spot by test flying.</p>
+    </div>
+    <div class="plain howto">
+      <p>Read the top picture like a seesaw: the triangle is the CG, the ring is the neutral point. Keep the triangle in front of the ring. Then the bottom picture shows what that does in the air. The steps to trim: first get the balance close (CG around the middle of the wing), then fix stalls and dives with <b>small</b> tail changes or tiny bits of clay, changing <b>one thing</b> per test.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== TURNING ===================== -->
+<section id="turning">
+  <div class="wrap">
+    <h2>Turning: stay in the gym <span class="tag t-leaf">Circle</span></h2>
+    <p class="sub">A glider that flies straight hits a wall in a few seconds. You want a wide, gentle circle that fits the room.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>The science: rudder and dihedral</h4>
+        <p>The <b>rudder</b> (the back part of the tall fin) is set a few degrees to one side. That swings the tail and points the nose into a turn. As it turns, the glider <b>banks</b> (tips its wings), like a bike leaning into a corner.</p>
+        <p><b>Dihedral</b> is the V shape of the wings when you look from the front. When the glider tips, the lower wing gets more lift and pushes it back level. Dihedral fights the bank, the rudder makes it.</p>
+        <p>If the rudder wins by too much, the bank keeps growing, the circle gets smaller and steeper, and the glider corkscrews into the floor. That's a <b>spiral dive</b>.</p>
+      </div>
+      <div class="card">
+        <h4>How to read the room</h4>
+        <ul class="tight">
+          <li>Circle about <b>two thirds</b> of the room's narrow width. It drifts a bit, so leave space.</li>
+          <li>Most catapult gliders climb turning one way and glide turning the other way. Righties usually launch with the glider banked to the right and glide in a left circle (or the opposite for lefties).</li>
+          <li>Tighter circles mean more bank, and more bank means faster sinking.</li>
+          <li>Don't add weight to one wing to make it turn. Use the rudder.</li>
+        </ul>
+        <div class="plain"><p>Think of a bike on a curvy path. Steering (rudder) makes you lean. Your balance (dihedral) keeps you from tipping over. Turn the handlebars too hard and you fall in.</p></div>
+      </div>
+    </div>
+
+    <div class="lab" id="tnLab">
+      <div class="lab-head"><h3>🔄 Exhibit: circle size and spiral dive</h3></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="tn-rud">Rudder offset <output id="tn-rud-o"></output></label><input id="tn-rud" type="range" min="0" max="8" step="0.25" value="2.5"><div class="hint">Degrees the rudder points to one side. Small changes matter a lot.</div></div>
+          <div class="ctl"><label for="tn-dih">Dihedral <output id="tn-dih-o"></output></label><input id="tn-dih" type="range" min="0" max="15" step="0.5" value="8"><div class="hint">Angle each wing tip is raised. Many catapult gliders use 5 to 10°. Tip dihedral (only the outer panels bent up) works too.</div></div>
+          <div class="ctl"><label>Room <output id="tn-room-o"></output></label>
+            <div class="seg" id="tn-room"><button data-v="14">Small gym</button><button data-v="22" aria-pressed="true">Big gym</button><button data-v="36">Field house</button></div>
+            <div class="hint">Narrow width of the room. Tournaments announce the size ahead of time.</div></div>
+        </div>
+        <div class="viz">
+          <svg id="tn-pic" viewBox="0 0 560 300" role="img" aria-label="Top view of the gym and the glider's circle"></svg>
+          <div class="readouts">
+            <div class="ro"><span>Circle across</span><b id="tn-r-d"></b></div>
+            <div class="ro"><span>Bank angle</span><b id="tn-r-b"></b></div>
+            <div class="ro"><span>Extra sink</span><b id="tn-r-s"></b></div>
+            <div class="ro big"><span>Result</span><b id="tn-r-res"></b></div>
+          </div>
+          <div class="verdict" id="tn-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Simplified model: the circle size comes only from the rudder, and the spiral test compares rudder and dihedral with a made-up rule of thumb. Flying speed is 3 m/s. In real life, wind from vents and how you launch also move the circle.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BUILD ===================== -->
+<section id="build">
+  <div class="wrap">
+    <h2>Build, trim, and launch <span class="tag t-balsa">Device</span></h2>
+    <p class="sub">How to make a glider that's legal, light, and tough enough to survive a season of launches.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>🪵 Materials</h4>
+        <ul class="tight">
+          <li><b>Balsa</b> is the usual wood: light, easy to cut, and strong for its weight. Weigh sheets at the hobby store and pick the lightest ones. Light wing balsa is about 5 to 7 lb per cubic foot (80 to 110 kg/m³). The NFFS balsa density calculator on the <a href="https://www.soinc.org/elastic-launched-glider-b">event page</a> tells you from a sheet's size and mass.</li>
+          <li><b>Grain</b>: A-grain bends easily (good for curved parts), C-grain is stiff and doesn't twist (good for flat wings and the stab). B-grain is in between.</li>
+          <li>Wing and tail: 1/16" (1.6 mm) or 3/32" (2.4 mm) sheet. Fuselage: a hard balsa or basswood stick, or a thin carbon rod.</li>
+          <li>Glue: thin CA ("super glue") sets fast, and acetone dissolves it if you need to re-set a part. Hobby cement (like Duco) is slower but more forgiving.</li>
+          <li>Anything goes except <b>boron</b> fibers. A kit is fine as long as nothing comes pre-glued or pre-covered.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>🛠 Build steps</h4>
+        <ol class="steps">
+          <li>Start from the NFFS "basic non-flapper glider" plans and tips (linked below), or a kit. Save fancy designs for glider number two.</li>
+          <li>Cut the wing. Sand it into an <b>airfoil</b>: rounded front edge, thin tapered back edge, and the thickest point about a quarter of the way back.</li>
+          <li>Crack the wing at the middle (or at the tips) and glue it with dihedral, propping the tips on a block.</li>
+          <li>Sand the stab and fin thin. Light tails matter: every gram at the back needs grams of clay at the front.</li>
+          <li>Glue the wing and stab to the fuselage, checking from the front and above that everything is square. Use a reinforcing patch where the wing sits.</li>
+          <li>Add a launch peg or notch near the back, behind the wing, for the rubber.</li>
+          <li>Shape a <b>blunt nose block</b>. Test it in a lip balm cap: it must not touch the bottom.</li>
+          <li>Add clay until it balances near the middle of the wing. Weigh it: more than 3.5 g and less than 10.0 g, with a few tenths of a gram of margin.</li>
+          <li>Check it fits <b>fully</b> in your measurement box. Write your names on it.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h4>📏 Size and safety rules (2027)</h4>
+        <div class="tablewrap"><table>
+          <tr><th>Rule</th><th>Limit</th></tr>
+          <tr><td>Mass, all through the flight</td><td>more than 3.5 g, less than 10.0 g</td></tr>
+          <tr><td>Measurement box (outside)</td><td>fits in 32.0 × 24.0 × 47.0 cm, no lid</td></tr>
+          <tr><td>Glider in the box</td><td>completely inside, ready to fly, not bent to fit</td></tr>
+          <tr><td>Nose</td><td>doesn't touch the bottom of a lip balm cap (~1.57 cm deep, ~1.37 cm wide)</td></tr>
+          <tr><td>Launch handle</td><td>less than 1 m without the rubber; one student can hold it</td></tr>
+          <tr><td>Rubber</td><td>not metal, stays on the handle, touches the glider during launch</td></tr>
+          <tr><td>Materials</td><td>anything except boron</td></tr>
+          <tr><td>Gliders per team</td><td>up to 2</td></tr>
+        </table></div>
+        <p class="muted"><small>"Throughout the flight" means a glider that drops its clay mid-flight could end up under 3.5 g. Press the clay on firmly and cover it with tape if needed.</small></p>
+      </div>
+      <div class="card">
+        <h4>🎯 Launching like a pro</h4>
+        <ul class="tight">
+          <li>Hold the glider from above, just behind the wing, so your fingers don't touch the tail.</li>
+          <li>Hook the rubber on the launch peg. Hold the handle straight up and pull the glider straight down below it.</li>
+          <li>Tilt the whole setup about <b>70 to 80°</b> from the floor (nearly straight up) and roll the glider about 45° onto its side. That bank is what makes it turn over at the top instead of looping backward.</li>
+          <li>Pull to a <b>marked spot</b> every time (a tape mark on your arm or a knot on a string) so launches are repeatable.</li>
+          <li>Control height by <b>shortening the rubber</b>: start loose, test launch in the gym, and wrap the loop around the handle until the peak sits about 1 m below the ceiling. Don't guess a new pull distance on the day.</li>
+          <li>Launch away from walls, lights, and basketball hoops, and wait for other gliders to clear.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>🔧 Trimming guide: symptom → fix</h3>
+    <div class="card">
+      <div class="tablewrap"><table>
+        <tr><th>What it does</th><th>Why</th><th>Try this</th></tr>
+        <tr><td>Bobs up and down in the glide (stall)</td><td>Tail heavy, or too much up on the stab</td><td>Add a tiny bit of nose clay, or bend the stab tab down slightly</td></tr>
+        <tr><td>Dives steeply into the floor</td><td>Nose heavy, or not enough up on the stab</td><td>Remove a little clay, or bend the stab tab up slightly</td></tr>
+        <tr><td>Loops backward at the top</td><td>Too much up on the stab, or launched too straight with no bank</td><td>Launch with more bank (45°), or a little less up on the stab</td></tr>
+        <tr><td>Flies straight and hits a wall</td><td>No rudder offset</td><td>Set the rudder a degree or two to one side</td></tr>
+        <tr><td>Circle too big for the room</td><td>Too little rudder</td><td>Add a little rudder (half a degree at a time)</td></tr>
+        <tr><td>Circle tightens and corkscrews down (spiral dive)</td><td>Too much rudder for the dihedral</td><td>Less rudder, or more dihedral</td></tr>
+        <tr><td>Never turns over at the top, arcs over like a thrown ball</td><td>Not enough bank at launch, or tail too heavy</td><td>Roll it more at launch; lighten the tail</td></tr>
+        <tr><td>Does something different every flight</td><td>A warped wing or stab, or loose glue joints</td><td>Sight down the wing for twists; re-glue; store it flat in its box</td></tr>
+      </table></div>
+      <p class="muted"><small>Trim in small steps: tiny clay pinches and half-degree bends. Write down every change in your flight log as your extra parameter. Steam (carefully, with an adult) can relax a warped wing.</small></p>
+    </div>
+
+    <div class="cols" style="margin-top:20px">
+      <div class="card">
+        <h4>🧰 Repair kit</h4>
+        <ul class="tight">
+          <li>Thin CA glue and a fine applicator tip</li>
+          <li>Clear tape and a few cm of light balsa scraps</li>
+          <li>Extra clay in a small container, and a toothpick to place it</li>
+          <li>Spare rubber loops, already cut and tied to your tested length</li>
+          <li>Small sandpaper, a hobby knife (adults only, or with permission), tweezers</li>
+          <li>A small ruler and your own digital scale (0.01 g if possible)</li>
+        </ul>
+        <p class="muted"><small>The clock keeps running during repairs, so practice quick fixes at home: a cracked wing taped in under a minute.</small></p>
+      </div>
+      <div class="card">
+        <h4>🦋 Flapper gliders (advanced)</h4>
+        <p>A <b>flapper</b> glider has a wing or stab that's held flat by the rubber's pull during launch, then pops to its gliding angle at the top. It climbs straight and fast with no lift fighting it, then glides with full lift. They can fly much longer, but they're harder to build and trim. NFFS has separate build and trim guides for flappers, linked below. Learn on a basic glider first.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FLIGHT LOG ===================== -->
+<section id="log">
+  <div class="wrap">
+    <h2>The flight log <span class="tag t-balsa">×1.2</span></h2>
+    <p class="sub">The bonus that comes from paperwork. Here's what the rules require, and a practice tool to spot patterns in your flights.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>What a complete log needs</h4>
+        <ul class="tight">
+          <li>Data from <b>10 or more</b> test flights made <b>before</b> the competition.</li>
+          <li>Three required items for each flight: <b>(1) estimated or recorded peak height</b> after launch, <b>(2) approximate relaxed length of the rubber</b>, and <b>(3) flight time</b>.</li>
+          <li>At least <b>one more</b> item of your choice. Good ones: clay added, stab tab setting, rudder setting, which glider, room, or what changed since the last flight.</li>
+          <li>Units on every number (s, m, cm, g).</li>
+        </ul>
+        <p>The supervisor looks it over at check-in and gives it back. Bring it in a folder so it stays readable.</p>
+      </div>
+      <div class="card">
+        <h4>Estimating peak height</h4>
+        <p>You can't hold a tape measure at the top of a launch. Use the room instead:</p>
+        <ul class="tight">
+          <li>Count rows of concrete blocks: one row is about 20 cm (8 inches). Basketball rims are 3.05 m (10 ft).</li>
+          <li>Have your partner stand back and compare the peak with things whose height you know, like the hoop, a banner, or the bottom of the lights.</li>
+          <li>Phone video against a wall with height marks works well at home (phones aren't allowed at the event, but they're great for practice).</li>
+        </ul>
+        <p class="muted"><small>"Estimated" is allowed. Being consistent matters more than being perfect.</small></p>
+      </div>
+    </div>
+
+    <div class="lab" id="lgLab">
+      <div class="lab-head"><h3>📓 Exhibit: practice flight log</h3>
+        <span class="btnrow"><button class="btn ghost" id="lg-csv">Download CSV</button><button class="btn ghost" id="lg-clear">Clear all</button></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="logform">
+            <label>Flight time (s)<input id="lg-t" type="number" min="0" max="300" step="0.1" inputmode="decimal" placeholder="e.g. 18.4"></label>
+            <label>Peak height (m)<input id="lg-h" type="number" min="0" max="40" step="0.1" inputmode="decimal" placeholder="e.g. 7"></label>
+            <label>Rubber, relaxed (cm)<input id="lg-r" type="number" min="0" max="200" step="0.5" inputmode="decimal" placeholder="e.g. 30"></label>
+            <label>Your extra item<input id="lg-x" type="text" maxlength="40" placeholder="e.g. +0.1 g clay"></label>
+          </div>
+          <button class="btn" id="lg-add">Add flight</button>
+          <div class="hint">This tool only keeps flights while the page is open. Copy them into your real log, or download them as a spreadsheet file.</div>
+        </div>
+        <div class="viz">
+          <svg id="lg-chart" viewBox="0 0 560 200" role="img" aria-label="Bar chart of logged flight times"></svg>
+          <div class="readouts">
+            <div class="ro"><span>Flights logged</span><b id="lg-r-n"></b></div>
+            <div class="ro"><span>Average</span><b id="lg-r-avg"></b></div>
+            <div class="ro"><span>Seconds per meter</span><b id="lg-r-spm"></b></div>
+            <div class="ro big"><span>Best 3 × 1.2</span><b id="lg-r-score"></b></div>
+          </div>
+          <div class="verdict" id="lg-verdict"></div>
+          <div class="tablewrap"><table class="logtable" id="lg-table"></table></div>
+        </div>
+      </div>
+      <p class="toy">Starts with four sample flights so you can see how it works. "Seconds per meter" is flight time ÷ peak height: a quick measure of how well the glide is trimmed, separate from how hard you launched.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FLASHCARDS ===================== -->
+<section id="flashcards">
+  <div class="wrap">
+    <h2>Flashcards</h2>
+    <p class="sub">Tap a card to flip it. You may be asked about your glider's design at check-in, so these help with that too. <button class="btn ghost" id="fc-shuffle" style="margin-left:6px">Shuffle</button> <button class="btn ghost" id="fc-reset">Flip all back</button></p>
+    <div class="cards" id="fc"></div>
+  </div>
+</section>
+
+<!-- ===================== GAME PLAN ===================== -->
+<section id="plan">
+  <div class="wrap">
+    <h2>Game plan</h2>
+    <p class="sub">How to practice, how to split the work with your partner, and what goes in your flight log.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>🗓 A practice schedule</h4>
+        <div class="timeline">
+          <div><b>8+ weeks out:</b> Read this page. Order balsa or a kit. Build glider #1 quickly, just to learn. Start the flight log with your very first flight.</div>
+          <div><b>6–8 weeks out:</b> Trim #1 until it glides smoothly in a circle. Build glider #2 lighter and neater, using what you learned. Find a gym you can practice in.</div>
+          <div><b>4–6 weeks out:</b> Tune the launch: mark your pull, set rubber length for your practice ceiling. Practice timing with three stopwatches and taking the middle time.</div>
+          <div><b>2–4 weeks out:</b> Run full 6-minute flight periods with a timer: declare each flight, make 5 official flights. Practice a quick repair. Finish 10+ logged flights.</div>
+          <div><b>Last week:</b> Check mass on your scale with a margin above 3.5 g. Test the nose in a lip balm cap. Check the box fits. Pack spares. Don't make big changes now.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h4>👯 Splitting the work between partners</h4>
+        <ul class="tight">
+          <li><b>Partner A: pilot.</b> Launches every flight the same way and makes trim changes.</li>
+          <li><b>Partner B: crew chief.</b> Keeps the clock and the flight log, watches the flight from the side to estimate peak height, and calls "official" or "trim" before each launch.</li>
+          <li>At the tournament, B watches the 6-minute clock. Plan it: maybe 1 trim flight to check the room, then official flights about once a minute.</li>
+          <li>Both of you should be able to explain how the glider was built and trimmed.</li>
+          <li>Swap jobs at some practices, in case one of you is out sick.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>📄 What to put in your flight log</h4>
+        <ul class="tight">
+          <li>A table: date, glider, flight time (s), peak height (m), relaxed rubber length (cm), plus your extra item (clay g, stab setting, room).</li>
+          <li>Ten or more rows, all before the tournament. Twenty is better.</li>
+          <li>A short note on what you changed and why ("added 0.05 g clay: it was stalling").</li>
+          <li>Glider specs: span, chord, wing area, mass, dihedral.</li>
+          <li>Your launch settings for different ceiling heights. That's your cheat sheet on the day.</li>
+        </ul>
+        <p class="muted"><small>There's no note sheet in this event. The flight log is your reference.</small></p>
+      </div>
+      <div class="card">
+        <h4>📏 Units cheat sheet</h4>
+        <div class="tablewrap"><table>
+          <tr><td>1 gram</td><td>0.035 oz; a US nickel is 5 g, a paper clip about 1 g</td></tr>
+          <tr><td>1 inch</td><td>2.54 cm; 1/16" = 1.6 mm</td></tr>
+          <tr><td>1 meter</td><td>3.28 feet; 10 m ≈ 33 ft</td></tr>
+          <tr><td>1 m/s</td><td>2.24 mph</td></tr>
+          <tr><td>1 lb/ft³</td><td>16 kg/m³ (balsa density)</td></tr>
+          <tr><td>Wing area</td><td>span × chord; 100 cm² = 1 dm² ≈ 15.5 in²</td></tr>
+          <tr><td>Wing loading</td><td>g per dm²; typical catapult gliders: 2 to 5 g/dm²</td></tr>
+          <tr><td>Energy</td><td>1 joule = lifting 1 newton by 1 meter</td></tr>
+        </table></div>
+      </div>
+      <div class="card">
+        <h4>🦺 Practicing safely</h4>
+        <ul class="tight">
+          <li>Wear safety glasses every time you launch. Rubber can snap back and gliders come down fast.</li>
+          <li>Never launch toward a person, and shout "launching!" in a shared gym.</li>
+          <li>Hobby knives are sharp: cut away from your fingers on a cutting mat, with an adult nearby.</li>
+          <li>CA glue bonds skin in seconds. Work with ventilation and keep acetone nearby to unstick fingers.</li>
+          <li>Retrieving a glider stuck up high is a job for an adult with proper equipment, not a climb.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SCORE ===================== -->
+<section id="score">
+  <div class="wrap">
+    <h2>Score calculator</h2>
+    <p class="sub">Enter five official flights from a practice flight period and see your score the way the supervisor computes it.</p>
+    <div class="lab">
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="sc-1">Flight 1 <output id="sc-1-o"></output></label><input id="sc-1" type="range" min="0" max="60" step="0.1" value="18.4"></div>
+          <div class="ctl"><label for="sc-2">Flight 2 <output id="sc-2-o"></output></label><input id="sc-2" type="range" min="0" max="60" step="0.1" value="22.1"></div>
+          <div class="ctl"><label for="sc-3">Flight 3 <output id="sc-3-o"></output></label><input id="sc-3" type="range" min="0" max="60" step="0.1" value="9"></div>
+          <div class="ctl"><label for="sc-4">Flight 4 <output id="sc-4-o"></output></label><input id="sc-4" type="range" min="0" max="60" step="0.1" value="20.5"></div>
+          <div class="ctl"><label for="sc-5">Flight 5 <output id="sc-5-o"></output></label><input id="sc-5" type="range" min="0" max="60" step="0.1" value="23"><div class="hint">Set a flight to 0 if you didn't make it in time.</div></div>
+          <div class="ctl"><label>Flight log</label>
+            <div class="seg" id="sc-log"><button data-v="1.2" aria-pressed="true">Complete ×1.2</button><button data-v="1.1">Partial ×1.1</button><button data-v="1">None ×1.0</button></div></div>
+          <div class="ctl"><label>Inspection</label>
+            <div class="seg" id="sc-ok"><button data-v="yes" aria-pressed="true">Passed</button><button data-v="no">Broke a rule</button></div></div>
+        </div>
+        <div class="viz">
+          <svg id="sc-chart" viewBox="0 0 560 120" role="img" aria-label="Score breakdown"></svg>
+          <div class="readouts" id="sc-ro"></div>
+          <div class="verdict" id="sc-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">The dashed box is the bonus you'd get with a complete log. "Broke a rule" means a construction or competition violation with no specific penalty, which ranks you below all teams that followed the rules.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VIDEOS ===================== -->
+<section id="videos">
+  <div class="wrap">
+    <h2>Videos and links</h2>
+    <p class="sub">Watching a good launch is the fastest way to learn one. The "search" tiles open a YouTube search for topics with lots of good short videos.</p>
+    <h3>Watch</h3>
+    <div class="vids" id="vids"></div>
+    <h3>Read and practice</h3>
+    <div class="cols">
+      <div class="card">
+        <h4>Rules and event resources</h4>
+        <ul class="tight">
+          <li><a href="https://www.soinc.org/elastic-launched-glider-b">Science Olympiad: Elastic Launched Glider event page</a> (official resources and NFFS guides)</li>
+          <li><a href="https://www.soinc.org/sites/default/files/uploaded_files/Science_Olympiad_Div_B_Rules_2027_for_Web_Secured.pdf">2027 Division B Rules Manual (PDF)</a>, Elastic Launched Glider on pages B23 to B25</li>
+          <li><a href="https://www.soinc.org/events/rules-corrections">Rules corrections</a> and <a href="https://www.soinc.org/events/submit-question-and-rule-clarifications">rule clarifications</a></li>
+          <li><a href="https://www.freeflight.org/wp-content/uploads/2026/09/Glider-Overview-2026-27.pdf">NFFS glider overview, 2026–27 (PDF)</a></li>
+          <li><a href="https://www.freeflight.org/wp-content/uploads/2026/09/Building-tips-for-basic-non-flapper-glider.pdf">NFFS: building a basic glider (PDF)</a> and <a href="https://www.freeflight.org/wp-content/uploads/2026/09/Launching-and-trimming-a-basic-non-flapper-glider.pdf">launching and trimming it (PDF)</a></li>
+          <li><a href="https://www.freeflight.org/wp-content/uploads/2026/10/Building-Tips-for-a-Flapper-Glider.pdf">NFFS: building a flapper glider (PDF)</a> and <a href="https://www.freeflight.org/wp-content/uploads/2026/10/Launching-and-trimming-a-flapper-glider.pdf">launching and trimming it (PDF)</a></li>
+          <li><a href="https://www.freeflight.org/science-olympiad/science-olympiad-resources1/">NFFS Science Olympiad resources</a></li>
+          <li><a href="https://scioly.org/wiki/index.php/Elastic_Launched_Glider">Scioly.org wiki: Elastic Launched Glider</a> (older seasons, good trim tips)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Learn more</h4>
+        <ul class="tight">
+          <li><a href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/vector-balance-of-forces-glider/">NASA Glenn: forces on a glider</a></li>
+          <li><a href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/drag-to-lift-ratio">NASA Glenn: drag-to-lift ratio and glide angle</a></li>
+          <li><a href="https://en.wikipedia.org/wiki/Longitudinal_static_stability">Wikipedia: pitch stability</a> (CG, neutral point, static margin; for grown-ups)</li>
+          <li><a href="https://en.wikipedia.org/wiki/Dihedral_(aeronautics)">Wikipedia: dihedral</a></li>
+          <li><a href="https://www.freeflight.org/">National Free Flight Society</a> (clubs, contests, and kits)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+  <div class="wrap">
+    <h2>Tournament-day checklist</h2>
+    <p class="sub">Tick things off as you pack. Your checks are saved on this device. <button class="btn ghost" id="ck-clear">Clear all</button></p>
+    <div class="check" id="ck"></div>
+  </div>
+</section>
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+  <div class="wrap">
+    <h2>Glossary</h2>
+    <p class="sub">Every big word on this page, in plain language. Type to filter.</p>
+    <input class="gloss-search" id="gl-q" type="search" placeholder="Search words…" aria-label="Search glossary">
+    <div class="gloss" id="gl"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Made for studying the Science Olympiad Elastic Launched Glider event (2027, Division B). Not an official Science Olympiad resource; the official Rules Manual takes precedence. Lab exhibits are simplified models for building intuition.</p>
+    <p><a href="../">← All science pages</a></p>
+  </div>
+</footer>
+
+<script>
+(() => {
+"use strict";
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function txt(parent, x, y, s, attrs = {}) { const t = el("text", { x, y, ...attrs }, parent); t.textContent = s; return t; }
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const fmt = (v, d = 1) => Number(v).toFixed(d);
+
+// segmented buttons -> value getter
+function seg(id, onChange) {
+  const box = document.getElementById(id);
+  box.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (box.dataset.multi) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    else box.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    onChange();
+  });
+  return () => {
+    if (box.dataset.multi) return [...box.querySelectorAll("button[aria-pressed=true]")].map(b => b.dataset.v);
+    const b = box.querySelector("button[aria-pressed=true]"); return b ? b.dataset.v : null;
+  };
+}
+const num = id => parseFloat(document.getElementById(id).value);
+function onInput(ids, fn) { ids.forEach(id => document.getElementById(id).addEventListener("input", fn)); }
+
+// simple line chart helper
+function axes(svg, { x0, y0, w, h, xmin, xmax, ymin, ymax, xticks, yticks, xlabel, ylabel, xfmt = v => v, yfmt = v => v }) {
+  const X = v => x0 + (v - xmin) / (xmax - xmin) * w;
+  const Y = v => y0 + h - (v - ymin) / (ymax - ymin) * h;
+  yticks.forEach(v => { el("line", { x1: x0, x2: x0 + w, y1: Y(v), y2: Y(v), class: "axis" }, svg); txt(svg, x0 - 6, Y(v) + 4, yfmt(v), { "text-anchor": "end", class: "axis-label" }); });
+  xticks.forEach(v => txt(svg, X(v), y0 + h + 15, xfmt(v), { "text-anchor": "middle", class: "axis-label" }));
+  if (xlabel) txt(svg, x0 + w / 2, y0 + h + 30, xlabel, { "text-anchor": "middle", class: "axis-label" });
+  if (ylabel) txt(svg, 12, y0 + h / 2, ylabel, { "text-anchor": "middle", class: "axis-label", transform: `rotate(-90 12 ${y0 + h / 2})` });
+  return { X, Y };
+}
+const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join("");
+// mix two #rrggbb colors
+function mix(a, b, t) {
+  const p = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+  const A = p(a), B = p(b);
+  return "#" + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, "0")).join("");
+}
+
+
+const G0 = 9.8;
+const legal = m => m > 3.5 && m < 10;
+
+/* =============== LAUNCH =============== */
+// stiffness of the rubber loop (N/m) and how much of the stored energy reaches the glider
+const LN = { thin: { k: 8, name: "thin" }, med: { k: 15, name: "medium" }, thick: { k: 25, name: "thick" } };
+const LN_EFF = 0.35;
+const lnBand = seg("ln-band", lnUpdate);
+onInput(["ln-pull", "ln-mass", "ln-ceil"], lnUpdate);
+function lnModel(k, xCm, mG) {
+  const E = 0.5 * k * (xCm / 100) ** 2, m = mG / 1000;
+  const v = Math.sqrt(2 * LN_EFF * E / m);
+  const hv = v * v / (2 * G0), Hd = 2.0 * mG;          // drag "height scale" grows with mass
+  return { E, v, h: hv / (1 + hv / Hd) + 1.8 };        // +1.8 m: released from about head height
+}
+function lnStretchFor(k, mG, target) {   // stretch (cm) that peaks at the target height, or null
+  if (lnModel(k, 90, mG).h < target) return null;
+  let lo = 0, hi = 90;
+  for (let i = 0; i < 40; i++) { const mid = (lo + hi) / 2; lnModel(k, mid, mG).h < target ? lo = mid : hi = mid; }
+  return hi;
+}
+function lnUpdate() {
+  const band = LN[lnBand()], x = num("ln-pull"), mG = num("ln-mass"), ceil = num("ln-ceil");
+  $("#ln-pull-o").textContent = x + " cm (" + fmt(x / 2.54, 0) + " in)";
+  $("#ln-band-o").textContent = band.name + ", k = " + band.k + " N/m";
+  $("#ln-mass-o").textContent = fmt(mG) + " g";
+  $("#ln-ceil-o").textContent = fmt(ceil) + " m (" + fmt(ceil * 3.28, 0) + " ft)";
+  const r = lnModel(band.k, x, mG), hits = r.h >= ceil - 0.1, peak = Math.min(r.h, ceil);
+  // drawing: floor at y=280, 15.5 px per meter
+  const svg = $("#ln-pic"); svg.innerHTML = "";
+  const Y = h => 280 - h * 15.5;
+  el("rect", { x: 40, y: Y(ceil), width: 510, height: 280 - Y(ceil), fill: css("--sky-soft") }, svg);
+  for (let h = 0; h <= 16; h += 2) txt(svg, 34, Y(h) + 4, h + " m", { "text-anchor": "end", class: "axis-label" });
+  el("line", { x1: 40, x2: 550, y1: 280, y2: 280, stroke: css("--muted"), "stroke-width": 3 }, svg);
+  el("line", { x1: 40, x2: 550, y1: Y(ceil), y2: Y(ceil), stroke: css("--ink"), "stroke-width": 3 }, svg);
+  txt(svg, 546, Y(ceil) - 6, "ceiling " + fmt(ceil) + " m", { "text-anchor": "end", "font-weight": 800, "font-size": 12 });
+  // student with launch handle
+  const px = 80;
+  el("circle", { cx: px, cy: Y(1.6), r: 6, fill: "none", stroke: css("--ink"), "stroke-width": 2 }, svg);
+  el("path", { d: `M${px} ${Y(1.45)} L${px} ${Y(0.85)} M${px} ${Y(0.85)} L${px - 7} 280 M${px} ${Y(0.85)} L${px + 7} 280 M${px} ${Y(1.3)} L${px + 10} ${Y(1.9)}`, stroke: css("--ink"), "stroke-width": 2, fill: "none" }, svg);
+  el("line", { x1: px + 10, y1: Y(1.6), x2: px + 16, y2: Y(2.5), stroke: css("--balsa"), "stroke-width": 4, "stroke-linecap": "round" }, svg);
+  // climb
+  const sx = px + 16, sy = Y(2.5), topX = 190, topY = Y(peak);
+  el("path", { d: `M${sx} ${sy} Q${sx + 30} ${(sy + topY) / 2} ${topX} ${topY}`, fill: "none", stroke: css("--sun"), "stroke-width": 3 }, svg);
+  if (hits) {
+    txt(svg, topX, topY + 22, "💥", { "text-anchor": "middle", "font-size": 18 });
+    txt(svg, topX + 18, topY + 22, "hits the ceiling", { "font-weight": 800, "font-size": 12, fill: css("--sun") });
+  } else {
+    // glide: a circle seen from the side, sinking to the floor
+    const pts = []; const turns = 3.2;
+    for (let i = 0; i <= 160; i++) { const t = i / 160; pts.push([topX + 60 * Math.sin(t * turns * 2 * Math.PI) + t * 250, topY + (280 - topY) * t]); }
+    el("path", { d: path(pts), fill: "none", stroke: css("--sky"), "stroke-width": 2, "stroke-dasharray": "5 4" }, svg);
+    el("line", { x1: 120, x2: 440, y1: topY, y2: topY, stroke: css("--sun"), "stroke-dasharray": "3 3" }, svg);
+    txt(svg, 444, topY + 4, "peak " + fmt(peak) + " m", { "font-weight": 800, "font-size": 12, fill: css("--sun") });
+  }
+  $("#ln-r-e").textContent = fmt(r.E, 2) + " J";
+  $("#ln-r-v").textContent = fmt(r.v, 0) + " m/s";
+  $("#ln-r-h").textContent = hits ? "ceiling!" : fmt(r.h) + " m";
+  $("#ln-r-gap").textContent = hits ? "none" : fmt(ceil - r.h) + " m";
+  const v = $("#ln-verdict"), target = ceil - 1, xt = lnStretchFor(band.k, mG, target);
+  const fix = xt === null ? `Even a 90 cm pull won't reach ${fmt(target)} m with ${band.name} rubber. Try stiffer rubber.` : `About ${fmt(xt, 0)} cm of stretch would peak 1 m below the ceiling.`;
+  if (!legal(mG)) { v.className = "verdict bad"; v.textContent = mG <= 3.5 ? "Illegal: the glider must be more than 3.5 g. Add clay before check-in." : "Illegal: the glider must be less than 10.0 g. It would be ranked below every legal team."; return; }
+  if (hits) { v.className = "verdict bad"; v.textContent = `It hits the ceiling at ${fmt(r.v * 0.4, 0)} m/s or so: lost height, maybe a broken wing. Shorten the rubber or pull less. ${fix}`; return; }
+  const spare = ceil - r.h;
+  if (spare < 0.6) { v.className = "verdict warn"; v.textContent = `Only ${fmt(spare * 100, 0)} cm to spare. A slightly harder pull or a drafty room and it brushes the ceiling. ${fix}`; return; }
+  if (spare <= 1.6) { v.className = "verdict"; v.textContent = `Peaks at ${fmt(r.h)} m, about ${fmt(spare)} m under the ceiling: just right. Now make every launch this same stretch.`; return; }
+  v.className = "verdict warn";
+  v.textContent = `You're leaving ${fmt(spare)} m of ceiling unused. At a typical sink rate of 0.4 m/s that's about ${fmt((spare - 1) / 0.4, 0)} seconds of glide you could add. ${fix}`;
+}
+lnUpdate();
+
+/* =============== GLIDE =============== */
+const GD_CL = 0.6, GD_RHO = 1.2;
+const gdLd = seg("gd-ld", gdUpdate);
+onInput(["gd-h", "gd-mass", "gd-area"], gdUpdate);
+function gdModel(h, mG, areaCm2, ld) {
+  const W = mG / 1000 * G0, S = areaCm2 / 10000;
+  const v = Math.sqrt(2 * W / (GD_RHO * S * GD_CL)), sink = v / ld;
+  const climb = Math.sqrt(2 * h / G0) + 0.3;
+  return { v, sink, wl: mG / (areaCm2 / 100), t: climb + Math.max(0, h - 0.5) / sink };   // 0.5 m lost in the transition
+}
+function gdUpdate() {
+  const h = num("gd-h"), mG = num("gd-mass"), A = num("gd-area"), ld = +gdLd();
+  $("#gd-h-o").textContent = fmt(h) + " m (" + fmt(h * 3.28, 0) + " ft)";
+  $("#gd-mass-o").textContent = fmt(mG) + " g";
+  $("#gd-area-o").textContent = A + " cm² (" + fmt(A / 6.452, 0) + " in²)";
+  $("#gd-ld-o").textContent = "glide ratio " + ld;
+  const r = gdModel(h, mG, A, ld);
+  const svg = $("#gd-chart"); svg.innerHTML = "";
+  const tMax = Math.ceil(gdModel(h, 3, A, ld).t / 10) * 10;
+  const { X, Y } = axes(svg, { x0: 56, y0: 14, w: 480, h: 196, xmin: 3, xmax: 11, ymin: 0, ymax: tMax, xticks: [3, 4, 5, 6, 7, 8, 9, 10, 11], yticks: Array.from({ length: tMax / 10 + 1 }, (_, i) => i * 10), xlabel: "glider mass (g)", ylabel: "time aloft (s)", xfmt: v => v + " g", yfmt: v => v + " s" });
+  el("rect", { x: X(3), y: 14, width: X(3.5) - X(3), height: 196, fill: css("--sun-soft") }, svg);
+  el("rect", { x: X(10), y: 14, width: X(11) - X(10), height: 196, fill: css("--sun-soft") }, svg);
+  txt(svg, X(10.5), 32, "illegal", { "text-anchor": "middle", class: "axis-label" });
+  const pts = []; for (let m = 3; m <= 11.001; m += 0.1) pts.push([X(m), Y(gdModel(h, m, A, ld).t)]);
+  el("path", { d: path(pts), fill: "none", stroke: css("--sun"), "stroke-width": 3 }, svg);
+  el("circle", { cx: X(mG), cy: Y(r.t), r: 7, fill: legal(mG) ? css("--sky") : css("--sun"), stroke: css("--paper"), "stroke-width": 2 }, svg);
+  const lx = X(mG) > 400 ? X(mG) - 12 : X(mG) + 12;
+  txt(svg, lx, Y(r.t) - 10, fmt(r.t) + " s", { "text-anchor": X(mG) > 400 ? "end" : "start", "font-weight": 800 });
+  $("#gd-r-wl").textContent = fmt(r.wl, 1) + " g/dm²";
+  $("#gd-r-v").textContent = fmt(r.v) + " m/s";
+  $("#gd-r-s").textContent = fmt(r.sink, 2) + " m/s";
+  $("#gd-r-t").textContent = fmt(r.t) + " s";
+  const v = $("#gd-verdict");
+  if (!legal(mG)) { v.className = "verdict bad"; v.textContent = mG <= 3.5 ? `It would fly ${fmt(r.t, 0)} s, but at ${fmt(mG)} g it's illegal. Add clay to get above 3.5 g, with a little margin for the supervisor's scale.` : `At ${fmt(mG)} g it's over the 10.0 g limit. Lighter balsa or less clay.`; return; }
+  const lighter = gdModel(h, mG - 0.5, A, ld).t - r.t, bigger = gdModel(h, mG, A + 20, ld).t - r.t;
+  if (r.wl > 5) { v.className = "verdict warn"; v.textContent = `Heavy for its wing (${fmt(r.wl)} g/dm²), so it has to fly fast and sinks quickly. 20 cm² more wing would add ${fmt(bigger)} s; 0.5 g lighter would add ${fmt(lighter)} s.`; return; }
+  v.className = "verdict";
+  v.textContent = `${fmt(r.t)} seconds from ${fmt(h)} m.` + (mG - 0.5 > 3.5 ? ` Shaving 0.5 g would add about ${fmt(lighter)} s per flight, ${fmt(lighter * 3 * 1.2)} points over three flights with a complete log.` : " You're close to the 3.5 g minimum, so more wing area or a smoother wing is the next way to gain time.") + (A > 280 ? " Check that a wing this big still fits in your box." : "");
+}
+gdUpdate();
+
+/* =============== BALANCE =============== */
+// positions in wing chords from the wing's leading edge: airframe (5 g) balances at 1.0, clay at -1.6
+const CG_AIR = 5.0, CG_AIRX = 1.0, CG_CLAYX = -1.6, CG_NP = 0.75;
+let cgQuiz = null, cgTally = [0, 0];
+onInput(["cg-clay", "cg-elev"], cgUpdate);
+function cgModel(clay, elev) {
+  const cg = (CG_AIR * CG_AIRX + clay * CG_CLAYX) / (CG_AIR + clay), sm = CG_NP - cg;
+  const diff = elev - 12 * sm;          // up-tail beyond what this balance needs (degrees)
+  const state = sm < 0.02 ? "tumble" : diff > 1.25 ? "stall" : diff < -1.25 ? "dive" : "good";
+  return { cg, sm, diff, state, m: CG_AIR + clay };
+}
+const CG_LABEL = { good: "smooth glide", stall: "stalls", dive: "dives", tumble: "tumbles" };
+function cgDraw(r, elev, clay, hide) {
+  const svg = $("#cg-pic"); svg.innerHTML = "";
+  const LE = 240, C = 100, fy = 82;    // wing leading edge x, chord px, fuselage y
+  el("line", { x1: LE + CG_CLAYX * C, x2: 492, y1: fy, y2: fy, stroke: css("--balsa"), "stroke-width": 5, "stroke-linecap": "round" }, svg);
+  el("path", { d: `M${LE} ${fy - 6} Q${LE + 20} ${fy - 16} ${LE + C} ${fy - 7} L${LE} ${fy - 4} Z`, fill: css("--balsa"), stroke: css("--ink"), "stroke-width": 1 }, svg);
+  // stab tilted (angle exaggerated 3x so you can see it)
+  const a = -elev * 3 * Math.PI / 180, sx = 430, sl = 62;
+  el("line", { x1: sx, y1: fy - 3, x2: sx + sl * Math.cos(a), y2: fy - 3 - sl * Math.sin(a), stroke: css("--balsa"), "stroke-width": 4, "stroke-linecap": "round" }, svg);
+  el("path", { d: `M460 ${fy - 3} L478 ${fy - 40} L492 ${fy - 40} L492 ${fy - 3} Z`, fill: css("--balsa"), opacity: .7 }, svg);
+  el("circle", { cx: LE + CG_CLAYX * C, cy: fy, r: 4 + 5 * Math.sqrt(clay), fill: css("--muted") }, svg);
+  txt(svg, LE + CG_CLAYX * C, fy - 18, "clay", { "text-anchor": "middle", class: "axis-label" });
+  txt(svg, LE + C / 2, fy - 22, "wing", { "text-anchor": "middle", class: "axis-label" });
+  txt(svg, sx + 30, fy - 44, "stab + fin", { "text-anchor": "middle", class: "axis-label" });
+  if (hide) txt(svg, LE + C / 2, fy + 36, "balance hidden: watch the flight", { "text-anchor": "middle", "font-weight": 800, "font-size": 13 });
+  else {
+    const cx = LE + clamp(r.cg, -1.5, 1.6) * C, nx = LE + CG_NP * C;
+    el("path", { d: `M${cx} ${fy + 6} L${cx - 8} ${fy + 20} L${cx + 8} ${fy + 20} Z`, fill: css("--sun") }, svg);
+    const cgLeft = cx <= nx;   // keep the two labels on opposite sides so they never overlap
+    txt(svg, cgLeft ? cx - 12 : cx + 12, fy + 34, "CG", { "text-anchor": cgLeft ? "end" : "start", "font-weight": 800, fill: css("--sun") });
+    el("circle", { cx: nx, cy: fy + 13, r: 7, fill: "none", stroke: css("--sky"), "stroke-width": 3 }, svg);
+    txt(svg, cgLeft ? nx + 12 : nx - 12, fy + 34, "neutral point", { "text-anchor": cgLeft ? "start" : "end", "font-weight": 800, "font-size": 12, fill: css("--sky") });
+  }
+  // flight path
+  el("line", { x1: 20, x2: 540, y1: 305, y2: 305, stroke: css("--muted"), "stroke-width": 2 }, svg);
+  txt(svg, 24, 150, "flight path, seen from the side", { class: "axis-label" });
+  const pts = [], x0 = 30, y0 = 168;
+  if (r.state === "good") for (let i = 0; i <= 100; i++) pts.push([x0 + i * 5, y0 + i * 1.32]);
+  else if (r.state === "stall") for (let i = 0; i <= 100; i++) { const t = i / 100; pts.push([x0 + t * 470, y0 + t * 132 + Math.sin(t * 5 * 2 * Math.PI) * (6 + 18 * t) * (1 - t * .3)]); }
+  else if (r.state === "dive") for (let i = 0; i <= 60; i++) { const t = i / 60; pts.push([x0 + t * 190, y0 + 137 * t * t * .4 + 137 * t * .6]); }
+  else for (let i = 0; i <= 80; i++) { const t = i / 80; pts.push([x0 + t * 120 + 18 * Math.sin(t * 9 * Math.PI), y0 + t * 137 + 10 * Math.cos(t * 9 * Math.PI)]); }
+  const end = pts[pts.length - 1];
+  el("path", { d: path(pts), fill: "none", stroke: r.state === "good" ? css("--leaf") : css("--sun"), "stroke-width": 3 }, svg);
+  const far = end[0] > 380;
+  txt(svg, far ? end[0] - 6 : end[0] + 10, end[1] - 14, CG_LABEL[r.state], { "font-weight": 800, "text-anchor": far ? "end" : "start" });
+}
+function cgUpdate() {
+  const clay = cgQuiz ? cgQuiz.clay : num("cg-clay"), elev = cgQuiz ? cgQuiz.elev : num("cg-elev");
+  $("#cg-clay-o").textContent = cgQuiz ? "?" : fmt(clay, 2) + " g";
+  $("#cg-elev-o").textContent = cgQuiz ? "?" : (elev > 0 ? "+" : "") + fmt(elev, 2) + "°";
+  const r = cgModel(clay, elev);
+  cgDraw(r, elev, clay, !!cgQuiz && !cgQuiz.answered);
+  const hide = cgQuiz && !cgQuiz.answered;
+  $("#cg-r-cg").textContent = hide ? "?" : fmt(r.cg * 100, 0) + "% of chord";
+  $("#cg-r-sm").textContent = hide ? "?" : fmt(r.sm * 100, 0) + "%";
+  $("#cg-r-m").textContent = fmt(r.m, 2) + " g";
+  $("#cg-r-f").textContent = CG_LABEL[r.state];
+  if (cgQuiz) return;
+  const v = $("#cg-verdict");
+  if (r.state === "tumble") { v.className = "verdict bad"; v.textContent = `The CG (${fmt(r.cg * 100, 0)}% of chord) is at or behind the neutral point (75%), so nothing keeps the nose pointed forward. Add nose clay first; no tail setting fixes this.`; return; }
+  if (r.state === "stall") { v.className = "verdict warn"; v.textContent = `Too much up tail for this balance: it pitches up, slows, drops, and repeats. ` + (r.diff > 3 ? "That's a big gap: add nose clay first, then fine-tune the tab." : `Bend the stab tab down about ${fmt(r.diff - 0.5, 1)}°, or add a little nose clay.`); return; }
+  if (r.state === "dive") { v.className = "verdict warn"; v.textContent = `Not enough up tail for this much nose weight: it dives. ` + (-r.diff > 3 ? "That's a big gap: remove some clay first, then fine-tune the tab." : `Bend the stab tab up about ${fmt(-r.diff - 0.5, 1)}°, or remove some clay.`); return; }
+  v.className = "verdict";
+  v.textContent = `Smooth glide. CG at ${fmt(r.cg * 100, 0)}% of the chord with a ${fmt(r.sm * 100, 0)}% static margin.` + (elev > 3.5 ? " That much up tail can make it loop at launch, so a little less clay and less tail would be safer." : r.sm > 0.4 ? " Very nose heavy, though: all that clay is weight that makes it sink faster." : " Now nudge one thing at a time and log each test.");
+}
+// practice mode: diagnose a mystery flight
+const CG_FIX = { stall: ["clay+", "down"], dive: ["clay-", "up"], tumble: ["clay+"], good: ["ok"] };
+function cgNewQuiz() {
+  const want = ["good", "stall", "dive", "tumble", "stall", "dive"][Math.floor(Math.random() * 6)];
+  let q;
+  for (let i = 0; i < 500; i++) {
+    q = { clay: Math.round((0.1 + Math.random() * 2.8) * 20) / 20, elev: Math.round((-1.5 + Math.random() * 6) * 4) / 4 };
+    if (cgModel(q.clay, q.elev).state === want) break;
+  }
+  cgQuiz = { ...q, answered: false };
+  $("#cg-fix").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", "false"));
+  const v = $("#cg-verdict"); v.className = "verdict warn"; v.textContent = "Mystery glider! Watch the flight path, then pick the change you'd make.";
+  cgUpdate();
+}
+$("#cg-mystery").addEventListener("click", () => {
+  cgTally = [0, 0];
+  $("#cg-quiz").hidden = false; $("#cg-ctl-clay").hidden = true; $("#cg-ctl-elev").hidden = true;
+  cgNewQuiz();
+});
+$("#cg-fix").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b || !cgQuiz || cgQuiz.answered) return;
+  $("#cg-fix").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  const r = cgModel(cgQuiz.clay, cgQuiz.elev), right = CG_FIX[r.state].includes(b.dataset.v);
+  cgQuiz.answered = true; cgTally[1]++; if (right) cgTally[0]++;
+  const why = { stall: "It was stalling: too tail heavy or too much up tail. More nose clay or tab down both work.", dive: "It was diving: too nose heavy or not enough up tail. Less clay or tab up both work.", tumble: "It was tumbling: the CG was behind the neutral point. Only more nose clay fixes that.", good: "That flight was already smooth. Don't fix what works!" }[r.state];
+  const v = $("#cg-verdict"); v.className = "verdict" + (right ? "" : " bad");
+  v.textContent = (right ? "✅ Right. " : "❌ Not quite. ") + why + ` (Clay ${fmt(cgQuiz.clay, 2)} g, tail ${fmt(cgQuiz.elev, 2)}°.) Score: ${cgTally[0]} of ${cgTally[1]}.`;
+  cgUpdate();
+});
+$("#cg-next").addEventListener("click", cgNewQuiz);
+$("#cg-exit").addEventListener("click", () => {
+  if (cgQuiz) { $("#cg-clay").value = cgQuiz.clay; $("#cg-elev").value = cgQuiz.elev; }
+  cgQuiz = null; $("#cg-quiz").hidden = true; $("#cg-ctl-clay").hidden = false; $("#cg-ctl-elev").hidden = false; cgUpdate();
+});
+cgUpdate();
+
+/* =============== TURNING =============== */
+const TN_V = 3.0;   // flying speed, m/s
+const tnRoom = seg("tn-room", tnUpdate);
+onInput(["tn-rud", "tn-dih"], tnUpdate);
+function tnModel(rud, dih, W) {
+  if (rud < 0.25) return { state: "straight", R: Infinity, bank: 0, extra: 0 };
+  const R = 20 / rud, bank = Math.atan(TN_V * TN_V / (G0 * R)), extra = Math.pow(1 / Math.cos(bank), 1.5) - 1;
+  const state = dih - 1.6 * rud < 0 ? "spiral" : 2 * R > W ? "wall" : 2 * R > 0.8 * W ? "tight" : "fits";
+  return { state, R, bank, extra };
+}
+function tnUpdate() {
+  const rud = num("tn-rud"), dih = num("tn-dih"), W = +tnRoom();
+  $("#tn-rud-o").textContent = fmt(rud, 2) + "°";
+  $("#tn-dih-o").textContent = fmt(dih) + "°";
+  $("#tn-room-o").textContent = W + " m wide (" + fmt(W * 3.28, 0) + " ft)";
+  const r = tnModel(rud, dih, W);
+  const svg = $("#tn-pic"); svg.innerHTML = "";
+  const L = W * 1.6, s = Math.min(520 / L, 250 / W), rw = L * s, rh = W * s, rx = (560 - rw) / 2, ry = (300 - rh) / 2 - 4;
+  const cx = rx + rw / 2, cy = ry + rh / 2;
+  el("rect", { x: rx, y: ry, width: rw, height: rh, fill: css("--sky-soft"), stroke: css("--ink"), "stroke-width": 3, rx: 4 }, svg);
+  txt(svg, rx + 22, cy + 4, W + " m", { class: "axis-label" });
+  el("line", { x1: rx + 14, x2: rx + 14, y1: ry + 4, y2: ry + rh - 4, stroke: css("--muted"), "stroke-dasharray": "3 3" }, svg);
+  txt(svg, 280, ry + rh + 16, "top view of the room", { "text-anchor": "middle", class: "axis-label" });
+  const stroke = { fits: css("--leaf"), tight: css("--balsa"), wall: css("--sun"), spiral: css("--sun"), straight: css("--sun") }[r.state];
+  if (r.state === "straight") {
+    el("line", { x1: cx, y1: cy, x2: rx + rw, y2: cy - 20, stroke, "stroke-width": 3 }, svg);
+    txt(svg, rx + rw - 14, cy - 18, "💥", { "text-anchor": "middle", "font-size": 18 });
+  } else if (r.state === "spiral") {
+    const pts = [], R0 = Math.min(r.R, W / 2) * s;
+    for (let i = 0; i <= 200; i++) { const t = i / 200, rr = R0 * (1 - 0.85 * t), a = t * 3.5 * 2 * Math.PI; pts.push([cx + rr * Math.cos(a), cy + rr * Math.sin(a)]); }
+    el("path", { d: path(pts), fill: "none", stroke, "stroke-width": 2.5 }, svg);
+    txt(svg, cx, cy + 5, "💥", { "text-anchor": "middle", "font-size": 16 });
+  } else {
+    el("circle", { cx, cy, r: r.R * s, fill: "none", stroke, "stroke-width": 3, "stroke-dasharray": r.state === "wall" ? "6 4" : "" }, svg);
+    if (r.state === "wall") txt(svg, cx, ry + 16, "💥 wall", { "text-anchor": "middle", "font-weight": 800, fill: css("--sun") });
+  }
+  if (r.state !== "spiral") el("circle", { cx, cy: r.state === "straight" ? cy : cy - r.R * s, r: 5, fill: css("--ink") }, svg);
+  $("#tn-r-d").textContent = r.R === Infinity ? "straight" : fmt(2 * r.R) + " m";
+  $("#tn-r-b").textContent = fmt(r.bank * 180 / Math.PI, 0) + "°";
+  $("#tn-r-s").textContent = "+" + fmt(r.extra * 100, 0) + "%";
+  $("#tn-r-res").textContent = { fits: "fits", tight: "tight", wall: "hits wall", spiral: "spiral dive", straight: "hits wall" }[r.state];
+  const v = $("#tn-verdict");
+  if (r.state === "straight") { v.className = "verdict bad"; v.textContent = "With no rudder it flies straight and reaches a wall in a few seconds. Set the rudder a degree or two to one side."; return; }
+  if (r.state === "spiral") { v.className = "verdict bad"; v.textContent = `Spiral dive: ${fmt(rud, 1)}° of rudder overpowers ${fmt(dih)}° of dihedral, so the bank keeps growing until it corkscrews in. Take out rudder, or add dihedral.`; return; }
+  if (r.state === "wall") { v.className = "verdict bad"; v.textContent = `A ${fmt(2 * r.R)} m circle doesn't fit in a ${W} m wide room. Add rudder, about ${fmt(20 / (0.35 * W), 1)}° for a circle ${fmt(0.7 * W)} m across.`; return; }
+  if (r.state === "tight") { v.className = "verdict warn"; v.textContent = `It fits, barely. Any drift from a vent and it brushes a wall. A touch more rudder (about ${fmt(20 / (0.35 * W), 1)}°) leaves a safety margin.`; return; }
+  v.className = "verdict";
+  v.textContent = `A ${fmt(2 * r.R)} m circle in a ${W} m room: good.` + (r.extra > 0.04 ? ` It's banked ${fmt(r.bank * 180 / Math.PI, 0)}°, which makes it sink ${fmt(r.extra * 100, 0)}% faster. A slightly wider circle would add a little time.` : " The bank is gentle, so turning costs almost nothing.");
+}
+tnUpdate();
+
+/* =============== FLIGHT LOG =============== */
+let LG = [
+  { t: 14.2, h: 6, r: 30, x: "first flight" },
+  { t: 17.8, h: 7, r: 30, x: "+0.05 g nose clay" },
+  { t: 12.5, h: 8.5, r: 25, x: "shorter rubber, stab tab down" },
+  { t: 19.6, h: 7, r: 28, x: "rudder +0.5°" }
+];
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function lgRender() {
+  const n = LG.length, times = LG.map(f => f.t);
+  const avg = n ? times.reduce((a, b) => a + b, 0) / n : 0;
+  const spm = LG.filter(f => f.h > 0).map(f => f.t / f.h);
+  const best3 = [...times].sort((a, b) => b - a).slice(0, 3).reduce((a, b) => a + b, 0);
+  const svg = $("#lg-chart"); svg.innerHTML = "";
+  const tMax = Math.max(20, Math.ceil(Math.max(0, ...times) / 10) * 10);
+  const { Y } = axes(svg, { x0: 46, y0: 10, w: 500, h: 160, xmin: 0, xmax: 1, ymin: 0, ymax: tMax, xticks: [], yticks: Array.from({ length: tMax / 10 + 1 }, (_, i) => i * 10), xlabel: "", ylabel: "seconds", yfmt: v => v + " s" });
+  const slots = Math.max(10, n), bw = 500 / slots;
+  LG.forEach((f, i) => {
+    el("rect", { x: 46 + i * bw + 2, y: Y(f.t), width: Math.max(2, bw - 4), height: Y(0) - Y(f.t), rx: 4, fill: i === n - 1 ? css("--sun") : css("--sky") }, svg);
+    if (bw > 22) txt(svg, 46 + i * bw + bw / 2, Y(0) + 14, String(i + 1), { "text-anchor": "middle", class: "axis-label" });
+  });
+  if (n) { el("line", { x1: 46, x2: 546, y1: Y(avg), y2: Y(avg), stroke: css("--balsa"), "stroke-width": 2, "stroke-dasharray": "6 4" }, svg); txt(svg, 544, Y(avg) - 5, "average", { "text-anchor": "end", class: "axis-label" }); }
+  if (n < 10) for (let i = n; i < 10; i++) el("rect", { x: 46 + i * bw + 2, y: Y(0) - 3, width: bw - 4, height: 3, fill: css("--line") }, svg);
+  $("#lg-r-n").textContent = n + " of 10";
+  $("#lg-r-avg").textContent = n ? fmt(avg) + " s" : "—";
+  $("#lg-r-spm").textContent = spm.length ? fmt(spm.reduce((a, b) => a + b, 0) / spm.length) + " s/m" : "—";
+  $("#lg-r-score").textContent = n >= 3 ? fmt(best3 * 1.2) : "—";
+  $("#lg-table").innerHTML = n ? "<tr><th>#</th><th>Time</th><th>Peak</th><th>Rubber</th><th>Extra</th><th></th></tr>" + LG.map((f, i) => `<tr><td>${i + 1}</td><td>${fmt(f.t)} s</td><td>${fmt(f.h)} m</td><td>${fmt(f.r)} cm</td><td>${esc(f.x)}</td><td><button data-del="${i}" aria-label="Delete flight ${i + 1}">✕</button></td></tr>`).join("") : "";
+  const v = $("#lg-verdict"), more = n < 10 ? ` ${10 - n} more for a complete log.` : " That's enough for a complete log. Keep going: more data means better trim decisions.";
+  if (!n) { v.className = "verdict warn"; v.textContent = "No flights yet. Fly, then add the time, peak height, rubber length, and one thing you changed."; return; }
+  const last = LG[n - 1], lastSpm = last.h > 0 ? last.t / last.h : null, bestSpm = Math.max(...spm), bestF = LG.find(f => f.h > 0 && f.t / f.h === bestSpm);
+  if (n === 1 || lastSpm === null) { v.className = "verdict"; v.textContent = "Good start." + more; return; }
+  if (lastSpm >= bestSpm - 1e-9) { v.className = "verdict"; v.textContent = `Your best glide so far: ${fmt(lastSpm, 2)} seconds per meter of height. Whatever you changed ("${last.x || "no note"}") helped. Keep it and try one more small step the same way.` + more; return; }
+  if (lastSpm < 0.8 * bestSpm) { v.className = "verdict warn"; v.textContent = `This flight glided worse (${fmt(lastSpm, 2)} s/m) than your best (${fmt(bestSpm, 2)} s/m, "${bestF.x || "no note"}"). Undo the last change, or check for a warp or loose clay.` + more; return; }
+  const prev = LG[n - 2];
+  if (last.h > prev.h + 1 && last.t <= prev.t) { v.className = "verdict warn"; v.textContent = "It went higher but didn't stay up longer, so the extra height got lost. Check the transition at the top: it may be stalling or looping." + more; return; }
+  v.className = "verdict"; v.textContent = `Steady: ${fmt(lastSpm, 2)} s/m against a best of ${fmt(bestSpm, 2)}. Change one thing at a time so you know what worked.` + more;
+}
+$("#lg-add").addEventListener("click", () => {
+  const t = parseFloat($("#lg-t").value), h = parseFloat($("#lg-h").value), r = parseFloat($("#lg-r").value);
+  if (isNaN(t) || t <= 0 || isNaN(h) || h < 0 || isNaN(r) || r < 0) { const v = $("#lg-verdict"); v.className = "verdict bad"; v.textContent = "Fill in time, peak height, and rubber length. All three are required for the log."; return; }
+  LG.push({ t, h, r, x: $("#lg-x").value.trim() });
+  ["lg-t", "lg-h", "lg-x"].forEach(id => $("#" + id).value = "");
+  lgRender(); $("#lg-t").focus();
+});
+["lg-t", "lg-h", "lg-r", "lg-x"].forEach(id => $("#" + id).addEventListener("keydown", e => { if (e.key === "Enter") $("#lg-add").click(); }));
+$("#lg-table").addEventListener("click", e => { const b = e.target.closest("button[data-del]"); if (b) { LG.splice(+b.dataset.del, 1); lgRender(); } });
+$("#lg-clear").addEventListener("click", () => { LG = []; lgRender(); });
+$("#lg-csv").addEventListener("click", () => {
+  const q = s => '"' + String(s).replace(/"/g, '""') + '"';
+  const csv = "flight,time_s,peak_height_m,rubber_relaxed_cm,extra\n" + LG.map((f, i) => [i + 1, f.t, f.h, f.r, q(f.x)].join(",")).join("\n");
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = "glider-flight-log.csv";
+  document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+});
+lgRender();
+
+/* =============== FLASHCARDS =============== */
+const FC = [
+  ["Rules", "Legal glider mass?", "More than 3.5 g and less than 10.0 g, the whole time it's flying."],
+  ["Rules", "How long is the flight period?", "6 minutes, starting when the supervisor hands back your launch handle. A flight launched before time is up gets to finish."],
+  ["Rules", "How many official flights, and how many count?", "Up to 5 official flights with 1 or 2 gliders. The 3 longest flight scores are added up."],
+  ["Rules", "Flight log bonus?", "Complete log ×1.2, partial log ×1.1, no log ×1.0, applied to every flight score."],
+  ["Rules", "What does a complete flight log need?", "10+ test flights before the tournament, each with peak height, relaxed rubber length, flight time, and at least one more item you chose. Units on everything."],
+  ["Rules", "How are ties broken?", "By your longest official flight that didn't count toward your score."],
+  ["Rules", "What stops the timer?", "Any part of the glider touching the floor, the glider getting stuck where its wings aren't holding it up, or the supervisor ending the flight."],
+  ["Rules", "Launch handle limit?", "Less than 1 m long without the rubber, held by one student. The rubber can't be metal and must stay on the handle."],
+  ["Rules", "What's the nose test?", "The nose goes into a lip balm cap (~1.57 cm deep, ~1.37 cm wide). It must not touch the bottom. A blunt nose is safer."],
+  ["Rules", "What if you don't say \"trim\" before a launch?", "It counts as an official flight."],
+  ["Launch", "Energy stored in a stretched rubber band?", "About ½ × k × x². Double the stretch and you store four times the energy."],
+  ["Launch", "What energy changes happen in a launch?", "Elastic potential energy → kinetic energy (speed) → gravitational potential energy (height)."],
+  ["Launch", "Why roll the glider about 45° at launch?", "The bank lets it turn over smoothly at the top into a glide instead of looping backward."],
+  ["Launch", "How do you control launch height?", "Pull to the same mark every time and shorten or lengthen the rubber loop to suit the ceiling."],
+  ["Glide", "What is sink rate?", "How fast the glider loses height in a glide, in meters per second. Lower sink rate = more time aloft."],
+  ["Glide", "What is wing loading?", "Glider mass divided by wing area (g/dm²). Lower wing loading lets it fly slower and sink slower."],
+  ["Glide", "What is glide ratio (L/D)?", "Distance forward for each unit of height lost. Equal to lift ÷ drag. A ratio of 8 means 8 m forward per 1 m down."],
+  ["Glide", "Why sand the wing into an airfoil?", "A rounded front, thin back, and gentle curve make more lift for less drag than a flat plate."],
+  ["Balance", "Where must the CG be compared with the neutral point?", "In front of it. The distance between them is the static margin."],
+  ["Balance", "What is decalage?", "The difference in angle between the wing and the stab. The stab's back edge is a little higher."],
+  ["Balance", "Glider porpoises (bobs up and down). Fixes?", "It's stalling: add a little nose clay or bend the stab tab down slightly."],
+  ["Balance", "Glider dives into the floor. Fixes?", "Remove a little nose clay or bend the stab tab up slightly."],
+  ["Turning", "What does dihedral do?", "When the glider tips, the lower wing gets more lift and rolls it back level. It keeps turns from tightening."],
+  ["Turning", "What is a spiral dive?", "The rudder turns harder than the dihedral can resist, so the bank grows and the glider corkscrews down."],
+  ["Turning", "How big should the circle be?", "About two thirds of the room's narrow width, to leave space for drift."],
+  ["Build", "Balsa grains A, B, C?", "A bends easily (curved parts), C is stiff and stays flat (wings, stab), B is in between."],
+  ["Build", "What's a flapper glider?", "One whose wing or stab is held flat during launch and pops to its gliding angle at the top: fast straight climb, full-lift glide."],
+  ["Build", "Only banned material?", "Boron (fibers). Kits can't have pre-glued joints or pre-covered surfaces."]
+];
+let fcOrder = FC.map((_, i) => i);
+function fcRender() {
+  const box = $("#fc"); box.innerHTML = "";
+  fcOrder.forEach(i => {
+    const [cat, q, a] = FC[i];
+    const b = document.createElement("button"); b.className = "flash"; b.setAttribute("aria-label", "Flashcard: " + q);
+    b.innerHTML = `<div class="in"><div class="f"><small>${cat}</small><b>${q}</b></div><div class="b">${a}</div></div>`;
+    b.addEventListener("click", () => b.classList.toggle("flip"));
+    box.appendChild(b);
+  });
+}
+$("#fc-shuffle").addEventListener("click", () => { for (let i = fcOrder.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [fcOrder[i], fcOrder[j]] = [fcOrder[j], fcOrder[i]]; } fcRender(); });
+$("#fc-reset").addEventListener("click", () => document.querySelectorAll(".flash.flip").forEach(f => f.classList.remove("flip")));
+fcRender();
+
+/* =============== SCORE =============== */
+const scLog = seg("sc-log", scUpdate), scOk = seg("sc-ok", scUpdate);
+onInput(["sc-1", "sc-2", "sc-3", "sc-4", "sc-5"], scUpdate);
+function scUpdate() {
+  const f = [1, 2, 3, 4, 5].map(i => num("sc-" + i)), m = +scLog(), ok = scOk() === "yes";
+  f.forEach((t, i) => $(`#sc-${i + 1}-o`).textContent = t > 0 ? fmt(t) + " s" : "no flight");
+  const sorted = [...f].sort((a, b) => b - a), top = sorted.slice(0, 3), base = top.reduce((a, b) => a + b, 0);
+  const final = base * m, possible = base * 1.2, tie = sorted[3] * m;
+  const svg = $("#sc-chart"); svg.innerHTML = "";
+  const scale = 540 / Math.max(possible, 1);
+  let x = 10;
+  const shades = [1, .82, .66];
+  top.forEach((t, i) => { const ww = t * scale; if (ww <= 0) return; el("rect", { x, y: 20, width: Math.max(0, ww - 2), height: 46, rx: 8, fill: css("--sky"), opacity: shades[i] }, svg); if (ww > 36) txt(svg, x + ww / 2, 48, fmt(t) + " s", { "text-anchor": "middle", "font-weight": 800, fill: "#fff" }); x += ww; });
+  const bonus = base * (m - 1), bw = bonus * scale;
+  if (bw > 0) { el("rect", { x, y: 20, width: Math.max(0, bw - 2), height: 46, rx: 8, fill: css("--balsa") }, svg); if (bw > 40) txt(svg, x + bw / 2, 48, "+" + fmt(bonus), { "text-anchor": "middle", "font-weight": 800, fill: "#222" }); x += bw; }
+  const miss = possible - final, mw = miss * scale;
+  if (mw > 0.5) { el("rect", { x, y: 20, width: mw, height: 46, rx: 8, fill: "none", stroke: css("--line"), "stroke-width": 2, "stroke-dasharray": "5 4" }, svg); if (mw > 60) txt(svg, x + mw / 2, 48, "log: +" + fmt(miss), { "text-anchor": "middle", class: "axis-label" }); }
+  txt(svg, 10, 92, "Blue: your three best flights. Tan: log bonus. Dashed: bonus you're missing.", { class: "axis-label" });
+  $("#sc-ro").innerHTML = `<div class="ro"><span>Best three</span><b>${fmt(base)} s</b></div><div class="ro"><span>Log multiplier</span><b>×${fmt(m)}</b></div><div class="ro"><span>Tiebreaker</span><b>${sorted[3] > 0 ? fmt(tie) : "—"}</b></div><div class="ro big"><span>Final score</span><b>${fmt(final)}</b></div>`;
+  const v = $("#sc-verdict"), flown = f.filter(t => t > 0).length;
+  if (!ok) { v.className = "verdict bad"; v.textContent = `${fmt(final)} points, but a rule violation ranks you below every team that passed inspection. Check mass, box fit, and the nose test at home the night before.`; return; }
+  if (flown < 3) { v.className = "verdict bad"; v.textContent = `Only ${flown} flight${flown === 1 ? "" : "s"}: an empty slot counts as zero. Plan your 6 minutes so you get at least 3 official flights in, even if some are short.`; return; }
+  if (m < 1.2) { v.className = "verdict warn"; v.textContent = `A complete flight log would add ${fmt(miss)} points with these same flights. That's the easiest gain on the board.`; return; }
+  const gain = (top[0] - top[2]) * 1.2;
+  v.className = "verdict";
+  v.textContent = gain > 1 ? `${fmt(final)} points. Your third-best flight (${fmt(top[2])} s) is ${fmt(top[0] - top[2])} s behind your best. Making flights consistent is worth up to ${fmt(gain)} more points: same pull, same launch angle, every time.` : `${fmt(final)} points from very consistent flights. The next gains come from a better glide: lighter, smoother wings, or a launch that uses more of the ceiling.`;
+}
+scUpdate();
+
+/* =============== VIDEOS =============== */
+const VIDS = [
+  { href: "https://youtu.be/HmXR_Lf1qPk", t: "2027 event video guide", s: "Science Olympiad · linked from the official event page", icon: "🎬", src: "Science Olympiad" },
+  { href: "https://www.youtube.com/watch?v=iNqwD4hBI74", t: "Glider event overview", s: "National Free Flight Society · how the event works", icon: "🪂", src: "NFFS" },
+  { href: "https://www.youtube.com/@FreeFlightDigest/playlists", t: "Free Flight Digest playlists", s: "NFFS · building and trimming videos", icon: "🛠", src: "NFFS" },
+  { q: "catapult glider launch technique", t: "How to launch a catapult glider", s: "Search: launch angle and bank", icon: "🚀" },
+  { q: "how to trim a balsa catapult glider", t: "Trimming a balsa glider", s: "Search: stalls, dives, and turns", icon: "🔧" },
+  { q: "flapper catapult glider", t: "Flapper gliders", s: "Search: how the wing flips after launch", icon: "🦋" },
+  { q: "science olympiad elastic launched glider", t: "Other teams' ELG flights", s: "Search: watch real tournament flights", icon: "🏟️" },
+  { q: "center of gravity model airplane balance explained", t: "Balancing a model plane", s: "Search: CG and neutral point", icon: "⚖️" },
+  { q: "how wings make lift explained", t: "How wings make lift", s: "Search: lift and drag basics", icon: "🌬️" },
+  { q: "dihedral wing stability explained", t: "Why dihedral works", s: "Search: roll stability", icon: "✈️" }
+];
+$("#vids").innerHTML = VIDS.map(v => {
+  const href = v.href || "https://www.youtube.com/results?search_query=" + encodeURIComponent(v.q);
+  return `<a class="vid" href="${href}" target="_blank" rel="noopener"><div class="thumb" data-src="${v.src ? "▶ " + v.src : "search"}">${v.icon}</div><div class="t"><b>${v.t}</b><span>${v.s}</span></div></a>`;
+}).join("");
+
+/* =============== CHECKLIST =============== */
+const CK = [
+  "Glider #1, in its measurement box", "Glider #2 (spare), trimmed and tested", "Measurement box checked: outside fits 32.0 × 24.0 × 47.0 cm",
+  "Mass checked at home: above 3.5 g with a margin, below 10.0 g", "Nose tested in a lip balm cap", "Launch handle (under 1 m) with rubber attached",
+  "Spare rubber loops, cut and tied to your tested lengths", "Flight log: 10+ flights, all units, in a folder", "Category B eye protection (safety glasses marked Z87+) for both partners",
+  "Repair kit: thin CA glue, tape, balsa scraps", "Extra clay and a toothpick", "Small scale (0.01 g) to double-check mass",
+  "Room size from the tournament (ceiling height) and your launch setting for it", "Names and team number on gliders, box, and log",
+  "A plan for your 6 minutes: who launches, who times", "Water bottle and a snack for between events"
+];
+let ckState = {};
+try { ckState = JSON.parse(localStorage.getItem("elg-checklist") || "{}"); } catch (e) {}
+$("#ck").innerHTML = CK.map((c, i) => `<label><input type="checkbox" data-i="${i}" ${ckState[i] ? "checked" : ""}><span>${c}</span></label>`).join("");
+$("#ck").addEventListener("change", e => { ckState[e.target.dataset.i] = e.target.checked; try { localStorage.setItem("elg-checklist", JSON.stringify(ckState)); } catch (err) {} });
+$("#ck-clear").addEventListener("click", () => { ckState = {}; document.querySelectorAll("#ck input").forEach(i => i.checked = false); try { localStorage.removeItem("elg-checklist"); } catch (err) {} });
+
+
+/* =============== GLOSSARY =============== */
+const G = [
+  ["Air density", "air density", "How much air is packed into a space: about 1.2 kg per cubic meter indoors. Thinner air means less lift."],
+  ["Airfoil", "airfoils?", "The shape of a wing seen from the side: rounded front, thin back, often gently curved."],
+  ["Angle of attack", "angle of attack", "The angle between the wing and the air flowing past it. Too big and the wing stalls."],
+  ["Aspect ratio", "aspect ratio", "How long and skinny a wing is: span divided by chord. Long, skinny wings glide better but are more fragile."],
+  ["Balsa", "balsa", "A very light, soft wood from South America. The classic material for model gliders."],
+  ["Ballast", "ballast", "Weight added to balance a glider or bring it up to a minimum mass, usually clay or tape."],
+  ["Bank", "banks?|banked|banking", "Tipping the wings to one side, like leaning a bike into a turn."],
+  ["Boron", "boron", "A very stiff fiber used in some high-end models. It's the one material banned in this event."],
+  ["CA glue", "CA glue|CA|super glue", "Cyanoacrylate, or super glue. Sets in seconds; acetone dissolves it."],
+  ["Camber", "camber|cambered", "A gentle upward curve in a wing from front to back. It makes more lift at slow speeds."],
+  ["Category B eye protection", "Category B eye protection|Category B", "Safety glasses with side shields (or goggles) marked with the ANSI standard \"Z87+\". Required in this event."],
+  ["Center of gravity", "center of gravity|CG", "The balance point of the glider. Put your finger there and it sits level."],
+  ["Chord", "chords?", "The distance from the front edge of a wing to its back edge."],
+  ["Climb", "climb|climbs", "The part of the flight going up, right after launch."],
+  ["Decalage", "decalage", "The difference in angle between the wing and the stab. It's what holds the nose up in a glide."],
+  ["Density", "density|densities", "How much mass is packed into a space. Light balsa has low density."],
+  ["Dihedral", "dihedral", "The V shape of the wings seen from the front. It helps the glider level itself."],
+  ["Drag", "drag", "Air pushing back against a moving object, slowing it down."],
+  ["Elastic potential energy", "elastic potential energy|elastic energy", "Energy stored in something stretched, like a rubber band."],
+  ["Event Supervisor", "Event Supervisor|supervisor", "The official who runs the event, checks gliders, and times flights."],
+  ["Fin", "fin", "The tall, upright tail surface. It keeps the glider pointed straight; the rudder is part of it."],
+  ["Flapper", "flappers?", "A glider with a wing or stab that is held flat during launch and pops to its gliding angle at the top."],
+  ["Flight log", "flight log", "Your record of test flights: time, peak height, rubber length, and more. A complete one gives a ×1.2 bonus."],
+  ["Flight period", "flight period", "The 6 minutes you get at the tournament to make your official flights."],
+  ["Free flight", "free flight", "Model aircraft that fly with no remote control: once launched, the pilot can't steer."],
+  ["Fuselage", "fuselage", "The body of the glider: the long stick the wing and tail attach to."],
+  ["Glide ratio", "glide ratios?", "How far forward a glider travels for each meter it drops. Same as the lift-to-drag ratio."],
+  ["Grain", "A-grain|B-grain|C-grain|grain", "How the wood fibers are arranged in balsa. A-grain bends easily, C-grain is stiff, B-grain is in between."],
+  ["Gravitational potential energy", "gravitational potential energy|energy of height", "Energy something has because it's up high. It equals mass × g × height."],
+  ["Joule", "joules?", "The unit of energy. Lifting a 100 g apple 1 meter takes about 1 joule."],
+  ["Kinetic energy", "kinetic energy", "Energy of motion. It equals ½ × mass × speed²."],
+  ["Launch handle", "launch handles?", "The stick with a rubber loop used to shoot the glider up. Must be under 1 m without the rubber."],
+  ["Launch peg", "launch peg", "A small hook or notch on the fuselage that the rubber catches on."],
+  ["Leading edge", "leading edges?|front edge", "The front edge of a wing or tail."],
+  ["Lift", "lift", "The upward push of air on a wing. It holds the glider up."],
+  ["Lift coefficient", "lift coefficient", "A number that says how much lift a wing makes at a given angle and speed. About 0.6 for a gliding model."],
+  ["Lift-to-drag ratio", "lift-to-drag|L/D", "Lift divided by drag. Higher means a better, flatter glide."],
+  ["Measurement box", "measurement box", "Your team's lidless box. Its outside must fit in 32.0 × 24.0 × 47.0 cm, and the glider must fit inside it."],
+  ["Median", "median|middle time", "The middle value when numbers are put in order. With three timers, it's the time between the other two."],
+  ["Neutral point", "neutral points?", "The point where the combined lift of the wing and tail acts. The CG must be in front of it."],
+  ["Newton", "newtons?", "The unit of force. A 100 g apple weighs about 1 newton."],
+  ["Official flight", "official flights?", "A flight that counts for score. Any flight you don't call \"trim\" first is official."],
+  ["Peak height", "peak height", "The highest point the glider reaches after launch. Required in your flight log."],
+  ["Pitch", "pitch", "Nose up or nose down movement."],
+  ["Porpoising", "porpoising", "Bobbing up and down in the glide, like a porpoise swimming. A sign of a stall."],
+  ["Roll", "roll|rolls", "Tipping one wing up and the other down."],
+  ["Rudder", "rudders?", "The back part of the fin, set a little to one side to make the glider turn."],
+  ["Sink rate", "sink rates?|sinks", "How fast the glider loses height while gliding, in meters per second."],
+  ["Span", "wingspan|span", "The distance from one wing tip to the other."],
+  ["Spiral dive", "spiral dives?", "A turn that keeps tightening until the glider corkscrews into the floor."],
+  ["Stabilizer", "stabilizer|stab", "The small horizontal tail wing. It keeps the nose from bobbing up and down."],
+  ["Stall", "stall|stalls|stalling", "When a wing's angle gets too steep, it loses lift suddenly and the nose drops."],
+  ["Static margin", "static margin", "How far the CG is in front of the neutral point, as a percent of the chord. More margin = more stable."],
+  ["Stiffness", "stiffness|stiff", "How hard something is to stretch or bend. Measured for rubber as k, in newtons per meter."],
+  ["Tab", "tab", "A small piece on the back edge of the stab that you bend up or down to trim."],
+  ["Tiebreaker", "tiebreaker|tiebreak", "How ties are settled: by your longest official flight that didn't count."],
+  ["Trailing edge", "trailing edges?|back edge", "The back edge of a wing or tail."],
+  ["Transition", "transition", "The moment at the top of the climb when the glider turns over into its glide."],
+  ["Trim", "trim|trimmed|trimming", "Small adjustments (clay, tail angle, rudder) that make a glider fly well."],
+  ["Trim flight", "trim flights?", "A practice flight during your flight period. You must say \"trim\" before you launch, or it counts as official."],
+  ["Turn radius", "turn radius", "The size of the circle the glider flies. Measured from the middle of the circle to the path."],
+  ["Warp", "warps?|warped", "A twist or bend in a wing or tail that wasn't meant to be there. It makes flights unpredictable."],
+  ["Wing area", "wing area", "The size of the wing seen from above: span × chord for a rectangular wing."],
+  ["Wing loading", "wing loading", "Mass divided by wing area, often in grams per square decimeter (g/dm²)."],
+  ["Yaw", "yaw", "Nose left or nose right movement, controlled by the fin and rudder."]
+];
+// glossary list
+const glBox = $("#gl");
+const slug = t => "g-" + t.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+glBox.innerHTML = G.map(([t, , d]) => `<div id="${slug(t)}"><b>${t}</b><br>${d}</div>`).join("");
+$("#gl-q").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  glBox.querySelectorAll("div").forEach(d => d.hidden = q && !d.textContent.toLowerCase().includes(q));
+});
+// auto-mark the first use of each term in every section
+const SKIP = "h1,h2,h3,h4,button,label,output,svg,nav,a,.term,.formula,.seg,.ro,.verdict,.hint,#glossary,.fact,.tag,.eyebrow,script,style,input,.org,.flash,.toy,th";
+const rx = new RegExp("(?<![\\w])(" + G.map(g => g[1]).sort((a, b) => b.length - a.length).join("|") + ")(?![\\w])", "i");
+const which = m => G.findIndex(g => new RegExp("^(" + g[1] + ")$", "i").test(m));
+document.querySelectorAll("header.hero, section").forEach(sec => {
+  if (sec.id === "glossary") return;
+  const used = new Set();
+  const walker = document.createTreeWalker(sec, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest(SKIP) || !n.nodeValue.trim() ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    let cur = node;
+    while (cur) {
+      const text = cur.nodeValue; let m, idx = -1, gi = -1, start = 0;
+      const r = new RegExp(rx.source, "gi");
+      while ((m = r.exec(text))) { const k = which(m[1]); if (k >= 0 && !used.has(k)) { idx = m.index; gi = k; start = m[1].length; break; } }
+      if (idx < 0) break;
+      used.add(gi);
+      const after = cur.splitText(idx); const rest = after.splitText(start);
+      const sp = document.createElement("span"); sp.className = "term"; sp.tabIndex = 0; sp.dataset.g = gi; sp.textContent = after.nodeValue;
+      after.replaceWith(sp); cur = rest;
+    }
+  });
+});
+// popover
+const pop = document.createElement("div"); pop.id = "gloss-pop"; pop.setAttribute("role", "tooltip"); document.body.appendChild(pop);
+let popFor = null, shownAt = 0;
+function showPop(t) {
+  const k = t.dataset.g;
+  if (k === "glossary-demo") pop.innerHTML = "<b>Like this!</b>Tap any dotted word to see what it means.";
+  else { const [term, , def] = G[+k]; pop.innerHTML = `<b>${term}</b>${def}<br><a href="#${slug(term)}">See in glossary</a>`; }
+  pop.style.display = "block";
+  const r = t.getBoundingClientRect(), pw = Math.min(300, innerWidth - 24);
+  pop.style.maxWidth = pw + "px";
+  let left = r.left + scrollX; left = Math.max(12 + scrollX, Math.min(left, scrollX + innerWidth - pop.offsetWidth - 12));
+  let top = r.bottom + scrollY + 8;
+  if (r.bottom + pop.offsetHeight + 16 > innerHeight) top = r.top + scrollY - pop.offsetHeight - 8;
+  pop.style.left = left + "px"; pop.style.top = top + "px"; if (popFor !== t) shownAt = Date.now(); popFor = t;
+}
+function hidePop() { pop.style.display = "none"; popFor = null; }
+document.addEventListener("click", e => { const t = e.target.closest(".term"); if (t) { popFor === t && Date.now() - shownAt > 400 ? hidePop() : showPop(t); } else if (!e.target.closest("#gloss-pop")) hidePop(); });
+document.addEventListener("mouseover", e => { const t = e.target.closest(".term"); if (t && matchMedia("(hover:hover)").matches) showPop(t); });
+document.addEventListener("mouseout", e => { const t = e.target.closest(".term"); if (t && matchMedia("(hover:hover)").matches && !e.relatedTarget?.closest?.("#gloss-pop")) hidePop(); });
+document.addEventListener("focusin", e => { const t = e.target.closest(".term"); if (t) showPop(t); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") hidePop(); });
+addEventListener("scroll", () => { if (popFor && !matchMedia("(hover:hover)").matches) showPop(popFor); }, { passive: true });
+
+
+// re-render colors when theme flips
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { lnUpdate(); gdUpdate(); cgUpdate(); tnUpdate(); lgRender(); scUpdate(); });
+})();
+</script>
+</body>
+</html>
