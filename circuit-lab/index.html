@@ -1,0 +1,1999 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Spark Lab: Circuit Lab</title>
+<meta name="description" content="Study guide and interactive lab exhibits for the Science Olympiad Circuit Lab event (2027, Division B): Ohm's law, series and parallel circuits, LEDs, digital logic, static electricity, and multimeter skills.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f2ec; --paper:#fffdf9; --ink:#1f1a17; --muted:#6b625a; --line:#e6ddd1;
+  --copper:#c25a22; --copper-soft:#fbe4d6;
+  --volt:#d29c00; --volt-soft:#fbf0c8;
+  --led:#1f9d6b; --led-soft:#d8f2e6;
+  --wire:#2a64c8; --wire-soft:#dde8fa;
+  --body:#e8d3a8; --lcd:#1d2a24; --lcd-ink:#9fe6b8;
+  --shadow:0 1px 2px rgba(50,30,10,.05),0 8px 24px rgba(50,30,10,.07);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141210; --paper:#1d1a17; --ink:#f0e9e1; --muted:#a99f94; --line:#36302a;
+    --copper:#f08a4b; --copper-soft:#3d2516;
+    --volt:#f5c842; --volt-soft:#3a3117;
+    --led:#4fd49a; --led-soft:#143326;
+    --wire:#7fa8f5; --wire-soft:#1b2840;
+    --body:#bfa77a; --lcd:#0c1410; --lcd-ink:#8ff0b0;
+    --shadow:none; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Nunito",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;line-height:1.15;margin:0}
+a{color:var(--wire)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+.muted{color:var(--muted)}
+small{font-size:.85rem}
+
+/* nav */
+nav.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav.top a{flex:none;text-decoration:none;color:var(--ink);font-weight:700;font-size:.92rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
+nav.top a:hover{border-color:var(--copper);color:var(--copper)}
+
+/* hero */
+.hero{padding:44px 0 28px}
+.eyebrow{display:inline-block;font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--wire);background:var(--wire-soft);padding:4px 10px;border-radius:999px;margin-bottom:14px}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800}
+.hero p.lead{font-size:1.15rem;max-width:720px;margin:14px 0 0}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:26px}
+.fact{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow)}
+.fact b{display:block;font-family:"Fraunces",serif;font-size:1.6rem}
+.fact span{color:var(--muted);font-size:.9rem}
+.note{border-left:4px solid var(--volt);background:var(--volt-soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:18px 0;font-size:.95rem}
+
+/* sections */
+section{padding:36px 0;border-top:1px dashed var(--line)}
+section > .wrap > h2{font-size:clamp(1.7rem,4vw,2.3rem);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.tag{font-family:"Nunito",sans-serif;font-size:.8rem;font-weight:800;padding:3px 10px;border-radius:999px;letter-spacing:.04em;text-transform:uppercase}
+.t-wire{background:var(--wire-soft);color:var(--wire)}
+.t-led{background:var(--led-soft);color:var(--led)}
+.t-volt{background:var(--volt-soft);color:color-mix(in srgb,var(--volt) 70%,var(--ink))}
+.t-copper{background:var(--copper-soft);color:var(--copper)}
+.sub{color:var(--muted);max-width:760px;margin:8px 0 20px}
+h3{font-size:1.3rem;margin:26px 0 10px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px 20px;box-shadow:var(--shadow);min-width:0}
+.card h4{margin:0 0 8px;font-size:1.05rem}
+ol.steps{margin:0;padding-left:22px}
+ol.steps li{margin:4px 0}
+ul.tight{margin:0;padding-left:20px}
+ul.tight li{margin:4px 0}
+.key{display:inline-block;font-weight:800;color:var(--copper)}
+.formula{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:inline-block;margin:6px 0}
+
+/* lab exhibit */
+.lab{background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-top:10px}
+.lab-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.lab-head h3{margin:0}
+.lab-grid{display:grid;grid-template-columns:300px 1fr;gap:18px}
+@media (max-width:860px){.lab-grid{grid-template-columns:1fr}}
+.controls{display:flex;flex-direction:column;gap:14px;min-width:0}
+.ctl label{display:flex;justify-content:space-between;font-weight:700;font-size:.92rem;gap:8px}
+.ctl label output{font-weight:800;color:var(--copper);white-space:nowrap}
+.ctl input[type=range]{width:100%;accent-color:var(--copper)}
+.ctl input[type=range]:disabled{opacity:.35}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.seg button{font:inherit;font-size:.85rem;font-weight:700;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--copper);border-color:var(--copper);color:#fff}
+.seg.bands button{display:inline-flex;align-items:center;gap:5px;padding:4px 8px}
+.sw{display:inline-block;width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.35)}
+.hint{font-size:.82rem;color:var(--muted);margin-top:2px}
+.viz{display:flex;flex-direction:column;gap:12px;min-width:0}
+.viz svg{width:100%;height:auto;display:block}
+.pair{display:grid;gap:12px;grid-template-columns:200px 1fr;align-items:center}
+@media (max-width:600px){.pair{grid-template-columns:1fr}.pair > svg:first-child{max-width:220px;margin:0 auto}}
+.readouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.ro{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px;min-width:0}
+.ro span{display:block;font-size:.78rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.ro b{font-family:"Fraunces",serif;font-size:1.35rem;overflow-wrap:anywhere}
+.ro.big{background:var(--copper-soft);border-color:transparent}
+.ro.big b{color:var(--copper)}
+.verdict{border-radius:12px;padding:10px 14px;font-weight:700;background:var(--led-soft);color:var(--ink)}
+.verdict.warn{background:var(--volt-soft)}
+.verdict.bad{background:var(--copper-soft)}
+.btn{font:inherit;font-weight:800;padding:7px 14px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.toy{font-size:.82rem;color:var(--muted);margin-top:10px}
+svg text{font-family:"Nunito",sans-serif}
+svg text:not([fill]){fill:var(--ink)}
+.axis{stroke:var(--line);stroke-width:1}
+.axis-label{font-size:11px;fill:var(--muted)}
+.guess{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.guess input{font:inherit;width:110px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.tt td,.tt th{text-align:center}
+.tt tr.on td{background:var(--copper-soft);font-weight:800}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+
+/* videos */
+.vids{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.vid{display:block;text-decoration:none;color:inherit;background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.vid:hover{border-color:var(--copper)}
+.vid .thumb{aspect-ratio:16/9;background:var(--line) center/cover no-repeat;position:relative;display:flex;align-items:center;justify-content:center;font-size:2rem;background:var(--wire-soft)}
+.vid .thumb::after{content:attr(data-src);position:absolute;inset:auto auto 10px 10px;background:rgba(0,0,0,.65);color:#fff;font-size:.8rem;padding:3px 9px;border-radius:999px}
+.vid div.t{padding:10px 12px}
+.vid b{display:block;font-size:.95rem;line-height:1.3}
+.vid span{font-size:.82rem;color:var(--muted)}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+
+/* flashcards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.flash{perspective:900px;min-height:150px;cursor:pointer;border:0;padding:0;background:none;font:inherit;color:inherit;text-align:left}
+.flash .in{position:relative;width:100%;height:100%;min-height:150px;transition:transform .45s;transform-style:preserve-3d}
+.flash.flip .in{transform:rotateY(180deg)}
+.flash .f,.flash .b{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;padding:14px 16px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
+.flash .f{background:var(--paper)}
+.flash .f small{color:var(--copper);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:.72rem;margin-bottom:6px}
+.flash .b{background:var(--led-soft);transform:rotateY(180deg);font-size:.93rem}
+@media (prefers-reduced-motion:reduce){.flash .in{transition:none}}
+
+/* checklist */
+.check{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
+.check label{display:flex;gap:10px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:9px 12px;cursor:pointer}
+.check input{margin-top:5px;accent-color:var(--led);width:18px;height:18px;flex:none}
+.check label:has(input:checked){opacity:.6;text-decoration:line-through}
+
+/* kid-friendly additions */
+.term{border-bottom:2px dotted var(--copper);cursor:help;border-radius:2px}
+.term:hover,.term:focus{background:var(--copper-soft);outline:none}
+#gloss-pop{position:absolute;z-index:50;max-width:300px;background:var(--paper);color:var(--ink);border:2px solid var(--copper);border-radius:14px;padding:10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.18);font-size:.92rem;line-height:1.45;display:none}
+#gloss-pop b{display:block;color:var(--copper);font-family:"Fraunces",serif;font-size:1.02rem;margin-bottom:2px}
+#gloss-pop a{font-size:.8rem}
+.plain{background:var(--wire-soft);border-radius:14px;padding:12px 16px;margin:12px 0;font-size:.97rem}
+.plain::before{content:"💡 In plain words";display:block;font-weight:800;color:var(--wire);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.plain.howto::before{content:"📈 How to read this"}
+.plain.example::before{content:"🧮 Worked example"}
+.plain.why::before{content:"🤔 Why it matters"}
+.plain p{margin:6px 0}
+.gloss{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.gloss div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:10px 14px;scroll-margin-top:80px}
+.gloss div:target{border-color:var(--copper);box-shadow:0 0 0 3px var(--copper-soft)}
+.gloss b{color:var(--copper)}
+.gloss-search{width:100%;max-width:360px;font:inherit;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);margin-bottom:12px}
+.ptable td:nth-child(2),.ptable th:nth-child(2){text-align:right;white-space:nowrap;font-weight:800}
+.pbar{display:flex;height:44px;border-radius:12px;overflow:hidden;margin:10px 0 4px;font-weight:800;font-size:.85rem;color:#222}
+.pbar div{display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.1;padding:0 4px}
+.startcard{background:var(--paper);border:2px solid var(--copper);border-radius:18px;padding:16px 20px;margin-top:22px}
+.startcard ol{margin:6px 0 0;padding-left:22px}
+.timeline{border-left:3px solid var(--line);margin:8px 0 0 8px;padding-left:16px}
+.timeline div{position:relative;margin-bottom:10px}
+.timeline div::before{content:"";position:absolute;left:-23px;top:7px;width:11px;height:11px;border-radius:50%;background:var(--copper)}
+.chain{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.chain span{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:6px 10px;font-size:.9rem;font-weight:700}
+.chain i{font-style:normal;color:var(--muted)}
+footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px dashed var(--line)}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Sections">
+  <div class="wrap">
+    <a href="#overview">Overview</a>
+    <a href="#points">🏅 Points</a>
+    <a href="#basics">⚡ Ohm's law &amp; power</a>
+    <a href="#circuits">🔀 Series &amp; parallel</a>
+    <a href="#leds">💡 Diodes &amp; LEDs</a>
+    <a href="#logic">🔢 Digital logic</a>
+    <a href="#static">🎈 Charges</a>
+    <a href="#bench">🔧 Hands-on bench</a>
+    <a href="#devices">🔌 Switches, safety &amp; history</a>
+    <a href="#flashcards">🃏 Flashcards</a>
+    <a href="#plan">🗺 Game plan</a>
+    <a href="#score">🧮 Score calculator</a>
+    <a href="#videos">▶ Videos &amp; links</a>
+    <a href="#checklist">✅ Checklist</a>
+    <a href="#glossary">📖 Glossary</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Science Olympiad · Circuit Lab · 2027 · Division B</span>
+    <h1>The Spark Lab</h1>
+    <p class="lead">Circuit Lab is about electricity: how voltage pushes current through resistors, why LEDs need a helper resistor, how logic gates make yes-or-no decisions, and how to use a multimeter without blowing its fuse. At the tournament you and a partner take a written test and do at least one hands-on task at a bench full of batteries, resistors, and wires. This page explains the science and has lab exhibits you can play with until it clicks.</p>
+    <div class="facts">
+      <div class="fact"><b>2</b><span>students per team, about 50 minutes</span></div>
+      <div class="fact"><b>2</b><span>parts: written test and hands-on tasks</span></div>
+      <div class="fact"><b>50–75%</b><span>of the score from the written test</span></div>
+      <div class="fact"><b>25–50%</b><span>from the hands-on tasks</span></div>
+      <div class="fact"><b>Any</b><span>amount of notes on paper (binders and books OK)</span></div>
+      <div class="fact"><b>2</b><span>calculators per team, plus your own basic multimeter if the supervisor OKs it</span></div>
+    </div>
+    <div class="startcard">
+      <b>👋 New here? Start like this:</b>
+      <ol>
+        <li>Read <a href="#overview">How the event works</a> and <a href="#points">Where the points come from</a>.</li>
+        <li>Learn <b>Ohm's law</b> first in the <a href="#basics">first exhibit</a>. Almost every circuit question uses it.</li>
+        <li>Work through the sections in order. In each exhibit, change <b>one</b> thing at a time and watch what happens.</li>
+        <li>Practice the <a href="#bench">hands-on skills</a> with a real multimeter and breadboard if you can get one (about $20 together), then quiz yourself with the <a href="#flashcards">flashcards</a>.</li>
+      </ol>
+      <p style="margin:10px 0 0"><span class="term" tabindex="0" data-g="glossary-demo">Words with a dotted underline</span> are "big words." Tap or hover over one to see what it means. They're all collected in the <a href="#glossary">glossary</a> at the bottom too.</p>
+    </div>
+    <p class="note"><b>Check the official rules.</b> This page is based on the <a href="https://www.soinc.org/circuit-lab-b">Science Olympiad Circuit Lab page</a> and the <a href="https://scio.ly/docs/circuit-lab">Scio.ly 2027 Circuit Lab guide</a>, which summarizes the 2027 rules. The full Rules Manual is emailed to coaches from the <a href="https://www.soinc.org/rules-2027">2027 rules page</a>, and it always wins. Rules get clarified during the season, so check <a href="https://www.soinc.org/events/rules-corrections">rules clarifications</a> before each tournament. <b>Big change from 2026:</b> magnets, electromagnets, motors, and capacitors are out, and diodes, LEDs, and digital logic are in. Older practice tests will have questions you can skip.</p>
+  </div>
+</header>
+
+<!-- ===================== OVERVIEW ===================== -->
+<section id="overview">
+  <div class="wrap">
+    <h2>How the event works</h2>
+    <p class="sub">There's nothing to build at home. Everything happens at the tournament: a written test plus one or more short bench tasks. The supervisor brings all the parts and meters.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>Part I: Written test (50–75%)</h4>
+        <p>Questions on charges and static electricity, DC and AC electricity, current, voltage, resistance, power and energy, series and parallel circuits, open and short circuits, reading circuit diagrams, diodes and LEDs, digital logic (gates, truth tables, binary adding), control devices (switches, relays, fuses, breakers, GFCIs), and the scientists who figured it all out. At <b>state and nationals</b> there will be at least one Kirchhoff's law question.</p>
+      </div>
+      <div class="card">
+        <h4>Part II: Hands-on tasks (25–50%)</h4>
+        <p>At least one task at a bench with a breadboard and a multimeter. Examples from the rules: find a mystery resistor using only voltage readings, work out the power in a circuit, make two LEDs glow equally bright, read a USB charger label and figure out charging time, build a logic circuit that matches a truth table, find the fault in a broken circuit, wire a 3-way light switch, or build a set resistance from given resistors. No soldering, no high voltage, no AC.</p>
+      </div>
+      <div class="card">
+        <h4>Bring</h4>
+        <p>Notes of any size on paper, from any source: a binder, tabs, sheet protectors, even printed books. Two calculators per team (the rules use Science Olympiad's calculator classes; check the manual for which kinds count). Pencils. Your own <b>basic multimeter</b> if the supervisor allows it, which is worth it because you'll know its buttons. No phones or smartwatches. Full list in the <a href="#checklist">checklist</a>.</p>
+      </div>
+      <div class="card">
+        <h4>Division B vs. C</h4>
+        <p>This page is for <b>Division B</b>. B gets control devices (switches, relays, fuses, GFCIs, breakers), and its math stays simple: no trigonometry. Division C adds flip-flops, transistors, and op-amps. Neither division gets capacitors, inductors, magnets, Thevenin circuits, or oscilloscopes this year.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== POINTS ===================== -->
+<section id="points">
+  <div class="wrap">
+    <h2>Where the points come from</h2>
+    <p class="sub">The supervisor decides the exact split inside the rule ranges, so you won't know it until the tournament. A 60/40 split is a good guess for practice.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>The point table</h4>
+        <div class="tablewrap"><table class="ptable">
+          <tr><th>Part</th><th>Share</th><th>How you earn it</th></tr>
+          <tr><td>📝 I. Written test</td><td>50–75</td><td>Correct answers, calculations, and data analysis.</td></tr>
+          <tr><td>🔧 II. Hands-on tasks</td><td>25–50</td><td>Correct measurements, working circuits, and the math that goes with them.</td></tr>
+          <tr><td>⚖️ Tiebreaker</td><td>—</td><td>Questions or tasks the supervisor picks ahead of time and marks on the test.</td></tr>
+        </table></div>
+      </div>
+      <div class="card">
+        <h4>How it splits (60/40 example)</h4>
+        <div class="pbar" role="img" aria-label="Written test 60, hands-on 40">
+          <div style="flex:60;background:var(--wire);color:#fff">Written · 60</div>
+          <div style="flex:40;background:var(--copper);color:#fff">Hands-on · 40</div>
+        </div>
+        <p class="muted"><small>The written part can be as big as 75 and the hands-on part as big as 50.</small></p>
+        <div class="plain why">
+          <p>The hands-on tasks are the <b>cheapest points to win</b>. They're worth a lot, the same few skills keep coming back (measure a voltage, find a resistor, light an LED), and many teams barely practice them. One evening a week with a $15 multimeter and a breadboard kit puts you ahead of most of the room.</p>
+        </div>
+      </div>
+    </div>
+    <div class="plain example">
+      <p>Ava and Sam go to a regional where the supervisor uses a 60/40 split.</p>
+      <ul class="tight">
+        <li>Written test: 65% correct → 0.65 × 60 = <b>39</b></li>
+        <li>Hands-on: they found the mystery resistor and lit both LEDs evenly but messed up the power math, 80% → 0.80 × 40 = <b>32</b></li>
+      </ul>
+      <p>Total: 39 + 32 = <b>71 out of 100</b>. If they'd skipped practicing the bench tasks and scored 40% there, they'd have 39 + 16 = 55, a 16-point drop. Try your own numbers in the <a href="#score">score calculator</a>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== BASICS ===================== -->
+<section id="basics">
+  <div class="wrap">
+    <h2>Ohm's law and power <span class="tag t-wire">Written + bench</span></h2>
+    <p class="sub">Four quantities run every circuit: voltage, current, resistance, and power. Learn what each one means and the two formulas that link them, and half the test opens up.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>The big four</h4>
+        <ul class="tight">
+          <li><b>Voltage</b> (V, in volts): the push. A 9 V battery pushes harder than a 1.5 V AA.</li>
+          <li><b>Current</b> (I, in amperes or amps, A): how much charge flows past a point each second. 1 milliamp (mA) = 0.001 A.</li>
+          <li><b>Resistance</b> (R, in ohms, Ω): how hard it is for current to get through. 1 kΩ = 1,000 Ω.</li>
+          <li><b>Power</b> (P, in watts, W): how fast energy is used or turned into heat and light.</li>
+        </ul>
+        <div class="plain"><p>Think of a garden hose. Voltage is the water pressure, current is how many gallons per minute come out, and resistance is how much you pinch the hose. Pinch harder (more resistance) and less water flows, unless you turn up the pressure.</p></div>
+      </div>
+      <div class="card">
+        <h4>The two formulas</h4>
+        <p class="formula">V = I × R</p>
+        <p><b>Ohm's law.</b> V is volts, I is amps, R is ohms. Cover the one you want on the triangle in the exhibit: R = V ÷ I, I = V ÷ R.</p>
+        <p class="formula">P = I × V = I² × R = V² ÷ R</p>
+        <p><b>Power.</b> All three versions give the same answer; pick the one that uses what you know.</p>
+        <div class="plain example"><p>A 1,500 W space heater on a 120 V outlet: I = P ÷ V = 1500 ÷ 120 = <b>12.5 A</b>. Its resistance: R = V ÷ I = 120 ÷ 12.5 = <b>9.6 Ω</b>.</p></div>
+      </div>
+    </div>
+
+    <div class="lab" id="ohLab">
+      <div class="lab-head"><h3>🔺 Exhibit: the Ohm's law triangle</h3><span class="muted"><small>Pick what to solve for, then set the other two.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Solve for</label>
+            <div class="seg" id="oh-solve"><button data-v="V">Voltage</button><button data-v="I" aria-pressed="true">Current</button><button data-v="R">Resistance</button></div></div>
+          <div class="ctl"><label for="oh-v">Voltage <output id="oh-v-o"></output></label><input id="oh-v" type="range" min="0.5" max="24" step="0.5" value="9"><div class="hint">AA battery 1.5 V, USB 5 V, 9 V battery, car battery 12 V.</div></div>
+          <div class="ctl"><label for="oh-i">Current <output id="oh-i-o"></output></label><input id="oh-i" type="range" min="0" max="100" step="1" value="50"><div class="hint">An LED wants about 20 mA. A phone charger gives 1–3 A.</div></div>
+          <div class="ctl"><label for="oh-r">Resistance <output id="oh-r-o"></output></label><input id="oh-r" type="range" min="0" max="100" step="1" value="57"><div class="hint">Common lab resistors run from 10 Ω to 1 MΩ.</div></div>
+        </div>
+        <div class="viz">
+          <div class="pair">
+            <svg id="oh-tri" viewBox="0 0 200 215" role="img" aria-label="Ohm's law triangle"></svg>
+            <svg id="oh-chart" viewBox="0 0 360 230" role="img" aria-label="Current versus voltage for this resistor"></svg>
+          </div>
+          <div class="readouts">
+            <div class="ro" id="oh-ro-V"><span>Voltage</span><b id="oh-r-V"></b></div>
+            <div class="ro" id="oh-ro-I"><span>Current</span><b id="oh-r-I"></b></div>
+            <div class="ro" id="oh-ro-R"><span>Resistance</span><b id="oh-r-R"></b></div>
+            <div class="ro"><span>Power (heat)</span><b id="oh-r-P"></b></div>
+          </div>
+          <div class="verdict" id="oh-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Ideal resistor: its resistance doesn't change as it warms up. Real light bulbs do change; see the <a href="../ohms-law/">Ohm's Law Lab</a>.</p>
+    </div>
+    <div class="plain howto">
+      <p>The graph shows current (up) against voltage (across) for this one resistor. Ohm's law makes it a <b>straight line</b> through zero: double the voltage and the current doubles. A <b>smaller</b> resistance gives a <b>steeper</b> line. If a test graph is a straight line through the origin, the part follows Ohm's law, and its resistance is the voltage divided by the current at any point on the line. LEDs and bulbs don't make straight lines.</p>
+    </div>
+
+    <h3>Energy and your electric bill</h3>
+    <p>Power is how fast energy is used. Energy is power × time. The electric company bills you in <b>kilowatt-hours</b> (kWh): 1,000 watts running for 1 hour.</p>
+    <p class="formula">E (kWh) = P (W) × hours ÷ 1000 &nbsp;&nbsp; cost = kWh × price per kWh</p>
+    <div class="lab" id="pwLab">
+      <div class="lab-head"><h3>💸 Exhibit: what does it cost to run?</h3><span class="muted"><small>One month = 30 days.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Appliance <output id="pw-a-o"></output></label>
+            <div class="seg" id="pw-a"><button data-v="0" aria-pressed="true">LED bulb</button><button data-v="1">Laptop</button><button data-v="2">TV</button><button data-v="3">Gaming PC</button><button data-v="4">Space heater</button></div></div>
+          <div class="ctl"><label for="pw-n">How many <output id="pw-n-o"></output></label><input id="pw-n" type="range" min="1" max="20" step="1" value="10"></div>
+          <div class="ctl"><label for="pw-h">Hours per day <output id="pw-h-o"></output></label><input id="pw-h" type="range" min="0.5" max="24" step="0.5" value="5"></div>
+          <div class="ctl"><label for="pw-p">Price per kWh <output id="pw-p-o"></output></label><input id="pw-p" type="range" min="8" max="40" step="1" value="16"><div class="hint">The US average is around 16–17¢. Hawaii pays about 40¢.</div></div>
+        </div>
+        <div class="viz">
+          <svg id="pw-chart" viewBox="0 0 440 220" role="img" aria-label="Monthly cost of each appliance"></svg>
+          <div class="readouts">
+            <div class="ro"><span>Total power</span><b id="pw-r-w"></b></div>
+            <div class="ro"><span>Current at 120 V</span><b id="pw-r-i"></b></div>
+            <div class="ro"><span>Energy per month</span><b id="pw-r-e"></b></div>
+            <div class="ro big"><span>Cost per month</span><b id="pw-r-c"></b></div>
+          </div>
+          <div class="verdict" id="pw-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Wattages are typical round numbers. A gaming PC or TV uses less when it's idling.</p>
+    </div>
+    <div class="plain example">
+      <p>Ten 9 W LED bulbs, 5 hours a day, for 30 days, at 16¢ per kWh:</p>
+      <p>Power: 10 × 9 W = 90 W. Energy: 90 W × 5 h × 30 days = 13,500 Wh = <b>13.5 kWh</b>. Cost: 13.5 × $0.16 = <b>$2.16</b> a month. Old 60 W bulbs would cost 60 ÷ 9 ≈ 6.7 times as much, about $14.40.</p>
+    </div>
+
+    <div class="cols">
+      <div class="card">
+        <h4>Math you might see</h4>
+        <ul class="tight">
+          <li><b>Units:</b> 1 kΩ = 1,000 Ω; 1 MΩ = 1,000,000 Ω; 1 mA = 0.001 A. Convert <b>before</b> you multiply. 9 V ÷ 2.2 kΩ = 9 ÷ 2200 = 0.0041 A = 4.1 mA.</li>
+          <li><b>Wire resistance:</b> R = ρL ÷ A. ρ (rho) depends on the material, L is length, A is cross-section area. Longer wire = more resistance; thicker wire = less. Stretch a wire to twice its length and it also gets thinner, so its resistance goes up <b>4 times</b>.</li>
+          <li><b>Efficiency</b> = useful energy out ÷ energy in. A 1,500 W kettle at 90% heats water with 1,350 W. Heating 1 liter from 20 °C to 100 °C (68 °F to 212 °F) takes 1000 g × 4.18 J/g°C × 80 °C ≈ 334,000 J, so 334,000 ÷ 1,350 ≈ 248 s ≈ <b>4.1 minutes</b>.</li>
+          <li><b>Charge:</b> Q = I × t. 2 A for 10 s moves 20 coulombs.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>DC and AC</h4>
+        <p><b>DC</b> (direct current) flows one way, like from a battery. <b>AC</b> (alternating current) flips direction back and forth, 60 times a second (60 Hz) in US wall outlets and 50 Hz in Europe.</p>
+        <p>The "120 V" on a US outlet is an <b>RMS</b> average. The voltage really swings up to a peak of about 120 × 1.414 ≈ <b>170 V</b> and back down to −170 V.</p>
+        <p>Power companies send electricity at very high voltage because the power lost in the wires is I² × R. Raise the voltage 10 times and the current drops 10 times, so the loss drops <b>100 times</b>.</p>
+        <p class="muted"><small>AC circuit math isn't tested this year, but these facts about AC are.</small></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CIRCUITS ===================== -->
+<section id="circuits">
+  <div class="wrap">
+    <h2>Series and parallel circuits <span class="tag t-copper">Written + bench</span></h2>
+    <p class="sub">Every circuit is built from two patterns: parts in a line, or parts side by side. Learn how voltage and current behave in each and you can take apart any circuit on the test.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>Series: one path</h4>
+        <p>Parts in a single loop, one after another. The <b>same current</b> goes through every part. The battery's voltage gets <b>shared</b> between them, and the biggest resistor gets the biggest share.</p>
+        <p class="formula">R_total = R1 + R2 + R3</p>
+        <p>Break the loop anywhere (an open circuit) and everything stops, like old holiday lights.</p>
+      </div>
+      <div class="card">
+        <h4>Parallel: side by side</h4>
+        <p>Each part gets its own path straight across the battery. Every branch gets the <b>full voltage</b>. The currents <b>add up</b>, and the smallest resistor takes the most current.</p>
+        <p class="formula">1/R_total = 1/R1 + 1/R2 + 1/R3</p>
+        <p>For just two: R_total = (R1 × R2) ÷ (R1 + R2). Two equal resistors in parallel give half of one. The total is always <b>smaller than the smallest</b> branch.</p>
+      </div>
+    </div>
+
+    <div class="lab" id="ckLab">
+      <div class="lab-head"><h3>🔀 Exhibit: the circuit board</h3>
+        <span><button class="btn" id="ck-quiz">🎲 Quiz me</button></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Wiring</label>
+            <div class="seg" id="ck-topo"><button data-v="series" aria-pressed="true">Series</button><button data-v="parallel">Parallel</button><button data-v="combo">R1 + (R2 ∥ R3)</button></div></div>
+          <div class="ctl"><label for="ck-v">Battery <output id="ck-v-o"></output></label><input id="ck-v" type="range" min="1" max="12" step="0.5" value="9"></div>
+          <div class="ctl"><label for="ck-r1">R1 <output id="ck-r1-o"></output></label><input id="ck-r1" type="range" min="10" max="1000" step="10" value="100"></div>
+          <div class="ctl"><label for="ck-r2">R2 <output id="ck-r2-o"></output></label><input id="ck-r2" type="range" min="10" max="1000" step="10" value="200"></div>
+          <div class="ctl"><label for="ck-r3">R3 <output id="ck-r3-o"></output></label><input id="ck-r3" type="range" min="10" max="1000" step="10" value="300"></div>
+          <div class="ctl"><label>Break something</label>
+            <div class="seg" id="ck-fault"><button data-v="none" aria-pressed="true">Nothing</button><button data-v="open">R2 open</button><button data-v="short">R2 shorted</button></div>
+            <div class="hint">Open = a broken wire or a burnt-out part. Shorted = a stray wire connects R2's two ends.</div></div>
+          <div class="ctl" id="ck-guessbox" hidden><label for="ck-g">Your total resistance (Ω)</label>
+            <div class="guess"><input id="ck-g" type="number" min="0" step="any" inputmode="decimal" placeholder="e.g. 150"><button class="btn" id="ck-check">Check</button><button class="btn ghost" id="ck-exit">Done</button></div>
+            <div class="hint">Within 2% counts. Work it on paper first.</div></div>
+        </div>
+        <div class="viz">
+          <svg id="ck-svg" viewBox="0 0 600 270" role="img" aria-label="Circuit diagram"></svg>
+          <div class="readouts">
+            <div class="ro big"><span>Total resistance</span><b id="ck-r-req"></b></div>
+            <div class="ro"><span>Battery current</span><b id="ck-r-i"></b></div>
+            <div class="ro"><span>Total power</span><b id="ck-r-p"></b></div>
+          </div>
+          <div class="tablewrap"><table id="ck-table"></table></div>
+          <div class="ro"><span>Kirchhoff check</span><div id="ck-kirch" style="font-weight:700"></div></div>
+          <div class="verdict" id="ck-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Ideal battery and wires (no internal resistance). The redder a resistor, the more power it's turning into heat.</p>
+    </div>
+
+    <div class="cols">
+      <div class="card">
+        <h4>Kirchhoff's laws <span class="tag t-volt">State &amp; nationals</span></h4>
+        <p><b>Voltage law (KVL):</b> go all the way around any loop and the voltage rises and drops add up to zero. In a series loop, the drops across the parts add up to the battery voltage.</p>
+        <p><b>Current law (KCL):</b> the current flowing into any junction equals the current flowing out. Charge doesn't pile up or vanish.</p>
+        <div class="plain example"><p>9 V battery, 100 Ω and 200 Ω in series. I = 9 ÷ 300 = 0.03 A = 30 mA. V1 = 0.03 × 100 = 3 V, V2 = 0.03 × 200 = 6 V. Check KVL: 3 + 6 = 9 ✓.</p>
+        <p>KCL: 50 mA flows into a junction that splits into two branches. One branch carries 20 mA, so the other must carry 50 − 20 = <b>30 mA</b>.</p></div>
+      </div>
+      <div class="card">
+        <h4>Open and short circuits</h4>
+        <ul class="tight">
+          <li><b>Open:</b> a gap in the path. No current flows in that path. In a series circuit, the <b>whole battery voltage</b> shows up across the gap. That's how you find a broken part with a voltmeter.</li>
+          <li><b>Short:</b> a path with almost no resistance that skips part of the circuit. The skipped part gets zero volts. A short straight across a battery draws a huge current and gets hot. That's what fuses and breakers protect against.</li>
+          <li><b>Closed</b> circuit: a complete loop, so current flows.</li>
+        </ul>
+        <div class="plain"><p>An open circuit is a drawbridge that's up: nobody gets across. A short circuit is a shortcut that's so easy everyone takes it and skips the town.</p></div>
+      </div>
+      <div class="card">
+        <h4>Voltage dividers</h4>
+        <p>Two resistors in series split the voltage in proportion to their size:</p>
+        <p class="formula">V2 = V_battery × R2 ÷ (R1 + R2)</p>
+        <p>9 V across 1 kΩ and 2 kΩ: the 2 kΩ gets 9 × 2 ÷ 3 = <b>6 V</b>. This is the trick behind the "mystery resistor" bench task in the <a href="#bench">hands-on section</a>.</p>
+      </div>
+      <div class="card">
+        <h4>Reading schematics</h4>
+        <p>A schematic is a map of a circuit using symbols. Straight lines are wires (assume zero resistance). A zigzag is a resistor. A battery is a long line (+) and a short line (−). A dot where wires cross means they connect; no dot means they just pass over each other. Learn the symbols for switch, bulb, LED, diode, fuse, ground, voltmeter (V in a circle), and ammeter (A in a circle).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LEDS ===================== -->
+<section id="leds">
+  <div class="wrap">
+    <h2>Diodes and LEDs <span class="tag t-led">New for 2027</span></h2>
+    <p class="sub">A diode is a one-way valve for current. A light-emitting diode (LED) is a diode that glows. They don't follow Ohm's law, and that's exactly why they need a resistor.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>How a diode works</h4>
+        <p>A silicon diode is made of two kinds of silicon pressed together: <b>P-type</b> (with "holes" that act like positive charges) and <b>N-type</b> (with extra electrons). Where they meet is the <b>PN junction</b>.</p>
+        <ul class="tight">
+          <li><b>Forward bias</b> (+ to the P side, the anode): once the voltage passes about <b>0.7 V</b> for silicon, current flows easily.</li>
+          <li><b>Reverse bias</b> (the other way): almost no current flows, until a high enough voltage breaks it down.</li>
+        </ul>
+        <p>The schematic symbol is an arrow pointing the way current flows, with a bar at the <b>cathode</b> end (−). On a real diode the cathode has a stripe. On an LED the <b>longer leg</b> is the anode (+) and the cathode side of the rim is flat.</p>
+      </div>
+      <div class="card">
+        <h4>Why an LED needs a resistor</h4>
+        <p>Each LED color has a <b>forward voltage</b>: about 2 V for red, 2.1 V for yellow, and 3–3.3 V for blue, white, and bright green. Bluer light carries more energy per photon, so it needs a bigger push.</p>
+        <p>Below that voltage, almost nothing happens. A little above it, the current shoots up. Hook an LED straight to a 9 V battery and it pulls far more than its ~20 mA limit and burns out. A resistor in series soaks up the extra voltage:</p>
+        <p class="formula">R = (V_supply − V_LED) ÷ I</p>
+        <div class="plain example"><p>Red LED on a 9 V battery, aiming for 20 mA: R = (9 − 2) ÷ 0.020 = <b>350 Ω</b>. Use the next bigger standard size, 390 Ω, to stay safe: I = 7 ÷ 390 = 18 mA.</p></div>
+      </div>
+    </div>
+
+    <div class="lab" id="ldLab">
+      <div class="lab-head"><h3>💡 Exhibit: light the LED (without frying it)</h3><span class="muted"><small>Where the two lines cross is what really happens.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Power supply</label>
+            <div class="seg" id="ld-s"><button data-v="3">3 V coin cell</button><button data-v="5">5 V USB</button><button data-v="9" aria-pressed="true">9 V battery</button></div></div>
+          <div class="ctl"><label>LED color <output id="ld-c-o"></output></label>
+            <div class="seg" id="ld-c"><button data-v="red" aria-pressed="true">Red</button><button data-v="yellow">Yellow</button><button data-v="green">Green</button><button data-v="blue">Blue</button><button data-v="white">White</button></div></div>
+          <div class="ctl"><label for="ld-r">Series resistor <output id="ld-r-o"></output></label><input id="ld-r" type="range" min="0" max="100" step="1" value="58"><div class="hint">Slide left for a smaller resistor (more current).</div></div>
+          <div class="ctl"><label>LED direction</label>
+            <div class="seg" id="ld-d"><button data-v="fwd" aria-pressed="true">Long leg to +</button><button data-v="rev">Backwards</button></div></div>
+        </div>
+        <div class="viz">
+          <div class="pair">
+            <svg id="ld-circ" viewBox="0 0 200 250" role="img" aria-label="Battery, resistor and LED circuit"></svg>
+            <svg id="ld-chart" viewBox="0 0 360 250" role="img" aria-label="LED current versus voltage with the resistor load line"></svg>
+          </div>
+          <div class="readouts">
+            <div class="ro big"><span>LED current</span><b id="ld-r-i"></b></div>
+            <div class="ro"><span>Volts across LED</span><b id="ld-r-vl"></b></div>
+            <div class="ro"><span>Volts across resistor</span><b id="ld-r-vr"></b></div>
+            <div class="ro"><span>Resistor for 15 milliamps</span><b id="ld-r-best"></b></div>
+          </div>
+          <div class="verdict" id="ld-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Simplified LED model: current grows exponentially above the forward voltage and reaches 20 mA right at it. Real forward voltages vary by maker; check the datasheet.</p>
+    </div>
+    <div class="plain howto">
+      <p>The orange curve is the LED: flat, then shooting up past its forward voltage. The blue line is the resistor and battery together (called a <b>load line</b>): at 0 V across the LED, the resistor gets the whole battery; as the LED takes more voltage, less is left to push current through the resistor. The circuit settles where the two meet. A smaller resistor makes the blue line steeper, so the crossing point climbs up the LED's curve to a higher current.</p>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <h4>Bench task: make two LEDs equally bright</h4>
+        <p>Brightness follows <b>current</b>, so give both LEDs the same current.</p>
+        <ul class="tight">
+          <li><b>Easiest:</b> put them in <b>series</b> with one resistor. Same path, same current. You need enough supply voltage for both: two red LEDs need about 4 V plus a little for the resistor.</li>
+          <li><b>In parallel:</b> give each LED its <b>own resistor</b>. If two different LEDs share one resistor in parallel, the one with the lower forward voltage hogs nearly all the current.</li>
+          <li>Different colors at the same current can still look different to your eye. Match the current and say so in your answer.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Diode facts to know</h4>
+        <ul class="tight">
+          <li>Silicon diode drop: about <b>0.7 V</b> when conducting. Germanium: about 0.3 V.</li>
+          <li>A diode in a battery holder stops damage if someone puts the batteries in backwards.</li>
+          <li>LEDs are far more efficient than old bulbs: a 9 W LED gives about the light of a 60 W bulb, which wasted most of its energy as heat.</li>
+          <li>Most LEDs survive only about 5 V backwards before breaking down.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LOGIC ===================== -->
+<section id="logic">
+  <div class="wrap">
+    <h2>Digital logic <span class="tag t-led">New for 2027</span></h2>
+    <p class="sub">Computers are built from tiny switches that only know two states: on (1) or off (0). Logic gates combine those 1s and 0s to make decisions. Division B covers gates, truth tables, Boolean expressions, De Morgan's laws, binary numbers, multiplexers, and adders.</p>
+    <div class="lab" id="lgLab">
+      <div class="lab-head"><h3>🔢 Exhibit: the gate playground</h3>
+        <span><button class="btn" id="lg-mystery">🎲 Mystery gate</button></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Gate <output id="lg-g-o"></output></label>
+            <div class="seg" id="lg-g"><button data-v="AND" aria-pressed="true">AND</button><button data-v="OR">OR</button><button data-v="NOT">NOT</button><button data-v="NAND">NAND</button><button data-v="NOR">NOR</button><button data-v="XOR">XOR</button><button data-v="XNOR">XNOR</button></div></div>
+          <div class="ctl"><label>Inputs (tap to switch on)</label>
+            <div class="seg" id="lg-in" data-multi="1"><button data-v="A" aria-pressed="true">A</button><button data-v="B">B</button></div>
+            <div class="hint">Lit button = 1 (on). Dark = 0 (off).</div></div>
+          <div class="ctl" id="lg-mbox" hidden><div class="hint" style="font-size:.9rem"><b>Mystery mode:</b> the truth table shows what the hidden gate does. Tap the gate you think it is.</div>
+            <div class="guess" style="margin-top:6px"><button class="btn ghost" id="lg-exit">Done</button></div></div>
+        </div>
+        <div class="viz">
+          <svg id="lg-svg" viewBox="0 0 560 220" role="img" aria-label="Logic gate diagram"></svg>
+          <div class="tablewrap"><table class="tt" id="lg-tt"></table></div>
+          <div class="readouts">
+            <div class="ro"><span>Inputs</span><b id="lg-r-in"></b></div>
+            <div class="ro big"><span>Output</span><b id="lg-r-out"></b></div>
+            <div class="ro"><span>Boolean</span><b id="lg-r-ex"></b></div>
+          </div>
+          <div class="verdict" id="lg-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">In Boolean notation · means AND, + means OR, a prime (A′) or a bar over a letter means NOT, and ⊕ means XOR.</p>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <h4>Truth tables and Boolean expressions</h4>
+        <p>A <b>truth table</b> lists every possible combination of inputs and the output for each. Two inputs make 2 × 2 = 4 rows; three inputs make 2³ = 8 rows.</p>
+        <p>A <b>Boolean expression</b> writes the same thing as algebra. Q = A·B + C′ means "Q is on when A and B are both on, or when C is off."</p>
+        <div class="plain example"><p>Q = A·B + C′ with A = 1, B = 0, C = 0: A·B = 1·0 = 0. C′ = NOT 0 = 1. Q = 0 + 1 = <b>1</b>.</p></div>
+      </div>
+      <div class="card">
+        <h4>De Morgan's laws and universal gates</h4>
+        <p class="formula">(A·B)′ = A′ + B′ &nbsp;&nbsp; (A+B)′ = A′·B′</p>
+        <p>"Break the bar, change the sign." NOT of an AND is the same as OR-ing the NOTs. So a NAND gate is the same as an OR gate with both inputs flipped.</p>
+        <p><b>NAND</b> and <b>NOR</b> are <b>universal</b>: you can build every other gate from just NANDs (or just NORs). A NAND with both inputs tied together is a NOT. That's why chip makers love them.</p>
+      </div>
+      <div class="card">
+        <h4>Multiplexers</h4>
+        <p>A <b>multiplexer</b> (MUX) is a data selector: it has several data inputs and a <b>select</b> input that picks which one passes through to the output, like a TV remote picking a channel.</p>
+        <p class="formula">2-to-1 MUX: Q = S′·A + S·B</p>
+        <p>When S = 0 the output copies A; when S = 1 it copies B. A 4-to-1 MUX needs 2 select lines (2² = 4 choices).</p>
+      </div>
+      <div class="card">
+        <h4>Binary numbers</h4>
+        <p>Binary uses only 0 and 1. Each place is worth twice the one to its right: 8, 4, 2, 1.</p>
+        <p>1011₂ = 8 + 0 + 2 + 1 = <b>11</b>. To convert 13 to binary: 13 = 8 + 4 + 1 → <b>1101</b>.</p>
+        <p>Adding: 0+0 = 0, 0+1 = 1, 1+1 = 10 (write 0, carry 1), 1+1+1 = 11 (write 1, carry 1). Division B uses whole numbers only, with no negatives.</p>
+      </div>
+    </div>
+
+    <div class="lab" id="adLab">
+      <div class="lab-head"><h3>➕ Exhibit: the 4-bit adder</h3><span class="muted"><small>Tap bits to switch them on.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Number A <output id="ad-a-o"></output></label>
+            <div class="seg" id="ad-a" data-multi="1"><button data-v="8">8</button><button data-v="4" aria-pressed="true">4</button><button data-v="2">2</button><button data-v="1" aria-pressed="true">1</button></div></div>
+          <div class="ctl"><label>Number B <output id="ad-b-o"></output></label>
+            <div class="seg" id="ad-b" data-multi="1"><button data-v="8">8</button><button data-v="4">4</button><button data-v="2" aria-pressed="true">2</button><button data-v="1" aria-pressed="true">1</button></div>
+            <div class="hint">Each button is one bit. Its label is what that place is worth.</div></div>
+        </div>
+        <div class="viz">
+          <svg id="ad-svg" viewBox="0 0 560 230" role="img" aria-label="Binary column addition"></svg>
+          <div class="readouts">
+            <div class="ro"><span>A</span><b id="ad-r-a"></b></div>
+            <div class="ro"><span>B</span><b id="ad-r-b"></b></div>
+            <div class="ro"><span>Sum in binary</span><b id="ad-r-s"></b></div>
+            <div class="ro big"><span>Sum</span><b id="ad-r-d"></b></div>
+          </div>
+          <div class="verdict" id="ad-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Each column is one full adder: Sum = A ⊕ B ⊕ Carry-in, and it carries out when at least two of its three inputs are 1.</p>
+    </div>
+    <div class="plain">
+      <p>A <b>half adder</b> adds two bits: the sum bit is <b>A XOR B</b> (1 if exactly one is on) and the carry is <b>A AND B</b> (1 only if both are on). A <b>full adder</b> also takes a carry from the column to its right. Chain four full adders and you can add any two numbers from 0 to 15, the same way you add with pencil and paper.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== STATIC ===================== -->
+<section id="static">
+  <div class="wrap">
+    <h2>Charges and static electricity <span class="tag t-wire">Written</span></h2>
+    <p class="sub">Before currents, there are charges. Like charges push apart, opposite charges pull together, and the force gets weaker fast as they move apart.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>Charge basics</h4>
+        <ul class="tight">
+          <li>Charge is measured in <b>coulombs</b> (C). One electron carries −1.6 × 10⁻¹⁹ C, so 1 C is about 6.2 billion billion electrons.</li>
+          <li>Objects get charged by gaining or losing <b>electrons</b>. Protons stay put in the nucleus.</li>
+          <li>Charge is <b>conserved</b>: rub a balloon on your hair, and the electrons the balloon gains are exactly the ones your hair loses.</li>
+          <li><b>Conductors</b> (metals, salt water) let charge move easily. <b>Insulators</b> (rubber, plastic, glass, dry air) don't.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Three ways to charge something</h4>
+        <ul class="tight">
+          <li><b>Friction:</b> rubbing moves electrons from one material to the other. The triboelectric series ranks which materials grab electrons.</li>
+          <li><b>Conduction:</b> touch a charged object to a neutral one and some charge flows over. Both end up with the <b>same</b> sign.</li>
+          <li><b>Induction:</b> bring a charged object <b>near</b> (not touching) a conductor. Its charges shift. Ground the far side, remove the ground, then move away, and the conductor keeps the <b>opposite</b> charge.</li>
+        </ul>
+        <p>An <b>electroscope</b> (two thin leaves of foil in a jar) shows charge: the leaves spread apart because they get the same sign and repel.</p>
+      </div>
+    </div>
+    <div class="lab" id="clLab">
+      <div class="lab-head"><h3>🎈 Exhibit: Coulomb's law</h3><span class="muted"><small>F = k × q₁ × q₂ ÷ r²</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="cl-q1">Charge 1 <output id="cl-q1-o"></output></label><input id="cl-q1" type="range" min="-10" max="10" step="1" value="4"><div class="hint">µC = microcoulombs, millionths of a coulomb. A rubbed balloon holds well under 1 µC.</div></div>
+          <div class="ctl"><label for="cl-q2">Charge 2 <output id="cl-q2-o"></output></label><input id="cl-q2" type="range" min="-10" max="10" step="1" value="-3"></div>
+          <div class="ctl"><label for="cl-r">Distance apart <output id="cl-r-o"></output></label><input id="cl-r" type="range" min="2" max="100" step="1" value="30"></div>
+        </div>
+        <div class="viz">
+          <svg id="cl-svg" viewBox="0 0 560 130" role="img" aria-label="Two charges and the force between them"></svg>
+          <svg id="cl-chart" viewBox="0 0 560 220" role="img" aria-label="Force versus distance"></svg>
+          <div class="readouts">
+            <div class="ro big"><span>Force</span><b id="cl-r-f"></b></div>
+            <div class="ro"><span>Push or pull?</span><b id="cl-r-d"></b></div>
+            <div class="ro"><span>In pounds</span><b id="cl-r-lb"></b></div>
+            <div class="ro"><span>At twice the distance</span><b id="cl-r-2"></b></div>
+          </div>
+          <div class="verdict" id="cl-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Uses k = 8.99 × 10⁹ N·m²/C² for point charges in air. 1 newton ≈ 0.225 pounds of force.</p>
+    </div>
+    <div class="plain example">
+      <p>Charges of +4 µC and −3 µC, 30 cm apart. Convert first: q₁ = 4 × 10⁻⁶ C, q₂ = 3 × 10⁻⁶ C, r = 0.30 m.</p>
+      <p>F = 8.99 × 10⁹ × (4 × 10⁻⁶) × (3 × 10⁻⁶) ÷ 0.30² = 8.99 × 10⁹ × 1.2 × 10⁻¹¹ ÷ 0.09 ≈ <b>1.2 N</b>, a pull (opposite signs). Move them to 60 cm (twice as far) and the force drops to a quarter: 0.3 N.</p>
+    </div>
+    <div class="plain"><p>The r² is the same "inverse square" pattern as gravity and light from a lamp. Twice as far = ¼ the force. Three times as far = 1/9. Half as far = 4 times the force.</p></div>
+  </div>
+</section>
+
+<!-- ===================== BENCH ===================== -->
+<section id="bench">
+  <div class="wrap">
+    <h2>Hands-on bench skills <span class="tag t-copper">25–50%</span></h2>
+    <p class="sub">The bench tasks use a breadboard, resistors, LEDs, batteries, and a multimeter. These exhibits drill the skills that come up again and again.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>How a breadboard is wired inside</h4>
+        <ul class="tight">
+          <li>The middle area has short <b>rows of 5 holes</b> (a–e on one side, f–j on the other). The 5 holes in a row are connected by a metal clip underneath.</li>
+          <li>The <b>center gap</b> separates the two halves, so a chip can straddle it without shorting its pins together.</li>
+          <li>The long <b>power rails</b> along the edges (red + and blue −) run the length of the board. On some long boards the rails are split in the middle; check with your meter.</li>
+          <li>Two legs of the same part in the same row = that part is <b>shorted out</b>. It's the most common breadboard mistake.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Multimeter rules of thumb</h4>
+        <ul class="tight">
+          <li><b>Voltage:</b> probes <b>across</b> the part (in parallel), circuit on.</li>
+          <li><b>Current:</b> break the circuit and put the meter <b>in the path</b> (in series), and move the red lead to the "A" or "mA" jack.</li>
+          <li><b>Resistance:</b> power <b>off</b>, and ideally take the part out of the circuit.</li>
+          <li>Black lead in COM. Start on a high range and work down if your meter isn't auto-ranging.</li>
+          <li>"OL" means over limit: the value is bigger than the range, or the path is open.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="lab" id="mmLab">
+      <div class="lab-head"><h3>🔧 Exhibit: multimeter trainer</h3>
+        <span><button class="btn" id="mm-mystery">🎲 Mystery resistor</button></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Meter setting</label>
+            <div class="seg" id="mm-mode"><button data-v="V" aria-pressed="true">Volts (V)</button><button data-v="A">Amps (mA)</button><button data-v="O">Ohms (Ω)</button></div></div>
+          <div class="ctl"><label>Where the probes go</label>
+            <div class="seg" id="mm-at"><button data-v="r1" aria-pressed="true">Across R1</button><button data-v="r2">Across R2</button><button data-v="bat">Across battery</button><button data-v="ser">In series (loop broken)</button></div></div>
+          <div class="ctl"><label>Power</label>
+            <div class="seg" id="mm-pw"><button data-v="on" aria-pressed="true">On</button><button data-v="off">Off (battery unclipped)</button></div></div>
+          <div class="ctl" id="mm-guessbox" hidden><label for="mm-g">R2 is how many ohms?</label>
+            <div class="guess"><input id="mm-g" type="number" min="0" step="any" inputmode="decimal" placeholder="e.g. 2200"><button class="btn" id="mm-check">Check</button><button class="btn ghost" id="mm-exit">Done</button></div>
+            <div class="hint">Use only voltage readings: measure across R1 and R2, then use R2 = R1 × V2 ÷ V1. Within 5% counts.</div></div>
+        </div>
+        <div class="viz">
+          <svg id="mm-svg" viewBox="0 0 560 260" role="img" aria-label="Circuit with a multimeter connected"></svg>
+          <div class="readouts">
+            <div class="ro big"><span>Meter reads</span><b id="mm-r-read"></b></div>
+            <div class="ro"><span>What that is</span><b id="mm-r-what" style="font-size:1rem"></b></div>
+            <div class="ro"><span>Circuit current</span><b id="mm-r-i"></b></div>
+          </div>
+          <div class="verdict" id="mm-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Simplified meter: the voltmeter has 10 MΩ inside, the ammeter almost none and a 200 mA fuse. The battery is an ideal 9.00 V.</p>
+    </div>
+    <div class="plain example">
+      <p>The mystery resistor task: a 9 V battery, a known R1 = 1,000 Ω, and an unknown R2 in series. You're allowed only voltage readings.</p>
+      <p>You read V1 = 3.10 V across R1 and V2 = 5.90 V across R2. In series the current is the same in both, so I = V1 ÷ R1 = 3.10 ÷ 1000 = 0.00310 A. Then R2 = V2 ÷ I = 5.90 ÷ 0.00310 ≈ <b>1,900 Ω</b>. Shortcut: R2 = R1 × V2 ÷ V1. Check: 3.10 + 5.90 = 9.00 V ✓.</p>
+    </div>
+
+    <h3>Resistor color code</h3>
+    <p>Most resistors are too small to print a number on, so they wear colored bands. Read from the end <b>opposite</b> the gold or silver band. For 4 bands: digit, digit, how many zeros to add, and tolerance.</p>
+    <div class="lab" id="ccLab">
+      <div class="lab-head"><h3>🌈 Exhibit: color code decoder</h3>
+        <span><button class="btn" id="cc-quiz">🎲 Quiz me</button></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Band 1 (first digit) <output id="cc-1-o"></output></label><div class="seg bands" id="cc-1"></div></div>
+          <div class="ctl"><label>Band 2 (second digit) <output id="cc-2-o"></output></label><div class="seg bands" id="cc-2"></div></div>
+          <div class="ctl"><label>Band 3 (multiplier) <output id="cc-m-o"></output></label><div class="seg bands" id="cc-m"></div></div>
+          <div class="ctl"><label>Band 4 (tolerance) <output id="cc-t-o"></output></label><div class="seg bands" id="cc-t"></div></div>
+          <div class="ctl" id="cc-guessbox" hidden><label for="cc-g">Value in ohms</label>
+            <div class="guess"><input id="cc-g" type="text" inputmode="decimal" placeholder="e.g. 4700 or 4.7k"><button class="btn" id="cc-check">Check</button><button class="btn ghost" id="cc-exit">Done</button></div></div>
+        </div>
+        <div class="viz">
+          <svg id="cc-svg" viewBox="0 0 420 140" role="img" aria-label="Resistor with color bands"></svg>
+          <div class="readouts">
+            <div class="ro big"><span>Value</span><b id="cc-r-v"></b></div>
+            <div class="ro"><span>Tolerance</span><b id="cc-r-t"></b></div>
+            <div class="ro"><span>Could really be</span><b id="cc-r-rng"></b></div>
+          </div>
+          <div class="verdict" id="cc-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Memory trick for black, brown, red, orange, yellow, green, blue, violet, gray, white (0–9): "<b>B</b>etter <b>B</b>e <b>R</b>ight <b>O</b>r <b>Y</b>our <b>G</b>reat <b>B</b>ig <b>V</b>enture <b>G</b>oes <b>W</b>rong."</p>
+    </div>
+
+    <div class="cols">
+      <div class="card">
+        <h4>Bench task: build a resistance from parts</h4>
+        <p>Given three 100 Ω resistors, you can make:</p>
+        <ul class="tight">
+          <li>300 Ω: all three in series.</li>
+          <li>33.3 Ω: all three in parallel (100 ÷ 3).</li>
+          <li>150 Ω: one in series with two in parallel (100 + 50).</li>
+          <li>66.7 Ω: two in series (200) in parallel with one (100): 200 × 100 ÷ 300.</li>
+        </ul>
+        <p>Measure the real resistors first: a "100 Ω" 5% resistor can be anywhere from 95 to 105 Ω.</p>
+      </div>
+      <div class="card">
+        <h4>Bench task: read a USB charger label</h4>
+        <p>A label says <b>Output: 5V ⎓ 2A</b>. (⎓ is the symbol for DC.) Power = 5 × 2 = <b>10 W</b>.</p>
+        <p>A phone battery says <b>3.7 V, 3000 mAh</b>. Energy = 3.7 V × 3.0 Ah = <b>11.1 Wh</b>.</p>
+        <p>Charging time ≈ 11.1 Wh ÷ 10 W ≈ 1.1 hours if nothing were wasted. With about 80% efficiency: 11.1 ÷ (10 × 0.8) ≈ <b>1.4 hours</b>. Using watt-hours avoids a trap: the charger runs at 5 V but the battery at 3.7 V, so you can't just divide mAh by mA.</p>
+      </div>
+      <div class="card">
+        <h4>Bench task: find the fault</h4>
+        <ol class="steps">
+          <li>Check the battery voltage first. A dead battery is the most common "fault."</li>
+          <li>Measure the voltage across each part with the power on.</li>
+          <li>In a series circuit, a part with the <b>full battery voltage</b> across it is <b>open</b> (broken).</li>
+          <li>A part with <b>0 V</b> across it while others work is <b>shorted</b> (or it's a wire).</li>
+          <li>On a breadboard, check for parts in the wrong row or a missing jumper.</li>
+        </ol>
+        <p>Try both faults in the <a href="#ckLab">circuit board exhibit</a> and watch R2's voltage.</p>
+      </div>
+      <div class="card">
+        <h4>Measuring like a pro</h4>
+        <ul class="tight">
+          <li>Write every reading with its unit, and the range the meter was on.</li>
+          <li>Record what the meter shows, digit for digit. Don't round until the final answer.</li>
+          <li>Check your work with Kirchhoff: do the voltages add up to the battery?</li>
+          <li>A negative voltage reading just means the probes are swapped.</li>
+          <li>Batteries sag under load. Measure the battery while the circuit is connected.</li>
+          <li>Pinching both resistor leads with your fingers adds your body's resistance in parallel. Hold just one side.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DEVICES ===================== -->
+<section id="devices">
+  <div class="wrap">
+    <h2>Switches, safety, and history <span class="tag t-volt">Written</span></h2>
+    <p class="sub">Control devices turn circuits on and off and protect them. Safety facts explain why. And a handful of scientists gave their names to the units you use every day.</p>
+    <div class="lab" id="swLab">
+      <div class="lab-head"><h3>🏠 Exhibit: the 3-way light switch</h3><span class="muted"><small>A light you can flip from the top or the bottom of the stairs.</small></span></div>
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label>Switch at the bottom of the stairs</label>
+            <div class="seg" id="sw-a"><button data-v="up" aria-pressed="true">Up</button><button data-v="down">Down</button></div></div>
+          <div class="ctl"><label>Switch at the top of the stairs</label>
+            <div class="seg" id="sw-b"><button data-v="up">Up</button><button data-v="down" aria-pressed="true">Down</button></div>
+            <div class="hint">Each one is an SPDT switch: one common terminal that connects to either of two "traveler" wires.</div></div>
+        </div>
+        <div class="viz">
+          <svg id="sw-svg" viewBox="0 0 560 190" role="img" aria-label="Two SPDT switches wired as a 3-way switch"></svg>
+          <div class="readouts">
+            <div class="ro"><span>Bottom switch</span><b id="sw-r-a"></b></div>
+            <div class="ro"><span>Top switch</span><b id="sw-r-b"></b></div>
+            <div class="ro big"><span>Light</span><b id="sw-r-l"></b></div>
+          </div>
+          <div class="verdict" id="sw-verdict"></div>
+        </div>
+      </div>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <h4>Switches and relays</h4>
+        <ul class="tight">
+          <li><b>Pole</b> = how many separate circuits a switch controls. <b>Throw</b> = how many positions each pole can connect to.</li>
+          <li><b>SPST</b> (single pole, single throw): plain on/off, like a light switch.</li>
+          <li><b>SPDT</b>: one input, two outputs. Used in 3-way switches.</li>
+          <li><b>DPDT</b>: two SPDTs flipped together. Can reverse a motor.</li>
+          <li><b>Momentary</b> push buttons: normally open (NO) or normally closed (NC).</li>
+          <li><b>Relay:</b> a switch flipped by electricity instead of a finger. A small current in a coil pulls a contact closed, so a tiny circuit can switch a big one.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Protection devices</h4>
+        <ul class="tight">
+          <li><b>Fuse:</b> a thin wire that melts if too much current flows, opening the circuit. Replace it after it blows. Your multimeter has one in its amps jack.</li>
+          <li><b>Circuit breaker:</b> does the same job but trips a switch, so you can reset it. Most home circuits are 15 or 20 A.</li>
+          <li><b>GFCI</b> (ground fault circuit interrupter): compares the current going out on the hot wire with the current coming back on neutral. If about <b>5 mA</b> is missing (maybe going through a person to ground), it cuts power in a fraction of a second. Required near water: kitchens, bathrooms, outdoors.</li>
+          <li><b>Ground wire:</b> the third prong. Gives stray current a safe path so a metal case can't become live.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Electrical safety</h4>
+        <p>It's the <b>current</b> through your body that hurts, and voltage is what pushes it through your skin's resistance. Wet skin has much lower resistance, which is why water and electricity are dangerous together.</p>
+        <div class="tablewrap"><table>
+          <tr><th>Current through body</th><th>Rough effect</th></tr>
+          <tr><td>About 1 mA</td><td>A tingle you can feel</td></tr>
+          <tr><td>About 10–20 mA</td><td>Muscles clamp; you may not be able to let go</td></tr>
+          <tr><td>About 100 mA and up</td><td>Can stop the heart's rhythm</td></tr>
+        </table></div>
+        <p class="muted"><small>Numbers vary by person and path. That's why GFCIs trip at around 5 mA.</small></p>
+      </div>
+      <div class="card">
+        <h4>Who's who</h4>
+        <div class="tablewrap"><table>
+          <tr><th>Scientist</th><th>Known for</th></tr>
+          <tr><td><b>Charles-Augustin de Coulomb</b> (1736–1806)</td><td>Measured the force between charges with a torsion balance (1785). Unit of charge: coulomb.</td></tr>
+          <tr><td><b>Alessandro Volta</b> (1745–1827)</td><td>Built the first battery, the voltaic pile (1800), from zinc and copper discs and salty cloth. Unit: volt.</td></tr>
+          <tr><td><b>André-Marie Ampère</b> (1775–1836)</td><td>Showed that currents push and pull on each other; founded the study of electrodynamics. Unit: ampere.</td></tr>
+          <tr><td><b>Georg Ohm</b> (1789–1854)</td><td>Found that current is proportional to voltage (1827): Ohm's law. Unit: ohm.</td></tr>
+          <tr><td><b>George Boole</b> (1815–1864)</td><td>Invented the algebra of true and false (1847–1854) that logic gates run on: Boolean algebra.</td></tr>
+          <tr><td><b>Gustav Kirchhoff</b> (1824–1887)</td><td>Laws for voltage around loops and current at junctions (1845).</td></tr>
+          <tr><td><b>Heinrich Hertz</b> (1857–1894)</td><td>Proved radio waves exist (1887). Unit of frequency: hertz (cycles per second).</td></tr>
+        </table></div>
+        <p class="muted"><small>Faraday and Tesla were on the 2026 list but aren't named in the 2027 rules summary.</small></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FLASHCARDS ===================== -->
+<section id="flashcards">
+  <div class="wrap">
+    <h2>Flashcards</h2>
+    <p class="sub">Tap a card to flip it. <button class="btn ghost" id="fc-shuffle" style="margin-left:6px">Shuffle</button> <button class="btn ghost" id="fc-reset">Flip all back</button></p>
+    <div class="cards" id="fc"></div>
+  </div>
+</section>
+
+<!-- ===================== GAME PLAN ===================== -->
+<section id="plan">
+  <div class="wrap">
+    <h2>Game plan</h2>
+    <p class="sub">How to practice, how to split the work with your partner, and how to organize your notes.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>🗓 A practice schedule</h4>
+        <div class="timeline">
+          <div><b>8+ weeks out:</b> Read this page. Get a cheap multimeter, a breadboard, a 9 V battery clip, and a resistor and LED kit. Measure a battery and a resistor tonight.</div>
+          <div><b>6–8 weeks out:</b> Ohm's law, power, and series and parallel until you can do them without looking. Build each exhibit circuit for real and check your math with the meter.</div>
+          <div><b>4–6 weeks out:</b> LEDs and diodes, then digital logic: truth tables, De Morgan, binary adding. Practice the mystery resistor and two-LED tasks on the bench.</div>
+          <div><b>2–4 weeks out:</b> Timed practice tests (skip 2026 questions on magnets and capacitors). Add every missed idea to your binder.</div>
+          <div><b>Last week:</b> Fresh battery in your meter. Tab your binder. Flashcards and one full timed run with your partner.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h4>👯 Splitting 50 minutes between two partners</h4>
+        <ul class="tight">
+          <li>Decide roles ahead of time. One common split: <b>Partner A</b> starts the bench task while <b>Partner B</b> starts the written test, then they swap or meet in the middle.</li>
+          <li>The bench partner should be the one who's practiced the meter most. The written partner owns logic and history.</li>
+          <li>Pull the test apart if the supervisor allows it.</li>
+          <li>Save the <b>last 5 minutes</b> to check each other's math and units. A blank answer is always wrong; a guess might be right.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>📒 What to put in your binder</h4>
+        <ul class="tight">
+          <li>Page 1: every formula with units (Ohm's law, power, energy, series and parallel, divider, Coulomb, R = ρL/A).</li>
+          <li>The resistor color code with a worked example.</li>
+          <li>LED forward voltages by color and the resistor formula.</li>
+          <li>All seven gate symbols with truth tables; De Morgan's laws; a 2-to-1 MUX; half and full adder tables.</li>
+          <li>Schematic symbols; switch types (SPST, SPDT, DPDT); fuse, breaker, GFCI.</li>
+          <li>The scientists table and key dates.</li>
+          <li>Your own multimeter's dial: which jack, which setting for each job.</li>
+        </ul>
+        <p class="muted"><small>Any amount of paper is allowed, but you only have 50 minutes. Tabs and a one-page formula sheet up front beat a thick, messy binder.</small></p>
+      </div>
+      <div class="card">
+        <h4>📏 Units cheat sheet</h4>
+        <div class="tablewrap"><table>
+          <tr><td>1 kΩ / 1 MΩ</td><td>1,000 Ω / 1,000,000 Ω</td></tr>
+          <tr><td>1 mA / 1 µA</td><td>0.001 A / 0.000001 A</td></tr>
+          <tr><td>1 kWh</td><td>1,000 W for 1 hour = 3,600,000 J</td></tr>
+          <tr><td>1 W</td><td>1 joule per second = 1 V × 1 A</td></tr>
+          <tr><td>1 mAh</td><td>1 mA for 1 hour = 3.6 coulombs</td></tr>
+          <tr><td>1 N</td><td>About 0.225 pounds of force</td></tr>
+          <tr><td>1 µC</td><td>0.000001 coulomb</td></tr>
+        </table></div>
+      </div>
+      <div class="card">
+        <h4>🦺 Practicing safely at home</h4>
+        <ul class="tight">
+          <li>Stick to batteries and USB power. Never experiment with wall outlets.</li>
+          <li>Never short a battery's terminals with a wire. Lithium and 9 V batteries can get hot enough to burn.</li>
+          <li>Resistors can get hot. Check the power: a common resistor is rated ¼ W.</li>
+          <li>Don't look straight into a bright LED up close.</li>
+          <li>Store loose batteries so their ends can't touch keys or coins.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SCORE ===================== -->
+<section id="score">
+  <div class="wrap">
+    <h2>Score calculator</h2>
+    <p class="sub">Plug in your practice results and see where your points come from.</p>
+    <div class="lab">
+      <div class="lab-grid">
+        <div class="controls">
+          <div class="ctl"><label for="sc-w">Written test correct <output id="sc-w-o"></output></label><input id="sc-w" type="range" min="0" max="100" step="1" value="65"></div>
+          <div class="ctl"><label for="sc-h">Hands-on tasks correct <output id="sc-h-o"></output></label><input id="sc-h" type="range" min="0" max="100" step="1" value="50"></div>
+          <div class="ctl"><label for="sc-s">Written test's share of the score <output id="sc-s-o"></output></label><input id="sc-s" type="range" min="50" max="75" step="5" value="60"><div class="hint">The supervisor picks anything from 50 to 75; the hands-on part gets the rest.</div></div>
+        </div>
+        <div class="viz">
+          <svg id="sc-chart" viewBox="0 0 560 120" role="img" aria-label="Score breakdown"></svg>
+          <div class="readouts" id="sc-ro"></div>
+          <div class="verdict" id="sc-verdict"></div>
+        </div>
+      </div>
+      <p class="toy">Treats each part as a simple percent of its share. Real tests weight questions differently.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== VIDEOS ===================== -->
+<section id="videos">
+  <div class="wrap">
+    <h2>Videos and links</h2>
+    <p class="sub">Videos first, then reading. The "search" tiles open a YouTube search for topics with lots of good short videos.</p>
+    <h3>Watch</h3>
+    <div class="vids" id="vids"></div>
+    <h3>Read and practice</h3>
+    <div class="cols">
+      <div class="card">
+        <h4>Rules and event resources</h4>
+        <ul class="tight">
+          <li><a href="https://www.soinc.org/circuit-lab-b">Science Olympiad: Circuit Lab event page</a> (resources, practice slides, practice tests)</li>
+          <li><a href="https://www.soinc.org/rules-2027">2027 Rules Manual request page</a></li>
+          <li><a href="https://www.soinc.org/events/rules-corrections">Rules corrections</a> and <a href="https://www.soinc.org/events/submit-question-and-rule-clarifications">clarifications</a></li>
+          <li><a href="https://scio.ly/docs/circuit-lab">Scio.ly Circuit Lab guide</a> (2027 topics in detail)</li>
+          <li><a href="https://scio.ly/practice">Scio.ly practice questions</a></li>
+          <li>Official practice slides: <a href="https://www.soinc.org/sites/default/files/uploaded_files/1_CircuitLabSlides.Practice01.v3.ppt">Ohm's law</a>, <a href="https://www.soinc.org/sites/default/files/uploaded_files/3_CircuitLabSlides.Practice03.v2.ppt">series and parallel</a>, <a href="https://www.soinc.org/sites/default/files/uploaded_files/9_CircuitLabSlides.Practice09.v2.ppt">resistor marking</a>, <a href="https://www.soinc.org/sites/default/files/uploaded_files/10_CircuitLabSlides.Practice10.v1.ppt">Kirchhoff</a>, <a href="https://www.soinc.org/sites/default/files/uploaded_files/12_CircuitLabSlides.Practice12.v1.pptx">LEDs and diodes</a>, <a href="https://www.soinc.org/sites/default/files/uploaded_files/15_CircuitLabSlides.Practice15.v1.pptx">digital logic</a></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Learn more</h4>
+        <ul class="tight">
+          <li><a href="https://phet.colorado.edu/en/simulations/filter?subjects=physics&amp;type=html">PhET physics simulations</a> (build circuits on screen; try Circuit Construction Kit)</li>
+          <li><a href="http://www.ibiblio.org/kuphaldt/electricCircuits/">Lessons in Electric Circuits</a> (free textbook; DC and Digital volumes)</li>
+          <li><a href="https://openstax.org/details/books/college-physics-2e">OpenStax College Physics</a> (chapters 18–21)</li>
+          <li><a href="https://www.khanacademy.org/science/physics/circuits-topic">Khan Academy: circuits</a></li>
+          <li><a href="https://tryengineering.org/news/science-olympiad-circuit-lab/">TryEngineering: Circuit Lab</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHECKLIST ===================== -->
+<section id="checklist">
+  <div class="wrap">
+    <h2>Tournament-day checklist</h2>
+    <p class="sub">Tick things off as you pack. Your checks are saved on this device. <button class="btn ghost" id="ck-clear">Clear all</button></p>
+    <div class="check" id="ckl"></div>
+  </div>
+</section>
+
+<!-- ===================== GLOSSARY ===================== -->
+<section id="glossary">
+  <div class="wrap">
+    <h2>Glossary</h2>
+    <p class="sub">Every big word on this page, in plain language. Type to filter.</p>
+    <input class="gloss-search" id="gl-q" type="search" placeholder="Search words…" aria-label="Search glossary">
+    <div class="gloss" id="gl"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Made for studying the Science Olympiad Circuit Lab event (2027, Division B). Not an official Science Olympiad resource; the official Rules Manual takes precedence. Lab exhibits are simplified models.</p>
+    <p><a href="../">← All science pages</a></p>
+  </div>
+</footer>
+<script>
+(() => {
+"use strict";
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function txt(parent, x, y, s, attrs = {}) { const t = el("text", { x, y, ...attrs }, parent); t.textContent = s; return t; }
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const fmt = (v, d = 1) => Number(v).toFixed(d);
+
+// segmented buttons -> value getter
+function seg(id, onChange) {
+  const box = document.getElementById(id);
+  box.addEventListener("click", e => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (box.dataset.multi) b.setAttribute("aria-pressed", b.getAttribute("aria-pressed") === "true" ? "false" : "true");
+    else box.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    onChange();
+  });
+  return () => {
+    if (box.dataset.multi) return [...box.querySelectorAll("button[aria-pressed=true]")].map(b => b.dataset.v);
+    const b = box.querySelector("button[aria-pressed=true]"); return b ? b.dataset.v : null;
+  };
+}
+const num = id => parseFloat(document.getElementById(id).value);
+function onInput(ids, fn) { ids.forEach(id => document.getElementById(id).addEventListener("input", fn)); }
+
+// simple line chart helper
+function axes(svg, { x0, y0, w, h, xmin, xmax, ymin, ymax, xticks, yticks, xlabel, ylabel, xfmt = v => v, yfmt = v => v }) {
+  const X = v => x0 + (v - xmin) / (xmax - xmin) * w;
+  const Y = v => y0 + h - (v - ymin) / (ymax - ymin) * h;
+  yticks.forEach(v => { el("line", { x1: x0, x2: x0 + w, y1: Y(v), y2: Y(v), class: "axis" }, svg); txt(svg, x0 - 6, Y(v) + 4, yfmt(v), { "text-anchor": "end", class: "axis-label" }); });
+  xticks.forEach(v => txt(svg, X(v), y0 + h + 15, xfmt(v), { "text-anchor": "middle", class: "axis-label" }));
+  if (xlabel) txt(svg, x0 + w / 2, y0 + h + 30, xlabel, { "text-anchor": "middle", class: "axis-label" });
+  if (ylabel) txt(svg, 12, y0 + h / 2, ylabel, { "text-anchor": "middle", class: "axis-label", transform: `rotate(-90 12 ${y0 + h / 2})` });
+  return { X, Y };
+}
+const path = pts => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join("");
+// mix two #rrggbb colors
+function mix(a, b, t) {
+  const p = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
+  const A = p(a), B = p(b);
+  return "#" + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, "0")).join("");
+}
+
+/* ---- electrical formatting helpers ---- */
+const sig = (v, n = 3) => Number(Number(v).toPrecision(n)).toLocaleString("en-US", { maximumFractionDigits: 6 });
+const fOhm = r => !isFinite(r) ? "∞ (open)" : r >= 1e6 ? sig(r / 1e6) + " MΩ" : r >= 1000 ? sig(r / 1000) + " kΩ" : sig(r) + " Ω";
+const fAmp = i => !isFinite(i) ? "∞" : i >= 1 ? sig(i) + " A" : i >= 1e-3 ? sig(i * 1000) + " mA" : i > 0 ? sig(i * 1e6) + " µA" : "0 mA";
+const fWatt = p => p >= 1 ? sig(p) + " W" : p > 0 ? sig(p * 1000) + " mW" : "0 W";
+const fVolt = v => sig(v) + " V";
+const logv = (id, lo, hi) => lo * Math.pow(hi / lo, num(id) / 100);
+const logpos = (v, lo, hi) => 100 * Math.log(v / lo) / Math.log(hi / lo);
+function niceTop(n) {
+  if (!(n > 0)) return 1;
+  const p = Math.pow(10, Math.floor(Math.log10(n)));
+  for (const m of [1, 2, 2.5, 5, 10]) if (m * p >= n * 0.999) return m * p;
+  return 10 * p;
+}
+const ticks = (top, n = 4) => Array.from({ length: n + 1 }, (_, i) => top * i / n);
+const tfmt = v => Number(v.toPrecision(3)).toString();
+
+/* =============== OHM'S LAW =============== */
+const ohSolve = seg("oh-solve", ohUpdate);
+onInput(["oh-v", "oh-i", "oh-r"], ohUpdate);
+const OH_I = [1e-4, 1], OH_R = [10, 1e5];
+function ohUpdate() {
+  const s = ohSolve();
+  let V = num("oh-v"), I = logv("oh-i", ...OH_I), R = logv("oh-r", ...OH_R);
+  R = Number(R.toPrecision(2)); I = Number(I.toPrecision(2));
+  if (s === "V") V = I * R; else if (s === "I") I = V / R; else R = V / I;
+  ["V", "I", "R"].forEach(k => {
+    document.getElementById("oh-" + k.toLowerCase()).disabled = k === s;
+    document.getElementById("oh-ro-" + k).className = "ro" + (k === s ? " big" : "");
+  });
+  if (s !== "V") $("#oh-v-o").textContent = fVolt(V);
+  if (s !== "I") $("#oh-i-o").textContent = fAmp(I);
+  if (s !== "R") $("#oh-r-o").textContent = fOhm(R);
+  $("#oh-" + s.toLowerCase() + "-o").textContent = "solved ↓";
+  const P = V * I;
+  $("#oh-r-V").textContent = fVolt(V); $("#oh-r-I").textContent = fAmp(I); $("#oh-r-R").textContent = fOhm(R); $("#oh-r-P").textContent = fWatt(P);
+  // triangle
+  const T = $("#oh-tri"); T.innerHTML = "";
+  const regions = { V: "100,10 48.2,105 151.8,105", I: "48.2,105 100,105 100,175 10,175", R: "100,105 151.8,105 190,175 100,175" };
+  for (const k in regions) el("polygon", { points: regions[k], fill: k === s ? css("--copper-soft") : css("--paper"), stroke: "none" }, T);
+  el("polygon", { points: "100,10 10,175 190,175", fill: "none", stroke: css("--ink"), "stroke-width": 2.5, "stroke-linejoin": "round" }, T);
+  el("line", { x1: 48.2, x2: 151.8, y1: 105, y2: 105, stroke: css("--ink"), "stroke-width": 2 }, T);
+  el("line", { x1: 100, x2: 100, y1: 105, y2: 175, stroke: css("--ink"), "stroke-width": 2 }, T);
+  const L = (k, x, y) => txt(T, x, y, k, { "text-anchor": "middle", "font-size": 30, "font-weight": 800, "font-family": "Fraunces,serif", fill: k === s ? css("--copper") : css("--ink") });
+  L("V", 100, 88); L("I", 66, 156); L("R", 134, 156);
+  txt(T, 92, 152, "×", { "text-anchor": "middle", "font-size": 18, fill: css("--muted") });
+  const rule = { V: "V = I × R", I: "I = V ÷ R", R: "R = V ÷ I" }[s];
+  txt(T, 100, 204, "cover " + s + ": " + rule, { "text-anchor": "middle", "font-weight": 800, "font-size": 14 });
+  // I-V chart in mA
+  const C = $("#oh-chart"); C.innerHTML = "";
+  const xmax = niceTop(Math.max(V * 1.4, 2)), Ima = I * 1000, ymax = niceTop(Math.max(Ima * 1.6, 0.01));
+  const { X, Y } = axes(C, { x0: 52, y0: 14, w: 290, h: 170, xmin: 0, xmax, ymin: 0, ymax, xticks: ticks(xmax), yticks: ticks(ymax), xlabel: "voltage (V)", ylabel: "current (mA)", xfmt: tfmt, yfmt: tfmt });
+  const line = (r, color, w, dash, label) => {
+    const vEnd = Math.min(xmax, ymax / 1000 * r);
+    const attrs = { x1: X(0), y1: Y(0), x2: X(vEnd), y2: Y(vEnd / r * 1000), stroke: color, "stroke-width": w };
+    if (dash) attrs["stroke-dasharray"] = dash;
+    el("line", attrs, C);
+    if (label) txt(C, X(vEnd) - 4, Y(vEnd / r * 1000) + (vEnd < xmax ? 14 : -6), label, { "text-anchor": "end", class: "axis-label" });
+  };
+  line(R / 2, css("--muted"), 1, "4 4", "R ÷ 2");
+  line(R * 2, css("--muted"), 1, "4 4", "R × 2");
+  line(R, css("--copper"), 3, null, null);
+  el("circle", { cx: X(V), cy: Y(Ima), r: 6, fill: css("--copper"), stroke: css("--paper"), "stroke-width": 2 }, C);
+  const v = $("#oh-verdict");
+  const hot = P > 0.25, big = I > 0.5;
+  v.className = "verdict" + (P > 2 || big ? " bad" : hot ? " warn" : "");
+  v.textContent = P > 2 ? `${fWatt(P)} is a lot of heat for a little resistor. It would smoke. That's space-heater territory: heaters are just resistors that are built to get hot.`
+    : big ? `${fAmp(I)} is a big current. A multimeter's mA jack is usually fused at 200 mA, so this would blow it.`
+    : hot ? `${fWatt(P)} of heat. A common resistor is rated for ¼ W (250 mW), so this one would get too hot. Use a bigger resistor or less voltage.`
+    : s === "I" ? `${fVolt(V)} ÷ ${fOhm(R)} = ${fAmp(I)}. Double the resistance and the current halves; double the voltage and it doubles.`
+    : s === "R" ? `${fVolt(V)} ÷ ${fAmp(I)} = ${fOhm(R)}. To get ${fAmp(I)} from this battery, that's the resistor to use.`
+    : `${fAmp(I)} × ${fOhm(R)} = ${fVolt(V)}. That's the voltage it takes to push this current through this resistor.`;
+}
+// sensible starting slider positions
+$("#oh-i").value = logpos(0.02, ...OH_I); $("#oh-r").value = logpos(470, ...OH_R);
+ohUpdate();
+
+/* =============== POWER COST =============== */
+const APPS = [["LED bulb", 9, "💡"], ["Laptop", 60, "💻"], ["TV", 100, "📺"], ["Gaming PC", 400, "🖥"], ["Space heater", 1500, "🔥"]];
+const pwApp = seg("pw-a", pwUpdate);
+onInput(["pw-n", "pw-h", "pw-p"], pwUpdate);
+function pwUpdate() {
+  const a = +pwApp(), n = num("pw-n"), h = num("pw-h"), price = num("pw-p");
+  const [name, watts] = APPS[a];
+  $("#pw-a-o").textContent = watts + " W each"; $("#pw-n-o").textContent = n; $("#pw-h-o").textContent = fmt(h, 1) + " h"; $("#pw-p-o").textContent = price + "¢";
+  const cost = w => n * w * h * 30 / 1000 * price / 100;
+  const W = n * watts, kwh = W * h * 30 / 1000, I = W / 120;
+  $("#pw-r-w").textContent = W >= 1000 ? sig(W / 1000) + " kW" : W + " W";
+  $("#pw-r-i").textContent = sig(I) + " A";
+  $("#pw-r-e").textContent = sig(kwh) + " kWh";
+  $("#pw-r-c").textContent = "$" + cost(watts).toFixed(2);
+  const C = $("#pw-chart"); C.innerHTML = "";
+  const max = Math.max(...APPS.map(p => cost(p[1]))), x0 = 140, w = 210;
+  APPS.forEach((p, i) => {
+    const y = 14 + i * 40, c = cost(p[1]), bw = Math.max(2, c / max * w), on = i === a;
+    txt(C, x0 - 10, y + 21, p[2] + " " + p[0], { "text-anchor": "end", "font-weight": on ? 800 : 600, "font-size": 14 });
+    el("rect", { x: x0, y: y + 4, width: bw, height: 26, rx: 6, fill: on ? css("--copper") : css("--line") }, C);
+    txt(C, x0 + bw + 8, y + 22, "$" + c.toFixed(2), { "font-weight": on ? 800 : 600, "font-size": 14 });
+  });
+  txt(C, 10, 214, `each one: ${n} × ${fmt(h, 1)} h a day × 30 days at ${price}¢ per kWh`, { class: "axis-label" });
+  const v = $("#pw-verdict");
+  v.className = "verdict" + (I > 15 ? " bad" : I > 12 ? " warn" : "");
+  v.textContent = I > 15 ? `${fAmp(I)} on one 120 V circuit is more than a 15 A breaker allows. It would trip and cut the power. Spread them across circuits.`
+    : I > 12 ? `${fAmp(I)} is close to a 15 A breaker's limit. Electricians plan circuits to stay under 80% of the breaker (12 A).`
+    : `${n} × ${watts} W = ${W} W. × ${fmt(h, 1)} h × 30 days ÷ 1000 = ${sig(kwh)} kWh. × $${(price / 100).toFixed(2)} = $${cost(watts).toFixed(2)} a month.`;
+}
+pwUpdate();
+
+/* =============== SERIES & PARALLEL =============== */
+const ckTopo = seg("ck-topo", ckUpdate), ckFault = seg("ck-fault", ckUpdate);
+onInput(["ck-v", "ck-r1", "ck-r2", "ck-r3"], ckUpdate);
+let ckQuiz = null;
+function ckSolve(topo, V, R, fault) {
+  const R2 = fault === "open" ? Infinity : fault === "short" ? 0 : R[1];
+  const Rs = [R[0], R2, R[2]];
+  let Req, I, Vk, Ik, short = false;
+  if (topo === "series") {
+    Req = Rs[0] + Rs[1] + Rs[2];
+    if (!isFinite(Req)) { I = 0; Vk = [0, V, 0]; } else { I = V / Req; Vk = Rs.map(r => I * r); }
+    Ik = [I, I, I];
+  } else if (topo === "parallel") {
+    if (R2 === 0) { short = true; Req = 0; I = Infinity; Vk = [0, 0, 0]; Ik = [0, Infinity, 0]; }
+    else { Ik = Rs.map(r => isFinite(r) ? V / r : 0); I = Ik[0] + Ik[1] + Ik[2]; Req = V / I; Vk = [V, V, V]; }
+  } else {
+    const Rp = !isFinite(R2) ? Rs[2] : R2 === 0 ? 0 : R2 * Rs[2] / (R2 + Rs[2]);
+    Req = Rs[0] + Rp; I = V / Req; const Vp = I * Rp;
+    Vk = [I * Rs[0], Vp, Vp];
+    Ik = [I, !isFinite(R2) ? 0 : R2 === 0 ? I : Vp / R2, R2 === 0 ? 0 : Vp / Rs[2]];
+  }
+  const Pk = Vk.map((v, i) => isFinite(Ik[i]) ? v * Ik[i] : 0);
+  return { Req, I, Vk, Ik, Pk, short };
+}
+// draw a resistor (zigzag) along a horizontal or vertical run
+function resistor(svg, a, b, fixed, vertical, label, state, heat, note) {
+  const ink = css("--ink"), hot = mix(css("--ink").length === 7 ? css("--ink") : "#222222", css("--copper"), heat);
+  const P = (u, w) => vertical ? [fixed + w, u] : [u, fixed + w];
+  const mid = (a + b) / 2, h = 30;
+  const wire = (u1, u2) => { const p = P(u1, 0), q = P(u2, 0); el("line", { x1: p[0], y1: p[1], x2: q[0], y2: q[1], stroke: ink, "stroke-width": 2.5, "stroke-linecap": "round" }, svg); };
+  wire(a, mid - h);
+  if (state === "open") {
+    wire(mid + h, b);
+    const p = P(mid, 0);
+    txt(svg, p[0] + (vertical ? -8 : 0), p[1] + (vertical ? 4 : -8), "✂ open", { "text-anchor": vertical ? "end" : "middle", "font-weight": 800, "font-size": 12, fill: css("--copper") });
+  } else {
+    const pts = [P(mid - h, 0)];
+    for (let k = 0; k < 6; k++) pts.push(P(mid - h + (k + 0.5) * (2 * h / 6), k % 2 ? -9 : 9));
+    pts.push(P(mid + h, 0));
+    el("path", { d: path(pts), fill: "none", stroke: state === "short" ? css("--muted") : hot, "stroke-width": 3, "stroke-linejoin": "round", opacity: state === "short" ? .4 : 1 }, svg);
+    wire(mid + h, b);
+    if (state === "short") {
+      const p = P(mid - h - 4, vertical ? -16 : -16), q = P(mid + h + 4, vertical ? -16 : -16), p0 = P(mid - h - 4, 0), q0 = P(mid + h + 4, 0);
+      el("path", { d: path([p0, p, q, q0]), fill: "none", stroke: css("--copper"), "stroke-width": 3 }, svg);
+    }
+  }
+  const lp = P(mid, vertical ? 18 : -22);
+  txt(svg, lp[0], lp[1] + (vertical ? -8 : 0), label, { "text-anchor": vertical ? "start" : "middle", "font-weight": 800, "font-size": 16 });
+  (Array.isArray(note) ? note : [note]).forEach((n, j) => { if (n) txt(svg, lp[0], lp[1] + (vertical ? 12 : 50) + j * 16, n, { "text-anchor": vertical ? "start" : "middle", "font-size": 14, fill: css("--muted") }); });
+}
+function ckUpdate() {
+  const topo = ckQuiz ? ckQuiz.topo : ckTopo(), fault = ckQuiz ? "none" : ckFault();
+  const V = ckQuiz ? ckQuiz.V : num("ck-v"), R = ckQuiz ? ckQuiz.R : [num("ck-r1"), num("ck-r2"), num("ck-r3")];
+  $("#ck-v-o").textContent = fVolt(V);
+  ["r1", "r2", "r3"].forEach((k, i) => $("#ck-" + k + "-o").textContent = fOhm(R[i]));
+  const s = ckSolve(topo, V, R, fault);
+  const svg = $("#ck-svg"); svg.innerHTML = "";
+  const ink = css("--ink"), top = 50, bot = 220, bx = 60, RX = 480;
+  const maxP = Math.max(...s.Pk, 1e-9);
+  const st = i => i === 1 && fault !== "none" ? fault : "ok";
+  const note = i => ckQuiz || s.short ? "" : [fVolt(s.Vk[i]), fAmp(s.Ik[i])];
+  const lab = i => `R${i + 1} = ${fOhm(R[i])}`;
+  const heat = i => s.Pk[i] / maxP;
+  const line = (x1, y1, x2, y2) => el("line", { x1, y1, x2, y2, stroke: ink, "stroke-width": 2.5, "stroke-linecap": "round" }, svg);
+  // battery
+  line(bx, top, bx, 125); line(bx, 137, bx, bot);
+  el("line", { x1: bx - 18, x2: bx + 18, y1: 125, y2: 125, stroke: ink, "stroke-width": 3 }, svg);
+  el("line", { x1: bx - 9, x2: bx + 9, y1: 137, y2: 137, stroke: ink, "stroke-width": 5 }, svg);
+  txt(svg, bx + 22, 122, "+", { "font-weight": 800 });
+  txt(svg, bx - 24, 135, fVolt(V), { "text-anchor": "end", "font-weight": 800, "font-size": 16 });
+  if (topo === "series") {
+    resistor(svg, bx, 270, top, false, lab(0), st(0), heat(0), note(0));
+    resistor(svg, 270, RX, top, false, lab(1), st(1), heat(1), note(1));
+    resistor(svg, top, bot, RX, true, lab(2), st(2), heat(2), note(2));
+    line(RX, bot, bx, bot);
+  } else if (topo === "parallel") {
+    line(bx, top, RX, top); line(bx, bot, RX, bot);
+    [200, 340, RX].forEach((x, i) => resistor(svg, top, bot, x, true, lab(i), st(i), heat(i), note(i)));
+  } else {
+    resistor(svg, bx, 240, top, false, lab(0), st(0), heat(0), note(0));
+    line(240, top, RX, top); line(bx, bot, RX, bot);
+    resistor(svg, top, bot, 330, true, lab(1), st(1), heat(1), note(1));
+    resistor(svg, top, bot, RX, true, lab(2), st(2), heat(2), note(2));
+  }
+  txt(svg, 300, 255, ckQuiz ? "Quiz: what's the total resistance?" : s.short ? "⚠ short circuit across the battery" : `battery current ${fAmp(s.I)}`, { "text-anchor": "middle", "font-weight": 800, "font-size": 16, fill: s.short ? css("--copper") : ink });
+  // readouts
+  $("#ck-r-req").textContent = ckQuiz && !ckQuiz.done ? "?" : s.short ? "≈ 0 Ω (short!)" : fOhm(s.Req);
+  $("#ck-r-i").textContent = ckQuiz && !ckQuiz.done ? "?" : s.short ? "huge" : fAmp(s.I);
+  $("#ck-r-p").textContent = ckQuiz && !ckQuiz.done ? "?" : s.short ? "huge" : fWatt(V * s.I);
+  $("#ck-table").innerHTML = ckQuiz && !ckQuiz.done ? "" : "<tr><th>Part</th><th>Resistance</th><th>Voltage</th><th>Current</th><th>Power</th></tr>" +
+    [0, 1, 2].map(i => `<tr><td><b>R${i + 1}</b></td><td>${i === 1 && fault === "open" ? "open" : i === 1 && fault === "short" ? "shorted" : fOhm(R[i])}</td><td>${s.short ? "0 V" : fVolt(s.Vk[i])}</td><td>${fAmp(s.Ik[i])}</td><td>${s.short ? "—" : fWatt(s.Pk[i])}</td></tr>`).join("");
+  const k = $("#ck-kirch"), fv = x => fmt(x, 2);
+  if (ckQuiz && !ckQuiz.done) k.textContent = "Hidden until you answer.";
+  else if (s.short) k.textContent = "No sensible numbers: an ideal short draws unlimited current.";
+  else if (topo === "series") k.textContent = `KVL: ${s.Vk.map(fv).join(" + ")} = ${fv(s.Vk[0] + s.Vk[1] + s.Vk[2])} V = battery ✓`;
+  else if (topo === "parallel") k.textContent = `KCL: ${s.Ik.map(i => fmt(i * 1000, 1)).join(" + ")} = ${fmt(s.I * 1000, 1)} mA = battery current ✓`;
+  else k.textContent = `KVL: ${fv(s.Vk[0])} + ${fv(s.Vk[1])} = ${fv(s.Vk[0] + s.Vk[1])} V ✓ · KCL: ${fmt(s.Ik[1] * 1000, 1)} + ${fmt(s.Ik[2] * 1000, 1)} = ${fmt(s.I * 1000, 1)} mA ✓`;
+  const v = $("#ck-verdict");
+  if (ckQuiz && !ckQuiz.done) { v.className = "verdict warn"; v.textContent = "Find the total resistance and type it in. Series: add. Parallel: product over sum for two, or 1/R for three."; return; }
+  if (ckQuiz && ckQuiz.done) return;
+  v.className = "verdict" + (s.short ? " bad" : fault !== "none" ? " warn" : "");
+  v.textContent = s.short ? "R2 shorted puts a bare wire straight across the battery. The current shoots up, the wire and battery get hot, and in a house a fuse or breaker would cut it off."
+    : fault === "open" && topo === "series" ? `Open circuit: no current flows anywhere, and the whole ${fVolt(V)} appears across the break at R2. A voltmeter reading the full battery across one part means that part is broken.`
+    : fault === "open" && topo === "parallel" ? "R2's branch is open, but R1 and R3 still get the full battery and keep working. Total current drops because one path is gone. That's why houses are wired in parallel."
+    : fault === "open" ? "With R2 open, all the current after R1 has to go through R3. Total resistance goes up, so total current goes down."
+    : fault === "short" && topo === "series" ? `R2 shorted gets 0 V, and R1 and R3 now share the whole ${fVolt(V)}. Total resistance drops, so the current rises.`
+    : fault === "short" ? "R2 shorted also bypasses R3 (they're in parallel), so R3 gets 0 V. Only R1 is left to limit the current."
+    : topo === "series" ? `Same current through all three. The biggest resistor gets the biggest share of the voltage. Total = ${R.map(fOhm).join(" + ")} = ${fOhm(s.Req)}.`
+    : topo === "parallel" ? `Every branch gets the full ${fVolt(V)}. The smallest resistor takes the most current. The total, ${fOhm(s.Req)}, is smaller than the smallest branch.`
+    : `R2 and R3 in parallel make ${fOhm(s.Req - R[0])}, then add R1 in series: ${fOhm(s.Req)}. Work from the inside out.`;
+}
+const NICE = [100, 150, 220, 330, 470, 680, 1000];
+const pick = a => a[Math.floor(Math.random() * a.length)];
+$("#ck-quiz").addEventListener("click", () => {
+  ckQuiz = { topo: pick(["series", "parallel", "combo"]), V: pick([6, 9, 12]), R: [pick(NICE), pick(NICE), pick(NICE)], done: false };
+  $("#ck-guessbox").hidden = false; $("#ck-g").value = "";
+  ["ck-v", "ck-r1", "ck-r2", "ck-r3"].forEach(id => document.getElementById(id).disabled = true);
+  ckUpdate(); $("#ck-g").focus();
+});
+$("#ck-check").addEventListener("click", () => {
+  const g = parseFloat($("#ck-g").value); if (isNaN(g) || !ckQuiz) return;
+  const s = ckSolve(ckQuiz.topo, ckQuiz.V, ckQuiz.R, "none"), err = Math.abs(g - s.Req) / s.Req;
+  ckQuiz.done = true; ckUpdate();
+  const v = $("#ck-verdict");
+  v.className = "verdict" + (err <= 0.02 ? "" : " bad");
+  v.textContent = `The answer is ${fOhm(s.Req)}. You said ${fOhm(g)}. ` + (err <= 0.02 ? "Nailed it! 🎉 Press Quiz me for another." : ckQuiz.topo === "series" ? "In series, just add them up." : ckQuiz.topo === "parallel" ? "In parallel, add the 1/R values and flip the result. It must be smaller than the smallest resistor." : "Do R2 ∥ R3 first (product ÷ sum), then add R1.");
+});
+function ckEnd(restore) {
+  if (ckQuiz && restore) { $("#ck-v").value = ckQuiz.V; ["r1", "r2", "r3"].forEach((k, i) => $("#ck-" + k).value = ckQuiz.R[i]); document.querySelectorAll("#ck-topo button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === ckQuiz.topo ? "true" : "false")); }
+  ckQuiz = null; $("#ck-guessbox").hidden = true;
+  ["ck-v", "ck-r1", "ck-r2", "ck-r3"].forEach(id => document.getElementById(id).disabled = false);
+  ckUpdate();
+}
+$("#ck-exit").addEventListener("click", () => ckEnd(true));
+$("#ck-g").addEventListener("keydown", e => { if (e.key === "Enter") $("#ck-check").click(); });
+["ck-topo", "ck-fault"].forEach(id => document.getElementById(id).addEventListener("click", () => { if (ckQuiz) ckEnd(false); }));
+ckUpdate();
+
+/* =============== LEDs =============== */
+const LEDC = { red: { vf: 2.0, c: "#ff3b30", n: "red" }, yellow: { vf: 2.1, c: "#ffcc00", n: "yellow" }, green: { vf: 3.0, c: "#30d158", n: "green" }, blue: { vf: 3.2, c: "#0a84ff", n: "blue" }, white: { vf: 3.2, c: "#f2f2f2", n: "white" } };
+const LD_R = [10, 4700];
+const ldS = seg("ld-s", ldUpdate), ldC = seg("ld-c", ldUpdate), ldD = seg("ld-d", ldUpdate);
+onInput(["ld-r"], ldUpdate);
+const ledI = (V, vf) => 0.02 * Math.exp((V - vf) / 0.08);   // amps; 20 mA at the forward voltage
+function ldSolve(Vs, R, vf) {   // find V across LED where resistor current = LED current
+  let lo = 0, hi = Vs;
+  for (let i = 0; i < 60; i++) { const m = (lo + hi) / 2; if ((Vs - m) / R > ledI(m, vf)) lo = m; else hi = m; }
+  const Vl = (lo + hi) / 2; return { Vl, I: (Vs - Vl) / R };
+}
+function ldUpdate() {
+  const Vs = +ldS(), col = LEDC[ldC()], fwd = ldD() === "fwd";
+  let R = logv("ld-r", ...LD_R); R = Number(R.toPrecision(2));
+  $("#ld-r-o").textContent = fOhm(R); $("#ld-c-o").textContent = "about " + fmt(col.vf, 1) + " V";
+  const sol = fwd ? ldSolve(Vs, R, col.vf) : { Vl: Vs, I: 0 };
+  const I = sol.I, glow = clamp(I / 0.02, 0, 1.4), burnt = I > 0.03;
+  // circuit drawing
+  const S = $("#ld-circ"); S.innerHTML = "";
+  const ink = css("--ink");
+  const ln = (x1, y1, x2, y2) => el("line", { x1, y1, x2, y2, stroke: ink, "stroke-width": 2.5, "stroke-linecap": "round" }, S);
+  // loop: battery on left (x=40), resistor on top, LED on right (x=160)
+  ln(40, 30, 40, 118); ln(40, 132, 40, 220); ln(40, 220, 150, 220); ln(40, 30, 70, 30); ln(130, 30, 150, 30); ln(150, 30, 150, 95); ln(150, 155, 150, 220);
+  el("line", { x1: 24, x2: 56, y1: 118, y2: 118, stroke: ink, "stroke-width": 3 }, S);
+  el("line", { x1: 32, x2: 48, y1: 132, y2: 132, stroke: ink, "stroke-width": 5 }, S);
+  txt(S, 60, 116, "+", { "font-weight": 800 }); txt(S, 20, 165, Vs + " V", { "font-weight": 800, "font-size": 13, transform: "rotate(-90 20 165)", "text-anchor": "middle" });
+  const zz = [[70, 30]]; for (let k = 0; k < 6; k++) zz.push([70 + (k + 0.5) * 10, 30 + (k % 2 ? -8 : 8)]); zz.push([130, 30]);
+  el("path", { d: path(zz), fill: "none", stroke: ink, "stroke-width": 3, "stroke-linejoin": "round" }, S);
+  txt(S, 100, 62, fOhm(R), { "text-anchor": "middle", "font-weight": 800, "font-size": 13 });
+  // LED glow + symbol (pointing down = forward, current flows clockwise from + at top)
+  if (!burnt && glow > 0.02) el("circle", { cx: 150, cy: 125, r: 18 + 26 * Math.min(glow, 1), fill: col.c, opacity: 0.18 + 0.5 * Math.min(glow, 1) }, S);
+  const tri = fwd ? "132,100 168,100 150,140" : "132,140 168,140 150,100";
+  el("polygon", { points: tri, fill: burnt ? "#555555" : glow > 0.02 ? col.c : css("--paper"), stroke: ink, "stroke-width": 2 }, S);
+  const by = fwd ? 140 : 100;
+  el("line", { x1: 132, x2: 168, y1: by, y2: by, stroke: ink, "stroke-width": 3 }, S);
+  ln(150, 95, 150, 100); ln(150, 140, 150, 155);
+  [[172, 112], [176, 126]].forEach(([x, y]) => el("path", { d: `M${x} ${y} l10 -8 m-5 0 h5 v5`, fill: "none", stroke: ink, "stroke-width": 1.5 }, S));
+  if (burnt) txt(S, 100, 246, "💥 burnt out", { "text-anchor": "middle", "font-weight": 800, "font-size": 14, fill: css("--copper") });
+  // chart
+  const C = $("#ld-chart"); C.innerHTML = "";
+  const ymax = 40;
+  const { X, Y } = axes(C, { x0: 46, y0: 14, w: 296, h: 190, xmin: 0, xmax: Vs, ymin: 0, ymax, xticks: ticks(Vs, Vs === 5 ? 5 : 3), yticks: [0, 10, 20, 30, 40], xlabel: "volts across the LED", ylabel: "current (mA)", xfmt: tfmt });
+  el("line", { x1: X(0), x2: X(Vs), y1: Y(30), y2: Y(30), stroke: css("--copper"), "stroke-width": 1, "stroke-dasharray": "3 4" }, C);
+  txt(C, X(Vs) - 4, Y(30) - 4, "burnout zone", { "text-anchor": "end", class: "axis-label" });
+  if (fwd) {
+    const pts = []; for (let k = 0; k <= 200; k++) { const vv = Vs * k / 200, ii = ledI(vv, col.vf) * 1000; if (ii > ymax) { pts.push([X(col.vf + 0.08 * Math.log(ymax / 20)), Y(ymax)]); break; } pts.push([X(vv), Y(ii)]); }
+    el("path", { d: path(pts), fill: "none", stroke: css("--copper"), "stroke-width": 3 }, C);
+    // load line from (0, Vs/R) to (Vs, 0), clipped at ymax
+    const i0 = Vs / R * 1000, vStart = i0 > ymax ? Vs - ymax / 1000 * R : 0;
+    el("line", { x1: X(vStart), y1: Y(Math.min(i0, ymax)), x2: X(Vs), y2: Y(0), stroke: css("--wire"), "stroke-width": 2.5 }, C);
+    if (I * 1000 <= ymax) el("circle", { cx: X(sol.Vl), cy: Y(I * 1000), r: 6, fill: css("--ink"), stroke: css("--paper"), "stroke-width": 2 }, C);
+    else txt(C, X(Vs) - 4, Y(ymax) + 14, `off the chart: ${fmt(I * 1000, 0)} mA ↑`, { "text-anchor": "end", "font-weight": 800, "font-size": 12, fill: css("--copper") });
+  } else txt(C, X(Vs / 2), Y(20), "Backwards: reverse biased, no current", { "text-anchor": "middle", "font-weight": 800, "font-size": 13 });
+  // readouts
+  const best = (Vs - col.vf) / 0.015;
+  $("#ld-r-i").textContent = fAmp(I);
+  $("#ld-r-vl").textContent = fwd ? fVolt(sol.Vl) : fVolt(Vs) + " (reverse)";
+  $("#ld-r-vr").textContent = fVolt(Vs - (fwd ? sol.Vl : Vs));
+  $("#ld-r-best").textContent = best > 0 ? fOhm(best) : "no resistor will do";
+  const v = $("#ld-verdict");
+  const ma = I * 1000;
+  if (!fwd) { v.className = "verdict" + (Vs > 5 ? " bad" : " warn"); v.textContent = Vs > 5 ? `Backwards, so no light. And ${Vs} V in reverse is more than most LEDs' 5 V limit, so it may be damaged. Long leg goes to +.` : "Backwards: a diode only lets current through one way, so it stays dark. Flip it so the long leg (anode) faces +."; return; }
+  v.className = "verdict" + (ma > 30 ? " bad" : ma > 20 || ma < 1 ? " warn" : "");
+  v.textContent = ma > 30 ? `${fmt(ma, 0)} mA is way past the ~20 mA rating. The LED would flash bright and die. Use at least ${fOhm(best)}.`
+    : ma > 20 ? `${fmt(ma, 0)} mA: very bright but over the usual 20 mA rating, so it won't last. Step the resistor up a size.`
+    : ma >= 5 ? `${fmt(ma, 1)} mA: a nice, safe glow. Check: (${Vs} − ${fmt(sol.Vl, 2)}) ÷ ${fOhm(R)} = ${fAmp(I)}.`
+    : ma >= 1 ? `${fmt(ma, 1)} mA: dim but lit. Use a smaller resistor for more light.`
+    : Vs - col.vf < 0.3 ? `Barely glowing: a ${col.n} LED needs about ${fmt(col.vf, 1)} V, and the ${Vs} V supply hardly pushes past that. Use a bigger supply.`
+    : `Too little current to see. The resistor is eating almost all the voltage. Slide it smaller.`;
+}
+$("#ld-r").value = logpos(390, ...LD_R);
+ldUpdate();
+
+/* =============== LOGIC GATES =============== */
+const GATES = {
+  AND: [(a, b) => a & b, "A·B", "Output is 1 only when A AND B are both 1."],
+  OR: [(a, b) => a | b, "A+B", "Output is 1 when A OR B (or both) is 1."],
+  NOT: [a => 1 - a, "A′", "NOT flips its one input: 1 becomes 0, 0 becomes 1. It's also called an inverter."],
+  NAND: [(a, b) => 1 - (a & b), "(A·B)′", "NOT-AND: 0 only when both are 1. By De Morgan it's the same as A′ + B′. NAND is universal: you can build any gate from NANDs."],
+  NOR: [(a, b) => 1 - (a | b), "(A+B)′", "NOT-OR: 1 only when both are 0. By De Morgan it's the same as A′·B′. NOR is universal too."],
+  XOR: [(a, b) => a ^ b, "A⊕B", "Exclusive OR: 1 when the inputs are different. It's the sum bit of a half adder."],
+  XNOR: [(a, b) => 1 - (a ^ b), "(A⊕B)′", "Exclusive NOR: 1 when the inputs match. A 3-way light switch works like this."]
+};
+let lgMystery = null;
+const lgGate = seg("lg-g", lgUpdate), lgIn = seg("lg-in", lgUpdate);
+function lgUpdate() {
+  const ins = lgIn(), a = ins.includes("A") ? 1 : 0, b = ins.includes("B") ? 1 : 0;
+  const g = lgMystery || lgGate(), [f, ex, desc] = GATES[g], one = g === "NOT";
+  const out = f(a, b);
+  $("#lg-g-o").textContent = lgMystery ? "?" : g;
+  const S = $("#lg-svg"); S.innerHTML = "";
+  const on = css("--copper"), off = css("--muted"), ink = css("--ink");
+  const wire = (x1, y1, x2, y2, v) => el("line", { x1, y1, x2, y2, stroke: v ? on : off, "stroke-width": v ? 5 : 3, "stroke-linecap": "round" }, S);
+  const lamp = (x, y, v, label) => { el("circle", { cx: x, cy: y, r: 14, fill: v ? on : css("--paper"), stroke: v ? on : off, "stroke-width": 2 }, S); txt(S, x, y + 5, v ? "1" : "0", { "text-anchor": "middle", "font-weight": 800, fill: v ? "#fff" : ink }); txt(S, x - 24, y + 5, label, { "text-anchor": "end", "font-weight": 800 }); };
+  const ya = one ? 110 : 80, yb = 140;
+  wire(64, ya, 220, ya, a); lamp(64, ya, a, "A");
+  if (!one) { wire(64, yb, 220, yb, b); lamp(64, yb, b, "B"); }
+  const bub = ["NAND", "NOR", "XNOR", "NOT"].includes(g), xo = lgMystery ? 306 : bub ? 316 : 302;
+  wire(xo, 110, 470, 110, out);
+  const body = { fill: css("--paper"), stroke: ink, "stroke-width": 3, "stroke-linejoin": "round" };
+  if (lgMystery) {
+    el("rect", { x: 200, y: 55, width: 106, height: 110, rx: 14, ...body }, S);
+    txt(S, 253, 125, "?", { "text-anchor": "middle", "font-size": 44, "font-weight": 800, "font-family": "Fraunces,serif" });
+  } else if (g === "AND" || g === "NAND") el("path", { d: "M205 60 H252 A50 50 0 0 1 252 160 H205 Z", ...body }, S);
+  else if (g === "NOT") el("path", { d: "M215 70 L300 110 L215 150 Z", ...body }, S);
+  else {
+    el("path", { d: "M198 60 Q245 60 302 110 Q245 160 198 160 Q228 110 198 60 Z", ...body }, S);
+    if (g === "XOR" || g === "XNOR") el("path", { d: "M186 60 Q216 110 186 160", fill: "none", stroke: ink, "stroke-width": 3 }, S);
+  }
+  if (bub && !lgMystery) el("circle", { cx: 309, cy: 110, r: 7, ...body }, S);
+  if (!lgMystery) txt(S, 250, 190, g, { "text-anchor": "middle", "font-weight": 800, "font-size": 16 });
+  el("circle", { cx: 490, cy: 110, r: 22, fill: out ? on : css("--paper"), stroke: out ? on : off, "stroke-width": 2 }, S);
+  if (out) el("circle", { cx: 490, cy: 110, r: 34, fill: on, opacity: .2 }, S);
+  txt(S, 490, 117, out ? "1" : "0", { "text-anchor": "middle", "font-weight": 800, "font-size": 20, fill: out ? "#fff" : ink });
+  txt(S, 490, 160, "output Q", { "text-anchor": "middle", class: "axis-label" });
+  // truth table
+  const rows = one ? [[0], [1]] : [[0, 0], [0, 1], [1, 0], [1, 1]];
+  $("#lg-tt").innerHTML = `<tr><th>A</th>${one ? "" : "<th>B</th>"}<th>Q</th></tr>` + rows.map(r => {
+    const cur = r[0] === a && (one || r[1] === b);
+    return `<tr class="${cur ? "on" : ""}"><td>${r[0]}</td>${one ? "" : `<td>${r[1]}</td>`}<td>${f(r[0], r[1])}</td></tr>`;
+  }).join("");
+  $("#lg-r-in").textContent = one ? "A = " + a : `A = ${a}, B = ${b}`;
+  $("#lg-r-out").textContent = "Q = " + out;
+  $("#lg-r-ex").textContent = lgMystery ? "?" : "Q = " + ex;
+  const v = $("#lg-verdict");
+  if (lgMystery) { v.className = "verdict warn"; v.textContent = "Study the Q column. Which gate gives exactly that pattern? Tap its name."; return; }
+  v.className = "verdict";
+  v.textContent = desc + (one ? " (It only uses input A.)" : "");
+}
+document.getElementById("lg-g").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b || !lgMystery) return;
+  const guess = b.dataset.v, ans = lgMystery, v = $("#lg-verdict");
+  const same = (g1, g2) => [0, 1].every(x => [0, 1].every(y => GATES[g1][0](x, y) === GATES[g2][0](x, y)));
+  if (guess === ans || (ans !== "NOT" && guess !== "NOT" && same(guess, ans))) { lgMystery = null; $("#lg-mbox").hidden = true; lgUpdate(); v.className = "verdict"; v.textContent = `Yes, it's ${ans}! 🎉 ` + GATES[ans][2]; }
+  else { b.setAttribute("aria-pressed", "false"); v.className = "verdict bad"; v.textContent = `Not ${guess}. A ${guess} gate would give ${(guess === "NOT" ? [[0], [1]] : [[0, 0], [0, 1], [1, 0], [1, 1]]).map(r => GATES[guess][0](r[0], r[1])).join(", ")} down the Q column. Compare and try again.`; }
+});
+$("#lg-mystery").addEventListener("click", () => {
+  lgMystery = pick(["AND", "OR", "NAND", "NOR", "XOR", "XNOR"]);
+  document.querySelectorAll("#lg-g button").forEach(b => b.setAttribute("aria-pressed", "false"));
+  $("#lg-mbox").hidden = false; lgUpdate();
+});
+$("#lg-exit").addEventListener("click", () => { const g = lgMystery || "AND"; lgMystery = null; $("#lg-mbox").hidden = true; document.querySelectorAll("#lg-g button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === g ? "true" : "false")); lgUpdate(); });
+lgUpdate();
+
+/* =============== ADDER =============== */
+const adA = seg("ad-a", adUpdate), adB = seg("ad-b", adUpdate);
+function adUpdate() {
+  const A = adA().reduce((s, x) => s + +x, 0), B = adB().reduce((s, x) => s + +x, 0), sum = A + B;
+  const bits = (n, k) => Array.from({ length: k }, (_, i) => (n >> (k - 1 - i)) & 1);
+  $("#ad-a-o").textContent = bits(A, 4).join("") + " = " + A; $("#ad-b-o").textContent = bits(B, 4).join("") + " = " + B;
+  // carries into each column (col 0 = ones)
+  const carry = [0]; for (let c = 0; c < 4; c++) carry.push(((A >> c & 1) + (B >> c & 1) + carry[c]) >> 1);
+  const S = $("#ad-svg"); S.innerHTML = "";
+  const colX = c => 470 - c * 80;   // c = 0 (ones) at right
+  const on = css("--copper"), ink = css("--ink");
+  txt(S, 40, 40, "carry", { class: "axis-label" }); txt(S, 40, 82, "A", { "font-weight": 800 }); txt(S, 40, 122, "+ B", { "font-weight": 800 }); txt(S, 40, 190, "sum", { "font-weight": 800 });
+  for (let c = 0; c <= 4; c++) {
+    const x = colX(c);
+    txt(S, x, 18, c < 4 ? "×" + (1 << c) : "×16", { "text-anchor": "middle", class: "axis-label" });
+    if (carry[c] && c > 0) { el("circle", { cx: x, cy: 36, r: 11, fill: on, opacity: .2 }, S); txt(S, x, 41, "1", { "text-anchor": "middle", "font-weight": 800, fill: on }); }
+    if (c < 4) {
+      txt(S, x, 88, (A >> c) & 1, { "text-anchor": "middle", "font-size": 26, "font-weight": 800, "font-family": "ui-monospace,monospace" });
+      txt(S, x, 128, (B >> c) & 1, { "text-anchor": "middle", "font-size": 26, "font-weight": 800, "font-family": "ui-monospace,monospace" });
+    }
+    const sb = (sum >> c) & 1;
+    if (c < 4 || sb) txt(S, x, 192, sb, { "text-anchor": "middle", "font-size": 30, "font-weight": 800, "font-family": "ui-monospace,monospace", fill: c === 4 ? on : ink });
+  }
+  el("line", { x1: 130, x2: 510, y1: 150, y2: 150, stroke: ink, "stroke-width": 2.5 }, S);
+  txt(S, 300, 222, `${A} + ${B} = ${sum}`, { "text-anchor": "middle", "font-weight": 800, "font-size": 15 });
+  $("#ad-r-a").textContent = A; $("#ad-r-b").textContent = B;
+  $("#ad-r-s").textContent = sum.toString(2); $("#ad-r-d").textContent = sum;
+  const nc = carry.slice(1).filter(Boolean).length, v = $("#ad-verdict");
+  v.className = "verdict" + (sum > 15 ? " warn" : "");
+  v.textContent = sum > 15 ? `${sum} is bigger than 15, the largest 4-bit number (1111). The last carry spills into a 5th bit: that's called overflow. A real 4-bit adder flags it with its carry-out.`
+    : nc ? `${nc} carr${nc > 1 ? "ies" : "y"}. Whenever a column adds to 2 (1 + 1), you write 0 and carry 1 to the next column left, just like carrying a 10 in regular math.`
+    : "No carries: no column has two 1s, so each sum bit is just A XOR B.";
+}
+adUpdate();
+
+/* =============== COULOMB =============== */
+onInput(["cl-q1", "cl-q2", "cl-r"], clUpdate);
+const K = 8.99e9;
+const clF = (q1, q2, rcm) => K * Math.abs(q1 * q2) * 1e-12 / Math.pow(rcm / 100, 2);
+const fN = f => f >= 1000 ? sig(f / 1000) + " kN" : f >= 0.01 ? sig(f) + " N" : f > 0 ? sig(f * 1000) + " mN" : "0 N";
+function clUpdate() {
+  const q1 = num("cl-q1"), q2 = num("cl-q2"), r = num("cl-r");
+  const sgn = q => q > 0 ? "+" + q : q < 0 ? "−" + Math.abs(q) : "0";
+  $("#cl-q1-o").textContent = sgn(q1) + " µC"; $("#cl-q2-o").textContent = sgn(q2) + " µC"; $("#cl-r-o").textContent = r + " cm (" + fmt(r / 2.54, 1) + " in)";
+  const F = clF(q1, q2, r), repel = q1 * q2 > 0, none = q1 * q2 === 0;
+  const S = $("#cl-svg"); S.innerHTML = "";
+  const d = 70 + r * 3.6, x1 = 280 - d / 2, x2 = 280 + d / 2, y = 62;
+  const ball = (x, q) => { el("circle", { cx: x, cy: y, r: 24, fill: q > 0 ? css("--copper") : q < 0 ? css("--wire") : css("--line") }, S); txt(S, x, y + 7, q > 0 ? "+" : q < 0 ? "−" : "0", { "text-anchor": "middle", "font-size": 24, "font-weight": 800, fill: "#fff" }); };
+  if (!none) {
+    let L = clamp(12 + 16 * Math.log10(F * 100 + 1), 10, 110); const col = css("--ink");
+    const arrow = (x, dir) => { const xe = x + dir * L; el("line", { x1: x, x2: xe, y1: y, y2: y, stroke: col, "stroke-width": 4 }, S); el("polygon", { points: `${xe + dir * 10},${y} ${xe},${y - 7} ${xe},${y + 7}`, fill: col }, S); };
+    if (repel) { const L0 = L; L = Math.min(L0, x1 - 46); arrow(x1 - 26, -1); arrow(x2 + 26, 1); }
+    else { arrow(x1 + 26, 1); arrow(x2 - 26, -1); }
+  }
+  ball(x1, q1); ball(x2, q2);
+  el("line", { x1, x2, y1: 112, y2: 112, stroke: css("--muted"), "stroke-width": 1 }, S);
+  txt(S, 280, 126, r + " cm", { "text-anchor": "middle", class: "axis-label" });
+  // chart
+  const C = $("#cl-chart"); C.innerHTML = "";
+  const ymax = niceTop(none ? 1 : F * 4);
+  const { X, Y } = axes(C, { x0: 60, y0: 12, w: 480, h: 170, xmin: 0, xmax: 100, ymin: 0, ymax, xticks: [0, 20, 40, 60, 80, 100], yticks: ticks(ymax), xlabel: "distance apart (cm)", ylabel: "force (N)", yfmt: tfmt });
+  if (!none) {
+    const pts = []; for (let rr = 1; rr <= 100; rr += 0.5) { const f = clF(q1, q2, rr); if (f <= ymax) pts.push([X(rr), Y(f)]); }
+    el("path", { d: path(pts), fill: "none", stroke: css("--copper"), "stroke-width": 3 }, C);
+    el("circle", { cx: X(r), cy: Y(F), r: 6, fill: css("--copper"), stroke: css("--paper"), "stroke-width": 2 }, C);
+    if (r * 2 <= 100) { el("circle", { cx: X(r * 2), cy: Y(F / 4), r: 5, fill: "none", stroke: css("--wire"), "stroke-width": 2 }, C); txt(C, X(r * 2) + 8, Y(F / 4) - 8, "2× as far → ¼", { class: "axis-label" }); }
+  }
+  $("#cl-r-f").textContent = fN(F); $("#cl-r-d").textContent = none ? "neither" : repel ? "push apart" : "pull together";
+  $("#cl-r-lb").textContent = none ? "0 lb" : sig(F * 0.2248) + " lb"; $("#cl-r-2").textContent = fN(F / 4);
+  const v = $("#cl-verdict");
+  v.className = "verdict" + (none ? " warn" : "");
+  v.textContent = none ? "One charge is zero, so there's no electric force at all. (A neutral object can still be attracted by induction, like a balloon sticking to a wall.)"
+    : `${repel ? "Same signs repel" : "Opposite signs attract"}. ${fN(F)} ≈ the weight of ${F * 0.2248 >= 1 ? sig(F * 0.2248, 2) + " lb" : sig(F / 9.8 * 1000, 2) + " g"}. Halve the distance and it's 4× stronger: ${fN(F * 4)}.`;
+}
+clUpdate();
+
+/* =============== MULTIMETER =============== */
+const mmMode = seg("mm-mode", mmUpdate), mmAt = seg("mm-at", mmUpdate), mmPw = seg("mm-pw", mmUpdate);
+const MM_R1 = 1000, VB = 9;
+let mmR2 = 2200, mmMyst = false;
+function mmRead(mode, at, pw, R2) {
+  const I = VB / (MM_R1 + R2), V1 = I * MM_R1, V2 = I * R2;
+  const on = pw === "on";
+  if (mode === "V") {
+    if (!on) return { s: "0.00 V", what: "nothing: no battery", I: 0, ok: "warn", why: "With the battery unhooked there's no voltage anywhere. Voltage is measured with the power on." };
+    if (at === "r1") return { s: V1.toFixed(2) + " V", what: "voltage across R1", I, ok: "good", why: `Correct! The voltmeter goes across the part. R1 gets ${V1.toFixed(2)} V of the battery's 9.`, v: V1 };
+    if (at === "r2") return { s: V2.toFixed(2) + " V", what: "voltage across R2", I, ok: "good", why: `Correct! R2 gets ${V2.toFixed(2)} V. Together with R1: ${V1.toFixed(2)} + ${V2.toFixed(2)} = 9.00 V (KVL).`, v: V2 };
+    if (at === "bat") return { s: "9.00 V", what: "battery voltage", I, ok: "good", why: "Correct: across the battery reads the whole supply. Always check this first in a troubleshooting task." };
+    return { s: "9.00 V", what: "the whole battery", I: 9 / 1e7, ok: "warn", why: "A voltmeter in series has 10 MΩ inside, so almost no current flows and the meter just reads the battery. The circuit stops working. Voltmeters go across, not in line." };
+  }
+  if (mode === "A") {
+    if (!on) return { s: "0.00 mA", what: "no current", I: 0, ok: "warn", why: "No battery, no current. Turn the power on to measure current." };
+    if (at === "ser") return { s: (I * 1000).toFixed(2) + " mA", what: "circuit current", I, ok: "good", why: `Correct! The ammeter sits in the path, so all the current goes through it: ${fAmp(I)}. In series that's the current through both resistors.` };
+    if (at === "r1") { const i = VB / R2; return { s: (i * 1000).toFixed(2) + " mA", what: "wrong: R1 is bypassed", I: i, ok: "bad", why: "An ammeter has almost no resistance, so putting it across R1 shorts R1 out. Now only R2 limits the current, and the reading is meaningless. Ammeters go in series." }; }
+    if (at === "r2") { const i = VB / MM_R1; return { s: (i * 1000).toFixed(2) + " mA", what: "wrong: R2 is bypassed", I: i, ok: "bad", why: "Across R2, the ammeter shorts R2 out. More current flows than normal and the reading is wrong. Ammeters go in series." }; }
+    return { s: "FUSE", what: "blown fuse", I: Infinity, ok: "bad", why: "An ammeter straight across the battery is a dead short. A huge current flows and the meter's 200 mA fuse blows. This is the #1 way students break multimeters." };
+  }
+  // ohms
+  if (on) return { s: "Err", what: "meaningless", I, ok: "bad", why: "Never measure resistance with the power on. The ohmmeter sends its own small current; the battery's voltage confuses it and can damage the meter." };
+  if (at === "r1") return { s: fOhm(MM_R1), what: "R1's resistance", I: 0, ok: "good", why: "Correct: power off, probes across the part. (Best of all is to pull the part out so nothing else is in parallel with it.)" };
+  if (at === "r2") return { s: R2 ? fOhm(R2) : "", what: "R2's resistance", I: 0, ok: "good", why: "Correct: power off, probes across R2." };
+  if (at === "bat") return { s: "OL", what: "not a resistor", I: 0, ok: "warn", why: "You can't measure a battery's resistance with an ohmmeter. Use the voltage setting to check a battery." };
+  return { s: "OL", what: "open loop", I: 0, ok: "warn", why: "With the loop broken and the battery out, there's no complete path through the meter: OL (over limit)." };
+}
+function mmUpdate() {
+  const mode = mmMode(), at = mmAt(), pw = mmPw();
+  const r = mmRead(mode, at, pw, mmR2);
+  const S = $("#mm-svg"); S.innerHTML = "";
+  const ink = css("--ink"), bx = 80, top = 50, bot = 210, rx = 440;
+  const ln = (x1, y1, x2, y2, extra = {}) => el("line", { x1, y1, x2, y2, stroke: ink, "stroke-width": 2.5, "stroke-linecap": "round", ...extra }, S);
+  // battery
+  const bOff = pw === "off";
+  ln(bx, top, bx, 120); ln(bx, 132, bx, bot);
+  el("line", { x1: bx - 18, x2: bx + 18, y1: 120, y2: 120, stroke: ink, "stroke-width": 3, opacity: bOff ? .35 : 1 }, S);
+  el("line", { x1: bx - 9, x2: bx + 9, y1: 132, y2: 132, stroke: ink, "stroke-width": 5, opacity: bOff ? .35 : 1 }, S);
+  txt(S, bx - 24, 130, bOff ? "off" : "9 V", { "text-anchor": "end", "font-weight": 800, "font-size": 13 });
+  resistor(S, bx, 320, top, false, "R1 = 1 kΩ", "ok", 0, "");
+  ln(320, top, rx, top);
+  resistor(S, top, bot, rx, true, mmMyst ? "R2 = ?" : "R2 = " + fOhm(mmR2), "ok", 0, "");
+  // bottom wire (maybe broken for series)
+  if (at === "ser") { ln(rx, bot, 330, bot); ln(230, bot, bx, bot); }
+  else ln(rx, bot, bx, bot);
+  // probe leads (drawn first so the meter covers their ends)
+  const P = { r1: [[110, top], [300, top]], r2: [[rx, 78], [rx, 182]], bat: [[bx, 90], [bx, 168]], ser: [[230, bot], [330, bot]] }[at];
+  [[250, css("--copper")], [310, "#222222"]].forEach(([mx, c], k) => {
+    const [px, py] = P[k], my = py < 130 ? 100 : 160, cy = (my + py) / 2;
+    el("path", { d: `M${mx} ${my} C ${mx} ${cy}, ${px} ${cy}, ${px} ${py}`, fill: "none", stroke: c, "stroke-width": 3 }, S);
+    el("circle", { cx: px, cy: py, r: 6, fill: c, stroke: css("--paper"), "stroke-width": 2 }, S);
+  });
+  // meter
+  el("rect", { x: 200, y: 92, width: 160, height: 76, rx: 12, fill: css("--volt"), stroke: ink, "stroke-width": 2 }, S);
+  el("rect", { x: 212, y: 102, width: 136, height: 40, rx: 6, fill: css("--lcd") }, S);
+  txt(S, 340, 132, r.s, { "text-anchor": "end", "font-size": 22, "font-weight": 800, "font-family": "ui-monospace,Menlo,monospace", fill: css("--lcd-ink") });
+  txt(S, 280, 160, { V: "V⎓", A: "mA", O: "Ω" }[mode] + " · COM", { "text-anchor": "middle", "font-size": 11, "font-weight": 800, fill: "#222222" });
+  txt(S, 280, 250, "red probe · black probe (COM)", { "text-anchor": "middle", class: "axis-label" });
+  $("#mm-r-read").textContent = r.s; $("#mm-r-what").textContent = r.what;
+  $("#mm-r-i").textContent = isFinite(r.I) ? fAmp(r.I) : "huge";
+  const v = $("#mm-verdict");
+  v.className = "verdict" + (r.ok === "bad" ? " bad" : r.ok === "warn" ? " warn" : "");
+  if (mmMyst && mode === "O") { $("#mm-r-read").textContent = "—"; v.className = "verdict warn"; v.textContent = "This task allows voltage readings only. Switch to Volts and measure across R1 and R2."; return; }
+  v.textContent = r.why;
+}
+$("#mm-mystery").addEventListener("click", () => {
+  mmR2 = pick([330, 470, 680, 1500, 2200, 3300, 4700, 6800]); mmMyst = true;
+  $("#mm-guessbox").hidden = false; $("#mm-g").value = ""; mmUpdate(); $("#mm-g").focus();
+});
+$("#mm-check").addEventListener("click", () => {
+  const g = parseFloat($("#mm-g").value); if (isNaN(g) || !mmMyst) return;
+  const err = Math.abs(g - mmR2) / mmR2, v = $("#mm-verdict");
+  v.className = "verdict" + (err <= 0.05 ? "" : " bad");
+  v.textContent = `R2 was ${fOhm(mmR2)}. You said ${fOhm(g)}, off by ${fmt(err * 100, 1)}%. ` + (err <= 0.05 ? "Within 5%: full marks. 🎉" : "Measure V1 across R1 and V2 across R2, then R2 = 1000 × V2 ÷ V1.");
+});
+$("#mm-exit").addEventListener("click", () => { mmMyst = false; mmR2 = 2200; $("#mm-guessbox").hidden = true; mmUpdate(); });
+$("#mm-g").addEventListener("keydown", e => { if (e.key === "Enter") $("#mm-check").click(); });
+mmUpdate();
+
+/* =============== COLOR CODE =============== */
+const COLORS = [["black", "#111111"], ["brown", "#7b4a1e"], ["red", "#d62828"], ["orange", "#f77f00"], ["yellow", "#f6c90e"], ["green", "#2a9d3a"], ["blue", "#1d5fd1"], ["violet", "#7b3fbf"], ["gray", "#8a8a8a"], ["white", "#f4f4f4"]];
+const GOLD = ["gold", "#c9a43a"], SILVER = ["silver", "#b8bcc2"];
+const MULT = [...COLORS.slice(0, 7).map((c, i) => [...c, Math.pow(10, i)]), [...GOLD, 0.1]];
+const TOL = [["brown", "#7b4a1e", 1], ["red", "#d62828", 2], [...GOLD, 5], [...SILVER, 10]];
+const swb = (name, hex, v, on) => `<button data-v="${v}" aria-pressed="${on}"><span class="sw" style="background:${hex}"></span>${name}</button>`;
+$("#cc-1").innerHTML = COLORS.slice(1).map((c, i) => swb(c[0], c[1], i + 1, i + 1 === 4)).join("");
+$("#cc-2").innerHTML = COLORS.map((c, i) => swb(c[0], c[1], i, i === 7)).join("");
+$("#cc-m").innerHTML = MULT.map((c, i) => swb(c[0], c[1], i, i === 2)).join("");
+$("#cc-t").innerHTML = TOL.map((c, i) => swb(c[0], c[1], i, i === 2)).join("");
+const cc1 = seg("cc-1", ccUpdate), cc2 = seg("cc-2", ccUpdate), ccM = seg("cc-m", ccUpdate), ccT = seg("cc-t", ccUpdate);
+let ccQuiz = null;
+function ccVals() { return ccQuiz ? ccQuiz : { b1: +cc1(), b2: +cc2(), m: +ccM(), t: +ccT() }; }
+function ccUpdate() {
+  const { b1, b2, m, t } = ccVals();
+  const val = (b1 * 10 + b2) * MULT[m][2], tol = TOL[t][2];
+  ["1", "2", "m", "t"].forEach((k, i) => $("#cc-" + k + "-o").textContent = ccQuiz ? "?" : [b1, b2, "×" + sig(MULT[m][2]), "±" + tol + "%"][i]);
+  const S = $("#cc-svg"); S.innerHTML = "";
+  el("line", { x1: 15, x2: 405, y1: 70, y2: 70, stroke: css("--muted"), "stroke-width": 4 }, S);
+  el("rect", { x: 80, y: 38, width: 260, height: 64, rx: 26, fill: css("--body"), stroke: css("--ink"), "stroke-width": 1.5 }, S);
+  const band = (x, hex) => el("rect", { x, y: 38, width: 18, height: 64, fill: hex, stroke: "rgba(0,0,0,.25)" }, S);
+  band(120, COLORS[b1][1]); band(158, COLORS[b2][1]); band(196, MULT[m][1]); band(290, TOL[t][1]);
+  txt(S, 129, 124, "1st", { "text-anchor": "middle", class: "axis-label" }); txt(S, 167, 124, "2nd", { "text-anchor": "middle", class: "axis-label" }); txt(S, 205, 124, "×", { "text-anchor": "middle", class: "axis-label" }); txt(S, 299, 124, "±", { "text-anchor": "middle", class: "axis-label" });
+  txt(S, 80, 24, "↓ start reading at this end", { "text-anchor": "start", class: "axis-label" });
+  const hide = ccQuiz && !ccQuiz.done;
+  $("#cc-r-v").textContent = hide ? "?" : fOhm(val);
+  $("#cc-r-t").textContent = hide ? "?" : "±" + tol + "%";
+  $("#cc-r-rng").textContent = hide ? "?" : fOhm(val * (1 - tol / 100)) + " – " + fOhm(val * (1 + tol / 100));
+  const v = $("#cc-verdict");
+  if (hide) { v.className = "verdict warn"; v.textContent = "What's this resistor's value? Type it in ohms (you can write 4.7k for 4,700)."; return; }
+  if (ccQuiz && ccQuiz.done) return;
+  v.className = "verdict";
+  v.textContent = `${COLORS[b1][0]} (${b1}), ${COLORS[b2][0]} (${b2}), ${MULT[m][0]} (${m === 7 ? "÷10" : m === 0 ? "no zeros" : "add " + m + " zero" + (m > 1 ? "s" : "")}) → ${b1}${b2}${m > 0 && m < 7 ? "0".repeat(m) : ""} ${m === 7 ? "÷ 10 = " + sig(val) + " " : ""}Ω = ${fOhm(val)}, give or take ${tol}%.`;
+}
+const ccParse = s => { const m = String(s).trim().replace(/,/g, "").match(/^([\d.]+)\s*([kKmM]?)/); if (!m) return NaN; return parseFloat(m[1]) * (m[2] ? (m[2].toLowerCase() === "k" ? 1e3 : 1e6) : 1); };
+$("#cc-quiz").addEventListener("click", () => {
+  ccQuiz = { b1: 1 + Math.floor(Math.random() * 9), b2: Math.floor(Math.random() * 10), m: Math.floor(Math.random() * 5), t: 2, done: false };
+  $("#cc-guessbox").hidden = false; $("#cc-g").value = ""; ccUpdate(); $("#cc-g").focus();
+});
+$("#cc-check").addEventListener("click", () => {
+  if (!ccQuiz) return; const g = ccParse($("#cc-g").value); if (isNaN(g)) return;
+  const val = (ccQuiz.b1 * 10 + ccQuiz.b2) * MULT[ccQuiz.m][2], ok = Math.abs(g - val) / val < 0.01;
+  ccQuiz.done = true; ccUpdate();
+  const v = $("#cc-verdict"); v.className = "verdict" + (ok ? "" : " bad");
+  v.textContent = `It's ${fOhm(val)}. You said ${fOhm(g)}. ` + (ok ? "Correct! 🎉 Press Quiz me for another." : `Digits ${ccQuiz.b1} and ${ccQuiz.b2}, then add ${ccQuiz.m} zero${ccQuiz.m === 1 ? "" : "s"}.`);
+});
+$("#cc-exit").addEventListener("click", () => {
+  if (ccQuiz) [["cc-1", ccQuiz.b1], ["cc-2", ccQuiz.b2], ["cc-m", ccQuiz.m], ["cc-t", ccQuiz.t]].forEach(([id, val]) => document.querySelectorAll("#" + id + " button").forEach(b => b.setAttribute("aria-pressed", +b.dataset.v === val ? "true" : "false")));
+  ccQuiz = null; $("#cc-guessbox").hidden = true; ccUpdate();
+});
+$("#cc-g").addEventListener("keydown", e => { if (e.key === "Enter") $("#cc-check").click(); });
+["cc-1", "cc-2", "cc-m", "cc-t"].forEach(id => document.getElementById(id).addEventListener("click", () => { if (ccQuiz) { ccQuiz = null; $("#cc-guessbox").hidden = true; ccUpdate(); } }));
+ccUpdate();
+
+/* =============== 3-WAY SWITCH =============== */
+const swA = seg("sw-a", swUpdate), swB = seg("sw-b", swUpdate);
+function swUpdate() {
+  const a = swA(), b = swB(), lit = a === b;
+  const S = $("#sw-svg"); S.innerHTML = "";
+  const ink = css("--ink"), hot = css("--copper"), dead = css("--muted");
+  const w = (x1, y1, x2, y2, live) => el("line", { x1, y1, x2, y2, stroke: live ? hot : dead, "stroke-width": live ? 4 : 2.5, "stroke-linecap": "round" }, S);
+  const yA = a === "up" ? 50 : 130, yB = b === "up" ? 50 : 130;
+  // source
+  txt(S, 20, 95, "120 V", { "font-weight": 800, "font-size": 12 });
+  w(60, 90, 120, 90, true);
+  // travelers
+  w(170, 50, 390, 50, a === "up"); w(170, 130, 390, 130, a === "down");
+  txt(S, 280, 42, "traveler 1", { "text-anchor": "middle", class: "axis-label" }); txt(S, 280, 148, "traveler 2", { "text-anchor": "middle", class: "axis-label" });
+  // blades
+  w(120, 90, 170, yA, true); w(440, 90, 390, yB, lit);
+  [[120, 90], [170, 50], [170, 130], [390, 50], [390, 130], [440, 90]].forEach(([x, y]) => el("circle", { cx: x, cy: y, r: 5, fill: css("--paper"), stroke: ink, "stroke-width": 2 }, S));
+  txt(S, 145, 175, "bottom switch", { "text-anchor": "middle", class: "axis-label" }); txt(S, 415, 175, "top switch", { "text-anchor": "middle", class: "axis-label" });
+  w(440, 90, 490, 90, lit);
+  if (lit) el("circle", { cx: 515, cy: 90, r: 36, fill: css("--volt"), opacity: .3 }, S);
+  el("circle", { cx: 515, cy: 90, r: 20, fill: lit ? css("--volt") : css("--paper"), stroke: ink, "stroke-width": 2 }, S);
+  el("path", { d: "M505 90 l5 -8 l5 8 l5 -8", fill: "none", stroke: ink, "stroke-width": 1.5 }, S);
+  $("#sw-r-a").textContent = a; $("#sw-r-b").textContent = b; $("#sw-r-l").textContent = lit ? "ON 💡" : "off";
+  const v = $("#sw-verdict"); v.className = "verdict" + (lit ? "" : " warn");
+  v.textContent = lit ? "Both switches pick the same traveler, so there's a complete path and the light is on. Flip either one to turn it off."
+    : "The switches pick different travelers, so the path is broken. Flip either one and they'll match again. Light = A XNOR B: on when the switches match.";
+}
+swUpdate();
+
+/* =============== FLASHCARDS =============== */
+const FC = [
+  ["Basics", "What does Ohm's law say?", "V = I × R. Voltage (volts) = current (amps) × resistance (ohms)."],
+  ["Basics", "9 V across 450 Ω. What current?", "I = V ÷ R = 9 ÷ 450 = 0.02 A = 20 mA."],
+  ["Basics", "Three ways to write power?", "P = I × V = I² × R = V² ÷ R. Units: watts."],
+  ["Basics", "What is a kilowatt-hour?", "Energy: 1,000 watts used for 1 hour. 3.6 million joules. What the electric bill charges for."],
+  ["Basics", "Why does a stretched wire have more resistance?", "R = ρL ÷ A. It's longer and thinner. Twice as long → 4× the resistance."],
+  ["Basics", "Peak voltage of a 120 V RMS outlet?", "120 × √2 ≈ 170 V. US outlets are 60 Hz AC."],
+  ["Circuits", "Series rule for current and voltage?", "Same current through every part; the voltages add up to the battery."],
+  ["Circuits", "Parallel rule for current and voltage?", "Same voltage across every branch; the branch currents add up to the total."],
+  ["Circuits", "Two 100 Ω resistors in parallel?", "50 Ω. Equal resistors in parallel: divide by how many there are."],
+  ["Circuits", "Kirchhoff's voltage law?", "Around any closed loop, the voltage rises and drops add to zero."],
+  ["Circuits", "Kirchhoff's current law?", "Current into a junction = current out."],
+  ["Circuits", "In a series circuit, one part reads the full battery voltage. What's wrong?", "That part is open (broken). No current flows, so all the voltage appears across the gap."],
+  ["Circuits", "What is a short circuit?", "A very low-resistance path that bypasses part of a circuit. Across a battery it draws a huge current."],
+  ["LEDs", "Which LED leg goes to +?", "The longer leg, the anode. The cathode side has a flat edge on the rim."],
+  ["LEDs", "Resistor for a red LED (2 V) on 5 V at 15 mA?", "R = (5 − 2) ÷ 0.015 = 200 Ω."],
+  ["LEDs", "Forward voltage of a silicon diode?", "About 0.7 V."],
+  ["LEDs", "Why do blue LEDs need more voltage than red?", "Blue light carries more energy per photon, so the forward voltage is higher (about 3.2 V vs 2 V)."],
+  ["LEDs", "How do you make two LEDs equally bright?", "Give them the same current: put them in series, or give each its own resistor."],
+  ["Logic", "Truth table for NAND?", "00→1, 01→1, 10→1, 11→0. Only 0 when both inputs are 1."],
+  ["Logic", "What makes NAND and NOR special?", "They're universal: you can build any other gate from just NANDs, or just NORs."],
+  ["Logic", "De Morgan's laws?", "(A·B)′ = A′ + B′ and (A+B)′ = A′·B′. Break the bar, change the sign."],
+  ["Logic", "What does XOR output?", "1 when the inputs are different, 0 when they match."],
+  ["Logic", "Half adder outputs?", "Sum = A XOR B. Carry = A AND B."],
+  ["Logic", "1101 in binary is what number?", "8 + 4 + 0 + 1 = 13."],
+  ["Logic", "What does a multiplexer do?", "Uses select lines to choose which of several inputs passes to the output. 2-to-1: Q = S′A + SB."],
+  ["Charges", "Coulomb's law?", "F = k q₁ q₂ ÷ r², k = 8.99 × 10⁹. Double the distance → ¼ the force."],
+  ["Charges", "Charging by induction vs conduction?", "Conduction: touching, same sign. Induction: nearby without touching (plus grounding), opposite sign."],
+  ["Bench", "How do you connect a voltmeter? An ammeter?", "Voltmeter across the part (parallel). Ammeter in the path (series), with the red lead in the A or mA jack."],
+  ["Bench", "Red, red, orange, gold resistor?", "2, 2, add 3 zeros → 22,000 Ω = 22 kΩ, ±5%."],
+  ["Bench", "Find R2 from voltages: R1 = 1 kΩ, V1 = 3 V, V2 = 6 V.", "Same current in series: R2 = R1 × V2 ÷ V1 = 1000 × 6 ÷ 3 = 2 kΩ."],
+  ["Devices", "What does a GFCI do?", "Cuts power in a fraction of a second if current going out and coming back differ by about 5 mA, which could mean it's flowing through a person."],
+  ["Devices", "Fuse vs circuit breaker?", "Both open a circuit on too much current. A fuse melts and gets replaced; a breaker trips and can be reset."],
+  ["History", "Who built the first battery?", "Alessandro Volta, the voltaic pile, 1800."],
+  ["History", "What did George Boole invent?", "Boolean algebra (1840s–1850s): the math of true/false that logic gates use."]
+];
+let fcOrder = FC.map((_, i) => i);
+function fcRender() {
+  const box = $("#fc"); box.innerHTML = "";
+  fcOrder.forEach(i => {
+    const [cat, q, a] = FC[i];
+    const b = document.createElement("button"); b.className = "flash"; b.setAttribute("aria-label", "Flashcard: " + q);
+    b.innerHTML = `<div class="in"><div class="f"><small>${cat}</small><b>${q}</b></div><div class="b">${a}</div></div>`;
+    b.addEventListener("click", () => b.classList.toggle("flip"));
+    box.appendChild(b);
+  });
+}
+$("#fc-shuffle").addEventListener("click", () => { for (let i = fcOrder.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [fcOrder[i], fcOrder[j]] = [fcOrder[j], fcOrder[i]]; } fcRender(); });
+$("#fc-reset").addEventListener("click", () => document.querySelectorAll(".flash.flip").forEach(f => f.classList.remove("flip")));
+fcRender();
+
+/* =============== SCORE =============== */
+onInput(["sc-w", "sc-h", "sc-s"], scUpdate);
+function scUpdate() {
+  const w = num("sc-w"), h = num("sc-h"), s = num("sc-s");
+  $("#sc-w-o").textContent = w + "%"; $("#sc-h-o").textContent = h + "%"; $("#sc-s-o").textContent = s + " / " + (100 - s);
+  const parts = [["Written", w * s / 100, "--wire"], ["Hands-on", h * (100 - s) / 100, "--copper"]];
+  const total = parts[0][1] + parts[1][1];
+  const svg = $("#sc-chart"); svg.innerHTML = "";
+  let x = 10; const scale = 540 / 100;
+  parts.forEach(p => { const ww = p[1] * scale; if (ww <= 0) return; el("rect", { x, y: 20, width: Math.max(0, ww - 2), height: 46, rx: 8, fill: css(p[2]) }, svg); if (ww > 30) txt(svg, x + ww / 2, 48, fmt(p[1], p[1] % 1 ? 1 : 0), { "text-anchor": "middle", "font-weight": 800, fill: "#fff" }); x += ww; });
+  if (total < 100) { const ww = (100 - total) * scale; el("rect", { x, y: 20, width: ww, height: 46, rx: 8, fill: "none", stroke: css("--line"), "stroke-width": 2, "stroke-dasharray": "5 4" }, svg); if (ww > 60) txt(svg, x + ww / 2, 48, "not yet: " + fmt(100 - total), { "text-anchor": "middle", class: "axis-label" }); }
+  txt(svg, 10, 92, "The whole bar is 100 points. Colors are points you have; the dashed box is what's left.", { class: "axis-label" });
+  $("#sc-ro").innerHTML = parts.map((p, i) => `<div class="ro"><span>${p[0]} (of ${i ? 100 - s : s})</span><b>${fmt(p[1])}</b></div>`).join("") + `<div class="ro big"><span>Total</span><b>${fmt(total)} <small style="font-size:.8rem">of 100</small></b></div>`;
+  const missW = s - parts[0][1], missH = (100 - s) - parts[1][1];
+  const v = $("#sc-verdict");
+  v.className = "verdict" + (total < 50 ? " warn" : "");
+  v.textContent = missH > missW
+    ? `The hands-on part has ${fmt(missH)} points still on the table, more than the written test (${fmt(missW)}). Bench skills repeat from tournament to tournament, so practice there pays off fastest: each 10% more is ${fmt((100 - s) / 10)} points.`
+    : missW - missH < 5 && h < 85
+      ? `About the same left in each part (${fmt(missW)} written, ${fmt(missH)} hands-on). The bench tasks are usually quicker to improve, so start there.`
+      : `The written test has the most left: ${fmt(missW)} points. Each 10% more there is ${fmt(s / 10)} points. Tab your binder so you can find formulas fast, and drill the flashcards.`;
+}
+scUpdate();
+
+/* =============== VIDEOS =============== */
+const VIDS = [
+  { href: "https://youtu.be/ZhS-WAcnFtw", t: "Circuit Lab \"Shocking Insights\" webinar", s: "Science Olympiad · event supervisors explain the event", icon: "⚡", src: "Official" },
+  { href: "https://www.youtube.com/watch?v=EJeAuQ7pkpc", t: "Intro to electricity", s: "Linked from the official event page", icon: "🔋", src: "YouTube" },
+  { href: "https://www.youtube.com/watch?v=XU-8KB5FQjo", t: "STEM Session: circuits", s: "Linked from the official event page", icon: "🔌", src: "YouTube" },
+  { href: "https://phet.colorado.edu/en/simulations/filter?subjects=physics&type=html", t: "Build circuits on screen", s: "PhET simulations · try Circuit Construction Kit: DC", icon: "🧪", src: "PhET" },
+  { q: "how to use a multimeter beginners voltage current resistance", t: "How to use a multimeter", s: "Search: volts, amps, and ohms", icon: "🔧" },
+  { q: "how a breadboard works for beginners", t: "How a breadboard works", s: "Search: rows, rails, and the center gap", icon: "🧩" },
+  { q: "LED current limiting resistor explained", t: "Why LEDs need a resistor", s: "Search: current-limiting resistor", icon: "💡" },
+  { q: "logic gates explained AND OR NOT NAND XOR", t: "Logic gates", s: "Search: gates and truth tables", icon: "🔢" },
+  { q: "binary addition half adder full adder explained", t: "Binary adders", s: "Search: half and full adders", icon: "➕" },
+  { q: "Kirchhoff's voltage and current laws explained simple", t: "Kirchhoff's laws", s: "Search: loops and junctions", icon: "🔁" },
+  { q: "resistor color code how to read", t: "Reading resistor colors", s: "Search: color bands", icon: "🌈" },
+  { q: "how a 3 way light switch works", t: "3-way switches", s: "Search: travelers and SPDT switches", icon: "🏠" }
+];
+$("#vids").innerHTML = VIDS.map(v => {
+  const href = v.href || "https://www.youtube.com/results?search_query=" + encodeURIComponent(v.q);
+  return `<a class="vid" href="${href}" target="_blank" rel="noopener"><div class="thumb" data-src="${v.src ? "▶ " + v.src : "search"}">${v.icon}</div><div class="t"><b>${v.t}</b><span>${v.s}</span></div></a>`;
+}).join("");
+
+/* =============== CHECKLIST =============== */
+const CK = [
+  "Binder of notes, tabbed (formulas, color code, gates, history)", "Two calculators, with fresh batteries", "Your own basic multimeter, if the supervisor allows it",
+  "Fresh 9 V battery for the multimeter", "Spare fuse for the multimeter's mA jack", "Pencils, eraser, and a ruler for drawing schematics",
+  "Safety goggles, if your tournament asks for them", "No phones, smartwatches, or anything with Wi-Fi", "Binder page for your own meter's settings",
+  "One-page formula sheet at the front of the binder", "Team name and number on everything you bring", "Practiced the mystery resistor and two-LED tasks",
+  "Quizzed yourself on gates and the color code this week", "Agreed with your partner who starts the bench task", "Water bottle and a snack for between events"
+];
+let ckState = {};
+try { ckState = JSON.parse(localStorage.getItem("cl-checklist") || "{}"); } catch (e) {}
+$("#ckl").innerHTML = CK.map((c, i) => `<label><input type="checkbox" data-i="${i}" ${ckState[i] ? "checked" : ""}><span>${c}</span></label>`).join("");
+$("#ckl").addEventListener("change", e => { ckState[e.target.dataset.i] = e.target.checked; try { localStorage.setItem("cl-checklist", JSON.stringify(ckState)); } catch (err) {} });
+$("#ck-clear").addEventListener("click", () => { ckState = {}; document.querySelectorAll("#ckl input").forEach(i => i.checked = false); try { localStorage.removeItem("cl-checklist"); } catch (err) {} });
+
+
+/* =============== GLOSSARY =============== */
+const G = [
+  ["AC", "alternating current|AC", "Alternating current: electricity that flips direction back and forth many times a second, like in wall outlets."],
+  ["Ammeter", "ammeters?", "A meter that measures current. It goes in series, in the path of the current."],
+  ["Ampere", "amperes?|amps", "The unit of current. 1 amp = 1 coulomb of charge flowing past each second."],
+  ["Anode", "anodes?", "The positive (+) side of a diode or LED. On an LED it's the longer leg."],
+  ["Binary", "binary", "Counting with only 0 and 1. Each place is worth twice the one to its right: 1, 2, 4, 8…"],
+  ["Boolean expression", "Boolean expressions?|Boolean algebra|Boolean", "A way to write logic as algebra: · for AND, + for OR, a prime or bar for NOT."],
+  ["Breadboard", "breadboards?", "A plastic board with rows of connected holes for building circuits without soldering."],
+  ["Carry", "carry|carries", "In adding, the extra 1 that moves to the next column left when a column's sum is too big for one digit."],
+  ["Cathode", "cathodes?", "The negative (−) side of a diode or LED. Marked with a stripe on a diode and a flat edge on an LED."],
+  ["Circuit breaker", "circuit breakers?|breakers?", "A switch that flips off by itself if too much current flows. You can reset it."],
+  ["Closed circuit", "closed circuit|complete loop", "A circuit with a complete path, so current can flow."],
+  ["Conductor", "conductors?", "A material that lets charge flow easily, like copper or salt water."],
+  ["Coulomb", "coulombs?", "The unit of electric charge. One coulomb is about 6.2 × 10¹⁸ electrons' worth."],
+  ["Coulomb's law", "Coulomb's law", "The force between two charges: F = k q₁ q₂ ÷ r². It gets 4 times weaker when the distance doubles."],
+  ["Current", "current|currents", "The flow of electric charge, measured in amps."],
+  ["DC", "direct current|DC", "Direct current: electricity that flows one way only, like from a battery."],
+  ["De Morgan's laws", "De Morgan's laws?|De Morgan", "Rules for flipping logic: NOT (A AND B) = (NOT A) OR (NOT B), and NOT (A OR B) = (NOT A) AND (NOT B)."],
+  ["Diode", "diodes?", "A part that lets current flow one way and blocks it the other way."],
+  ["Efficiency", "efficiency|efficient", "The share of energy going in that comes out as useful work. The rest is usually wasted as heat."],
+  ["Electric field", "electric fields?", "The region around a charge where other charges feel a push or pull."],
+  ["Electron", "electrons?", "A tiny particle with negative charge. Moving electrons carry the current in metal wires."],
+  ["Electroscope", "electroscopes?", "A simple device with two thin metal leaves that spread apart when charged."],
+  ["Energy", "energy", "The ability to do work. Electrical energy = power × time, in joules or kilowatt-hours."],
+  ["Equivalent resistance", "equivalent resistance|total resistance", "The single resistor that could replace a group of resistors and draw the same current."],
+  ["Forward bias", "forward bias|forward biased", "A diode connected so current can flow: + to the anode."],
+  ["Forward voltage", "forward voltages?", "The voltage a diode or LED needs before current really starts to flow. About 0.7 V for silicon, 2–3.3 V for LEDs."],
+  ["Full adder", "full adders?", "A logic circuit that adds two bits plus a carry-in, and gives a sum bit and a carry-out."],
+  ["Fuse", "fuses?", "A thin wire in a holder that melts and breaks the circuit if too much current flows."],
+  ["GFCI", "GFCIs?|ground fault circuit interrupter", "Ground fault circuit interrupter: an outlet that cuts power fast if some current is leaking, maybe through a person."],
+  ["Ground", "grounding|ground wire|grounded", "A connection to the earth, or the circuit's 0-volt reference point. Gives stray current a safe path."],
+  ["Half adder", "half adders?", "A logic circuit that adds two bits: sum = A XOR B, carry = A AND B."],
+  ["Hertz", "hertz|Hz", "The unit of frequency: cycles per second. US outlets are 60 Hz."],
+  ["Induction (charging)", "induction", "Charging an object by bringing a charge near it without touching, then grounding it."],
+  ["Insulator", "insulators?", "A material that doesn't let charge flow easily, like rubber, plastic, or glass."],
+  ["Inverse square", "inverse square|inverse-square", "A pattern where something gets weaker by the square of the distance: twice as far, ¼ as strong."],
+  ["Junction", "junctions?", "A point where wires meet and current can split or join. Also called a node."],
+  ["Kilowatt-hour", "kilowatt-hours?|kWh", "A unit of energy: 1,000 watts for 1 hour. What electric bills charge for."],
+  ["Kirchhoff's laws", "Kirchhoff's laws?|KVL|KCL", "Voltage law: voltages around a loop add to zero. Current law: current into a junction equals current out."],
+  ["LED", "light-emitting diodes?", "Light-emitting diode: a diode that glows when current flows through it the right way."],
+  ["Load line", "load line", "A line on a graph showing every possible current and voltage the battery and resistor allow. Where it crosses a part's curve is what happens."],
+  ["Logic gate", "logic gates?|gates", "A tiny circuit that takes 1s and 0s in and gives a 1 or 0 out by a fixed rule (AND, OR, NOT…)."],
+  ["Multimeter", "multimeters?", "A meter that measures voltage, current, and resistance (and sometimes more)."],
+  ["Multiplexer", "multiplexers?|MUX", "A circuit that uses select inputs to choose which data input reaches the output."],
+  ["Ohm", "ohms", "The unit of resistance. 1 ohm lets 1 amp flow when pushed by 1 volt."],
+  ["Ohm's law", "Ohm's law", "V = I × R. Voltage equals current times resistance."],
+  ["Ohmmeter", "ohmmeters?", "A meter (or multimeter setting) that measures resistance. Use it with the power off."],
+  ["OL", "OL", "\"Over limit\" on a multimeter: the value is too big for the range, or the path is open."],
+  ["Open circuit", "open circuits?", "A circuit with a break in the path, so no current flows."],
+  ["Overflow", "overflow", "When an answer is too big to fit in the number of bits available."],
+  ["Parallel", "parallel", "Connected side by side, so each part gets the same voltage and the current splits."],
+  ["PN junction", "PN junctions?|P-type|N-type", "Where P-type silicon (with holes) meets N-type silicon (with extra electrons). The heart of a diode."],
+  ["Power", "power", "How fast energy is used or delivered, in watts. P = I × V."],
+  ["Relay", "relays?", "A switch flipped by an electric signal instead of a finger, so a small circuit can control a big one."],
+  ["Resistance", "resistance", "How much something opposes current, in ohms."],
+  ["Resistivity", "resistivity", "How strongly a material resists current, no matter its size. Copper's is very low."],
+  ["Resistor", "resistors?", "A part made to have a set resistance, used to control current and voltage."],
+  ["Reverse bias", "reverse bias|reverse biased", "A diode connected backwards, so it blocks current."],
+  ["RMS", "RMS", "Root mean square: the \"effective\" value of AC voltage. 120 V RMS does the same heating as 120 V DC."],
+  ["Schematic", "schematics?", "A diagram of a circuit drawn with standard symbols."],
+  ["Series", "series", "Connected one after another in a single path, so the same current flows through each part."],
+  ["Short circuit", "short circuits?|shorted", "A path with almost no resistance that bypasses part of a circuit."],
+  ["SPDT", "SPDT|SPST|DPDT", "Switch types by poles and throws. SPDT = single pole, double throw: one input that connects to either of two outputs."],
+  ["Static electricity", "static electricity|static", "Electric charge that builds up on a surface and stays put, until it jumps as a spark."],
+  ["Tolerance", "tolerance", "How far a part's real value can be from its labeled value. ±5% on a 100 Ω resistor means 95–105 Ω."],
+  ["Traveler", "travelers?", "In a 3-way switch, either of the two wires that run between the switches."],
+  ["Triboelectric series", "triboelectric", "A list of materials ranked by how easily they gain or lose electrons when rubbed together."],
+  ["Truth table", "truth tables?", "A table listing every input combination for a logic circuit and the output for each."],
+  ["Universal gate", "universal", "A gate (NAND or NOR) that can be combined to build every other kind of gate."],
+  ["Voltage", "voltages?", "The electrical push that drives current, measured in volts. Also called potential difference."],
+  ["Voltage divider", "voltage dividers?", "Two resistors in series that split a voltage in proportion to their sizes."],
+  ["Voltmeter", "voltmeters?", "A meter that measures voltage. It goes across (in parallel with) the part."],
+  ["Watt", "watts?", "The unit of power. 1 watt = 1 joule per second = 1 volt × 1 amp."]
+];
+// glossary list
+const glBox = $("#gl");
+const slug = t => "g-" + t.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+glBox.innerHTML = G.map(([t, , d]) => `<div id="${slug(t)}"><b>${t}</b><br>${d}</div>`).join("");
+$("#gl-q").addEventListener("input", e => {
+  const q = e.target.value.trim().toLowerCase();
+  glBox.querySelectorAll("div").forEach(d => d.hidden = q && !d.textContent.toLowerCase().includes(q));
+});
+// auto-mark the first use of each term in every section
+const SKIP = "h1,h2,h3,h4,button,label,output,svg,nav,a,.term,.formula,.seg,.ro,.verdict,.hint,#glossary,.fact,.tag,.eyebrow,script,style,input,.flash,.toy,th,table.tt";
+const rx = new RegExp("(?<![\\w])(" + G.map(g => g[1]).sort((a, b) => b.length - a.length).join("|") + ")(?![\\w])", "i");
+const which = m => G.findIndex(g => new RegExp("^(" + g[1] + ")$", "i").test(m));
+document.querySelectorAll("header.hero, section").forEach(sec => {
+  if (sec.id === "glossary") return;
+  const used = new Set();
+  const walker = document.createTreeWalker(sec, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest(SKIP) || !n.nodeValue.trim() ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+  const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => {
+    let cur = node;
+    while (cur) {
+      const text = cur.nodeValue; let m, idx = -1, gi = -1, start = 0;
+      const r = new RegExp(rx.source, "gi");
+      while ((m = r.exec(text))) { const k = which(m[1]); if (k >= 0 && !used.has(k)) { idx = m.index; gi = k; start = m[1].length; break; } }
+      if (idx < 0) break;
+      used.add(gi);
+      const after = cur.splitText(idx); const rest = after.splitText(start);
+      const sp = document.createElement("span"); sp.className = "term"; sp.tabIndex = 0; sp.dataset.g = gi; sp.textContent = after.nodeValue;
+      after.replaceWith(sp); cur = rest;
+    }
+  });
+});
+// popover
+const pop = document.createElement("div"); pop.id = "gloss-pop"; pop.setAttribute("role", "tooltip"); document.body.appendChild(pop);
+let popFor = null, shownAt = 0;
+function showPop(t) {
+  const k = t.dataset.g;
+  if (k === "glossary-demo") pop.innerHTML = "<b>Like this!</b>Tap any dotted word to see what it means.";
+  else { const [term, , def] = G[+k]; pop.innerHTML = `<b>${term}</b>${def}<br><a href="#${slug(term)}">See in glossary</a>`; }
+  pop.style.display = "block";
+  const r = t.getBoundingClientRect(), pw = Math.min(300, innerWidth - 24);
+  pop.style.maxWidth = pw + "px";
+  let left = r.left + scrollX; left = Math.max(12 + scrollX, Math.min(left, scrollX + innerWidth - pop.offsetWidth - 12));
+  let top = r.bottom + scrollY + 8;
+  if (r.bottom + pop.offsetHeight + 16 > innerHeight) top = r.top + scrollY - pop.offsetHeight - 8;
+  pop.style.left = left + "px"; pop.style.top = top + "px"; if (popFor !== t) shownAt = Date.now(); popFor = t;
+}
+function hidePop() { pop.style.display = "none"; popFor = null; }
+document.addEventListener("click", e => { const t = e.target.closest(".term"); if (t) { popFor === t && Date.now() - shownAt > 400 ? hidePop() : showPop(t); } else if (!e.target.closest("#gloss-pop")) hidePop(); });
+document.addEventListener("mouseover", e => { const t = e.target.closest(".term"); if (t && matchMedia("(hover:hover)").matches) showPop(t); });
+document.addEventListener("mouseout", e => { const t = e.target.closest(".term"); if (t && matchMedia("(hover:hover)").matches && !e.relatedTarget?.closest?.("#gloss-pop")) hidePop(); });
+document.addEventListener("focusin", e => { const t = e.target.closest(".term"); if (t) showPop(t); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") hidePop(); });
+addEventListener("scroll", () => { if (popFor && !matchMedia("(hover:hover)").matches) showPop(popFor); }, { passive: true });
+
+// re-render colors when theme flips
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { ohUpdate(); pwUpdate(); ckUpdate(); ldUpdate(); lgUpdate(); adUpdate(); clUpdate(); mmUpdate(); ccUpdate(); swUpdate(); scUpdate(); });
+})();
+</script>
+</body>
+</html>
