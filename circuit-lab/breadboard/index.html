@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Breadboard Bench: Circuit Lab</title>
+<meta name="description" content="A virtual breadboard for practicing Science Olympiad Circuit Lab bench tasks: wire LEDs, switches, resistors, and 74HC logic chips, probe with a multimeter, and solve build and fix-it challenges.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f2ec; --paper:#fffdf9; --ink:#1f1a17; --muted:#6b625a; --line:#e6ddd1;
+  --copper:#c25a22; --copper-soft:#fbe4d6;
+  --volt:#d29c00; --volt-soft:#fbf0c8;
+  --led:#1f9d6b; --led-soft:#d8f2e6;
+  --wire:#2a64c8; --wire-soft:#dde8fa;
+  --shadow:0 1px 2px rgba(50,30,10,.05),0 8px 24px rgba(50,30,10,.07);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#141210; --paper:#1d1a17; --ink:#f0e9e1; --muted:#a99f94; --line:#36302a;
+    --copper:#f08a4b; --copper-soft:#3d2516;
+    --volt:#f5c842; --volt-soft:#3a3117;
+    --led:#4fd49a; --led-soft:#143326;
+    --wire:#7fa8f5; --wire-soft:#1b2840;
+    --shadow:none; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 "Nunito",system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;line-height:1.15;margin:0}
+a{color:var(--wire)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px}
+.muted{color:var(--muted)}
+small{font-size:.85rem}
+nav.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;gap:6px;overflow-x:auto;padding-top:10px;padding-bottom:10px;scrollbar-width:none}
+nav.top a{flex:none;text-decoration:none;color:var(--ink);font-weight:700;font-size:.92rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
+nav.top a:hover{border-color:var(--copper);color:var(--copper)}
+.hero{padding:36px 0 20px}
+.eyebrow{display:inline-block;font-weight:800;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--wire);background:var(--wire-soft);padding:4px 10px;border-radius:999px;margin-bottom:14px}
+.hero h1{font-size:clamp(2.1rem,6vw,3.3rem);font-weight:800}
+.hero p.lead{font-size:1.1rem;max-width:760px;margin:12px 0 0}
+.startcard{background:var(--paper);border:2px solid var(--copper);border-radius:18px;padding:14px 20px;margin-top:18px}
+.startcard ol{margin:6px 0 0;padding-left:22px}
+.note{border-left:4px solid var(--volt);background:var(--volt-soft);padding:10px 14px;border-radius:0 12px 12px 0;margin:16px 0;font-size:.95rem}
+section{padding:30px 0;border-top:1px dashed var(--line)}
+section > .wrap > h2{font-size:clamp(1.6rem,4vw,2.2rem)}
+.sub{color:var(--muted);max-width:760px;margin:8px 0 18px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow);min-width:0}
+.card h4{margin:0 0 8px;font-size:1.05rem}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+ul.tight{margin:0;padding-left:20px}
+ul.tight li{margin:4px 0}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+
+/* bench */
+.bench{background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:14px;box-shadow:var(--shadow)}
+.toolbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.toolbar .grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding-right:8px;margin-right:2px;border-right:1px solid var(--line)}
+.toolbar .grp:last-child{border-right:0}
+.tb{font:inherit;font-size:.86rem;font-weight:800;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;white-space:nowrap}
+.tb[aria-pressed=true]{background:var(--copper);border-color:var(--copper);color:#fff}
+.tb:disabled{opacity:.35;cursor:not-allowed}
+.tb.ghost{background:transparent}
+select.opt{font:inherit;font-size:.86rem;font-weight:700;padding:5px 8px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.optrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px;font-size:.86rem;font-weight:700;color:var(--muted)}
+.optrow label{display:flex;gap:6px;align-items:center}
+.hintline{margin:10px 0 8px;padding:8px 12px;border-radius:12px;background:var(--wire-soft);font-weight:700;font-size:.93rem}
+.hintline.warn{background:var(--copper-soft)}
+.benchgrid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:14px;align-items:start}
+@media (max-width:1000px){.benchgrid{grid-template-columns:minmax(0,1fr)}}
+.boardwrap{overflow-x:auto;border-radius:14px;background:var(--bg);border:1px solid var(--line);-webkit-overflow-scrolling:touch}
+#board{display:block;width:100%;min-width:720px;height:auto;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+#board .hole{cursor:pointer}
+#board .part{cursor:pointer}
+#board.placing .parts{pointer-events:none}
+#board.placing .parts .sw-hit{pointer-events:none}
+svg text{font-family:"Nunito",sans-serif}
+svg text:not([fill]){fill:var(--ink)}
+.side{display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-size:.92rem}
+.panel h5{margin:0 0 6px;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.panel p{margin:4px 0}
+.diag{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.diag li{padding:7px 10px;border-radius:10px;background:var(--led-soft);font-weight:700;font-size:.88rem}
+.diag li.warn{background:var(--volt-soft)}
+.diag li.bad{background:var(--copper-soft)}
+.meter{font-family:ui-monospace,Menlo,Consolas,monospace;background:#1d2a24;color:#9fe6b8;border-radius:8px;padding:6px 10px;font-size:1.3rem;font-weight:800;text-align:right}
+.goal{background:var(--paper);border:2px solid var(--copper);border-radius:14px;padding:10px 12px;font-size:.93rem}
+.goal h5{color:var(--copper)}
+.goal .btnrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.btn{font:inherit;font-weight:800;padding:7px 14px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.verdict{border-radius:10px;padding:8px 10px;font-weight:700;background:var(--led-soft);margin-top:8px;font-size:.9rem}
+.verdict.bad{background:var(--copper-soft)}
+.verdict.warn{background:var(--volt-soft)}
+.tt td,.tt th{text-align:center;padding:4px 6px}
+.ok{color:var(--led);font-weight:800}
+.no{color:var(--copper);font-weight:800}
+.hints li{margin:4px 0}
+.chal{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.chal button{font:inherit;text-align:left;color:inherit;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:12px 14px;cursor:pointer;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px}
+.chal button:hover{border-color:var(--copper)}
+.chal button[aria-pressed=true]{border:2px solid var(--copper)}
+.chal b{font-size:1rem}
+.chal span{font-size:.86rem;color:var(--muted)}
+.chal .lvl{align-self:flex-start;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:2px 8px;border-radius:999px;background:var(--wire-soft);color:var(--wire)}
+.chal .lvl.fix{background:var(--copper-soft);color:var(--copper)}
+.chal .lvl.led{background:var(--volt-soft);color:color-mix(in srgb,var(--volt) 70%,var(--ink))}
+.chal .done{color:var(--led);font-weight:800}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px dashed var(--line)}
+</style>
+</head>
+<body>
+
+<nav class="top" aria-label="Sections">
+  <div class="wrap">
+    <a href="../">← The Spark Lab</a>
+    <a href="#bench">🔧 Bench</a>
+    <a href="#challenges">🏆 Challenges</a>
+    <a href="#tips">📌 Breadboard and chip tips</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Science Olympiad · Circuit Lab · 2027 · Division B</span>
+    <h1>The Breadboard Bench</h1>
+    <p class="lead">A practice breadboard for the Circuit Lab bench tasks. Wire up LEDs, resistors, switches, and logic chips, flip the switches, and watch what happens. Probe any two holes with the multimeter. Then try the challenges: build circuits that match a truth table, and fix boards that someone else wired wrong.</p>
+    <div class="startcard">
+      <b>👋 How to use it</b>
+      <ol>
+        <li>Pick a tool (Wire, Resistor, LED…), then tap two holes to place it. For an LED, tap the <b>+ leg (anode)</b> first.</li>
+        <li>Use <b>Select</b> to flip switches, press buttons, change a part, or move one of its ends. Tap an empty hole to light up everything connected to it.</li>
+        <li>Read the <b>Problems</b> box. It catches the mistakes real boards punish: unpowered chips, backwards LEDs, missing resistors, floating inputs, and shorts.</li>
+        <li>Start with the <a href="#challenges">challenges</a>. Works best on a laptop or tablet; on a phone, scroll the board sideways.</li>
+      </ol>
+    </div>
+  </div>
+</header>
+
+<section id="bench">
+  <div class="wrap">
+    <div class="bench">
+      <div class="toolbar" id="tools">
+        <div class="grp">
+          <button class="tb" data-tool="select" aria-pressed="true">👆 Select</button>
+          <button class="tb" data-tool="wire">🔗 Wire</button>
+          <button class="tb" data-tool="res">〰️ Resistor</button>
+          <button class="tb" data-tool="led">💡 LED</button>
+          <button class="tb" data-tool="sw">🎚 Switch</button>
+          <button class="tb" data-tool="btn">🔘 Button</button>
+          <button class="tb" data-tool="chip">🔲 Chip</button>
+          <button class="tb" data-tool="probe">📟 Meter</button>
+          <button class="tb" data-tool="del">🗑 Delete</button>
+        </div>
+        <div class="grp">
+          <button class="tb ghost" id="undo">↶ Undo</button>
+          <button class="tb ghost" id="clear">Clear board</button>
+        </div>
+      </div>
+      <div class="optrow">
+        <label>Wire <select class="opt" id="o-wire"><option value="auto">auto color</option><option value="red">red</option><option value="black">black</option><option value="blue">blue</option><option value="green">green</option><option value="yellow">yellow</option><option value="orange">orange</option><option value="white">white</option></select></label>
+        <label>Resistor <select class="opt" id="o-res"></select></label>
+        <label>LED <select class="opt" id="o-led"><option value="red">red</option><option value="yellow">yellow</option><option value="green">green</option><option value="blue">blue</option><option value="white">white</option></select></label>
+        <label>Chip <select class="opt" id="o-chip"></select></label>
+        <label>Supply <select class="opt" id="o-v"><option value="3">3 V</option><option value="5" selected>5 V</option><option value="9">9 V</option></select></label>
+        <button class="tb" id="power" aria-pressed="true">⚡ Power on</button>
+      </div>
+      <div class="hintline" id="hint"></div>
+      <div class="benchgrid">
+        <div>
+          <div class="boardwrap"><svg id="board" viewBox="0 0 900 346" role="img" aria-label="Breadboard"></svg></div>
+          <p class="muted" style="margin:6px 2px 0"><small>Simplified model: ideal wires and switches, LEDs with a fixed turn-on voltage, 74HC chips with about 25 Ω outputs. Good for learning what works and what doesn't, not for exact readings.</small></p>
+        </div>
+        <div class="side">
+          <div class="goal" id="goal"></div>
+          <div class="panel"><h5>Problems</h5><ul class="diag" id="diag"></ul></div>
+          <div class="panel" id="meterp"><h5>📟 Multimeter</h5><div class="meter" id="meter">-.-- V</div><p id="meter-txt" class="muted"></p></div>
+          <div class="panel" id="insp"><h5>Selected</h5><div id="insp-body"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="challenges">
+  <div class="wrap">
+    <h2>Challenges</h2>
+    <p class="sub">Each one loads a starter board. Build or fix the circuit, then press <b>Check my circuit</b>. For logic challenges, the checker flips the input switches through every combination and compares the output LEDs with the truth table, just like a supervisor would.</p>
+    <div class="chal" id="chal"></div>
+  </div>
+</section>
+
+<section id="tips">
+  <div class="wrap">
+    <h2>Breadboard and chip tips</h2>
+    <p class="sub">What trips people up at the real bench, and the chip pinouts you'll need.</p>
+    <div class="cols">
+      <div class="card">
+        <h4>How the board is connected</h4>
+        <ul class="tight">
+          <li>Each column of 5 holes (a–e, or f–j) is one connected strip. Hover or tap a hole with Select to see its strip light up.</li>
+          <li>The center gap separates the top and bottom halves. Chips straddle it so each pin gets its own strip.</li>
+          <li>The rails run the whole length. On this board only the <b>top</b> rails come from the battery. The bottom rails need two jumper wires, which most starter boards already have.</li>
+          <li>Never put both legs of a part in the same strip: that shorts the part out.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Chip rules</h4>
+        <ul class="tight">
+          <li>Notch on the left. Pin 1 is bottom-left, pins count counterclockwise, so pin 14 is top-left.</li>
+          <li>On every 14-pin 74HC logic chip here: <b>pin 14 to +</b> and <b>pin 7 to −</b>. No power, no logic.</li>
+          <li>74HC chips run on 2–6 V. A 9 V battery will damage them.</li>
+          <li>Don't leave an input you're using unconnected. A "floating" input picks up noise and can read 1 or 0 at random.</li>
+          <li>Never wire an output straight to + or −, or to another output.</li>
+          <li>An output can light an LED, but always through a resistor (330 Ω is a good choice at 5 V).</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Pinouts (top view, notch on the left)</h4>
+        <div class="tablewrap"><table>
+          <tr><th>Chip</th><th>Gates</th><th>Inputs → output</th></tr>
+          <tr><td class="mono">74HC00</td><td>4 × NAND</td><td>1,2→3 · 4,5→6 · 9,10→8 · 12,13→11</td></tr>
+          <tr><td class="mono">74HC08</td><td>4 × AND</td><td>same pins as the 00</td></tr>
+          <tr><td class="mono">74HC32</td><td>4 × OR</td><td>same pins as the 00</td></tr>
+          <tr><td class="mono">74HC86</td><td>4 × XOR</td><td>same pins as the 00</td></tr>
+          <tr><td class="mono">74HC02</td><td>4 × NOR</td><td>2,3→1 · 5,6→4 · 8,9→10 · 11,12→13 (outputs come first!)</td></tr>
+          <tr><td class="mono">74HC04</td><td>6 × NOT</td><td>1→2 · 3→4 · 5→6 · 9→8 · 11→10 · 13→12</td></tr>
+        </table></div>
+        <p class="muted"><small>All: pin 14 = + (VCC), pin 7 = − (GND).</small></p>
+      </div>
+      <div class="card">
+        <h4>Troubleshooting order</h4>
+        <ol style="margin:0;padding-left:22px">
+          <li>Battery voltage across the rails.</li>
+          <li>Chip power: probe pin 14 to pin 7. It should read the supply voltage.</li>
+          <li>Each input pin: does it change when you flip its switch?</li>
+          <li>Each output pin: does it match the truth table?</li>
+          <li>The LED: right way around, and a resistor in series?</li>
+        </ol>
+        <p class="muted"><small>Practice this order in the fix-it challenges, using only the meter before you change anything.</small></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Made for practicing the Science Olympiad Circuit Lab bench tasks (2027, Division B). Not an official Science Olympiad resource; the official Rules Manual takes precedence. The simulator is a simplified model.</p>
+    <p><a href="../">← The Spark Lab</a> · <a href="../../">All science pages</a></p>
+  </div>
+</footer>
+<script>
+(() => {
+"use strict";
+const $ = s => document.querySelector(s);
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function txt(parent, x, y, s, attrs = {}) { const t = el("text", { x, y, ...attrs }, parent); t.textContent = s; return t; }
+const sig = (v, n = 3) => Number(Number(v).toPrecision(n)).toString();
+const fOhm = r => r >= 1e6 ? sig(r / 1e6) + " MΩ" : r >= 1000 ? sig(r / 1000) + " kΩ" : sig(r) + " Ω";
+const fAmp = i => { i = Math.abs(i); return i >= 1 ? sig(i) + " A" : i >= 1e-3 ? sig(i * 1000) + " mA" : i >= 1e-6 ? sig(i * 1e6) + " µA" : "0 mA"; };
+const fV = v => (Math.abs(v) < 0.005 ? 0 : v).toFixed(2) + " V";
+
+/* =============== BOARD GEOMETRY =============== */
+const COLS = 40;
+const X = c => 90 + (c - 1) * 20;
+const ROWY = { tp: 22, tn: 40, a: 74, b: 94, c: 114, d: 134, e: 154, f: 194, g: 214, h: 234, i: 254, j: 274, bp: 306, bn: 324 };
+const ROWS = ["tp", "tn", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "bp", "bn"];
+const parseH = h => { const m = /^(tp|tn|bp|bn|[a-j])(\d+)$/.exec(h); return m ? [m[1], +m[2]] : null; };
+const hxy = h => { const [r, c] = parseH(h); return [X(c), ROWY[r]]; };
+const strip = h => { const [r, c] = parseH(h); return r.length === 2 ? r : ("abcde".includes(r) ? "T" : "B") + c; };
+const ALLH = []; ROWS.forEach(r => { for (let c = 1; c <= COLS; c++) ALLH.push(r + c); });
+
+/* =============== PART DATA =============== */
+const WIRE = { red: "#d62828", black: "#2b2b2b", blue: "#1d5fd1", green: "#2a9d3a", yellow: "#e0b000", orange: "#f77f00", white: "#f4f4f4" };
+const LEDS = { red: { vf: 2.0, c: "#ff3b30" }, yellow: { vf: 2.1, c: "#ffcc00" }, green: { vf: 3.0, c: "#30d158" }, blue: { vf: 3.2, c: "#0a84ff" }, white: { vf: 3.2, c: "#ffffff" } };
+const RVALS = [100, 220, 330, 390, 470, 680, 1000, 2200, 4700, 10000];
+const BAND = ["#111111", "#7b4a1e", "#d62828", "#f77f00", "#f6c90e", "#2a9d3a", "#1d5fd1", "#7b3fbf", "#8a8a8a", "#f4f4f4"];
+const Q4 = [[1, 2, 3], [4, 5, 6], [9, 10, 8], [12, 13, 11]];
+const CHIPS = {
+  "00": { name: "NAND", fn: (a, b) => a && b ? 0 : 1, gates: Q4 },
+  "08": { name: "AND", fn: (a, b) => a && b ? 1 : 0, gates: Q4 },
+  "32": { name: "OR", fn: (a, b) => a || b ? 1 : 0, gates: Q4 },
+  "86": { name: "XOR", fn: (a, b) => a !== b ? 1 : 0, gates: Q4 },
+  "02": { name: "NOR", fn: (a, b) => a || b ? 0 : 1, gates: [[2, 3, 1], [5, 6, 4], [8, 9, 10], [11, 12, 13]] },
+  "04": { name: "NOT", fn: a => a ? 0 : 1, gates: [[1, 2], [3, 4], [5, 6], [9, 8], [11, 10], [13, 12]] }
+};
+const RON = 15, ROUT = 25;
+const chipPins = c => Array.from({ length: 14 }, (_, k) => { const pin = k + 1; return pin <= 7 ? "f" + (c + pin - 1) : "e" + (c + 14 - pin); });
+function pinRole(kind, pin) {
+  if (pin === 14) return "+ (VCC)"; if (pin === 7) return "− (GND)";
+  const gi = CHIPS[kind].gates.findIndex(g => g.includes(pin));
+  const g = CHIPS[kind].gates[gi];
+  return (g[g.length - 1] === pin ? "output " : "input ") + (gi + 1);
+}
+
+/* =============== STATE =============== */
+const S = { parts: [], V: 5, power: true };
+let tool = "select", pending = null, sel = null, netSel = null, moveEnd = null, probes = { r: null, b: null }, hover = null;
+let hist = [], challenge = null, result = null, hintsShown = 0, flash = null;
+const part = id => S.parts.find(p => p.id === id);
+function nextId(prefix) { let n = 0; S.parts.forEach(p => { const m = new RegExp("^" + prefix + "(\\d+)$").exec(p.id); if (m) n = Math.max(n, +m[1]); }); return prefix + (n + 1); }
+function occupied() { const o = {}; S.parts.forEach(p => p.pins.forEach(h => o[h] = p.id)); return o; }
+function snapshot() { hist.push(JSON.stringify(S.parts)); if (hist.length > 60) hist.shift(); }
+
+/* =============== SIMULATION =============== */
+function netFn(parts) {
+  const par = {};
+  const f = x => { if (par[x] === undefined) par[x] = x; while (par[x] !== x) { par[x] = par[par[x]]; x = par[x]; } return x; };
+  const u = (a, b) => { a = f(a); b = f(b); if (a !== b) par[a] = b; };
+  parts.forEach(p => {
+    if (p.type === "wire") u(strip(p.pins[0]), strip(p.pins[1]));
+    else if (p.type === "sw") u(strip(p.pins[1]), strip(p.pos === "L" ? p.pins[0] : p.pins[2]));
+    else if (p.type === "btn" && p.pressed) u(strip(p.pins[0]), strip(p.pins[1]));
+  });
+  return h => f(strip(h));
+}
+function gauss(A, b) {
+  const n = b.length;
+  for (let i = 0; i < n; i++) {
+    let p = i; for (let r = i + 1; r < n; r++) if (Math.abs(A[r][i]) > Math.abs(A[p][i])) p = r;
+    [A[i], A[p]] = [A[p], A[i]]; [b[i], b[p]] = [b[p], b[i]];
+    const d = A[i][i]; if (Math.abs(d) < 1e-15) continue;
+    for (let r = i + 1; r < n; r++) { const k = A[r][i] / d; if (!k) continue; for (let c = i; c < n; c++) A[r][c] -= k * A[i][c]; b[r] -= k * b[i]; }
+  }
+  const x = new Array(n).fill(0);
+  for (let i = n - 1; i >= 0; i--) { let s = b[i]; for (let c = i + 1; c < n; c++) s -= A[i][c] * x[c]; x[i] = Math.abs(A[i][i]) < 1e-15 ? 0 : s / A[i][i]; }
+  return x;
+}
+function simulate(parts) {
+  const net = netFn(parts), V = S.V;
+  const TP = net("tp1"), TN = net("tn1");
+  const R = { net, v: {}, driven: new Set(), short: false, off: false, led: {}, res: {}, chip: {}, supplyI: 0, unstable: false };
+  R.vh = h => R.v[net(h)] || 0; R.dh = h => R.driven.has(net(h));
+  if (!S.power) { R.off = true; return R; }
+  if (TP === TN) { R.short = true; return R; }
+  const fixed = { [TP]: V, [TN]: 0 };
+  const res = [], leds = [], chips = [];
+  parts.forEach(p => {
+    if (p.type === "res") res.push({ p, a: net(p.pins[0]), b: net(p.pins[1]), g: 1 / p.ohms });
+    else if (p.type === "led") leds.push({ p, a: net(p.pins[0]), b: net(p.pins[1]), vf: LEDS[p.color].vf, on: false });
+    else if (p.type === "chip") chips.push({ p, n: p.pins.map(net), def: CHIPS[p.kind], powered: false, dead: false, out: {}, vcc: 0, v7: 0, v14: 0 });
+  });
+  const all = new Set(Object.keys(fixed));
+  parts.forEach(p => p.pins.forEach(h => all.add(net(h))));
+  const unk = [...all].filter(n => !(n in fixed)), idx = {};
+  unk.forEach((n, i) => idx[n] = i);
+  let v = { ...fixed }, driven = new Set(), srcs = [];
+  const lvl = (c, pin) => { const n = c.n[pin - 1]; if (!driven.has(n)) return "float"; const x = v[n] - c.v7; return x > 0.7 * c.vcc ? 1 : x < 0.3 * c.vcc ? 0 : "mid"; };
+  for (let it = 0; it < 80; it++) {
+    srcs = [];
+    chips.forEach(c => { if (!c.powered || c.dead) return; c.def.gates.forEach(g => { const o = g[g.length - 1]; srcs.push({ n: c.n[o - 1], vs: c.out[o] ? c.v14 : c.v7, c, pin: o }); }); });
+    const n = unk.length, A = Array.from({ length: n }, () => new Array(n).fill(0)), B = new Array(n).fill(0);
+    const st = (a, b, g, vf) => {
+      const ia = idx[a], ib = idx[b];
+      if (ia !== undefined) { A[ia][ia] += g; if (ib !== undefined) A[ia][ib] -= g; else B[ia] += g * fixed[b]; B[ia] += g * vf; }
+      if (ib !== undefined) { A[ib][ib] += g; if (ia !== undefined) A[ib][ia] -= g; else B[ib] += g * fixed[a]; B[ib] -= g * vf; }
+    };
+    res.forEach(e => st(e.a, e.b, e.g, 0));
+    leds.forEach(e => e.on ? st(e.a, e.b, 1 / RON, e.vf) : st(e.a, e.b, 1e-9, 0));
+    srcs.forEach(s => { const i = idx[s.n]; if (i !== undefined) { A[i][i] += 1 / ROUT; B[i] += s.vs / ROUT; } });
+    for (let i = 0; i < n; i++) A[i][i] += 1e-9;
+    const x = gauss(A, B);
+    v = { ...fixed }; unk.forEach((nm, i) => v[nm] = x[i]);
+    driven = new Set(Object.keys(fixed)); srcs.forEach(s => driven.add(s.n));
+    const adj = {}, link = (a, b) => { (adj[a] = adj[a] || []).push(b); (adj[b] = adj[b] || []).push(a); };
+    res.forEach(e => link(e.a, e.b)); leds.forEach(e => { if (e.on) link(e.a, e.b); });
+    const q = [...driven]; while (q.length) { const a = q.pop(); (adj[a] || []).forEach(b => { if (!driven.has(b)) { driven.add(b); q.push(b); } }); }
+    let changed = false;
+    leds.forEach(e => { const vak = v[e.a] - v[e.b]; const on = e.on ? vak - e.vf > 0 : vak > e.vf; if (on !== e.on) { e.on = on; changed = true; } });
+    chips.forEach(c => {
+      c.v14 = v[c.n[13]] || 0; c.v7 = v[c.n[6]] || 0; c.vcc = c.v14 - c.v7;
+      const pw = driven.has(c.n[13]) && driven.has(c.n[6]) && c.vcc > 1.5, dead = pw && c.vcc > 7;
+      if (pw !== c.powered || dead !== c.dead) { c.powered = pw; c.dead = dead; changed = true; }
+      if (!pw || dead) return;
+      c.def.gates.forEach(g => { const o = g[g.length - 1]; const val = c.def.fn(...g.slice(0, -1).map(pin => lvl(c, pin) === 1 ? 1 : 0)); if (c.out[o] !== val) { c.out[o] = val; changed = true; } });
+    });
+    if (!changed) break;
+    if (it === 79) R.unstable = true;
+  }
+  R.v = v; R.driven = driven;
+  leds.forEach(e => { const vak = v[e.a] - v[e.b]; R.led[e.p.id] = { vak, I: e.on ? (vak - e.vf) / RON : 0 }; });
+  res.forEach(e => { const dv = v[e.a] - v[e.b]; R.res[e.p.id] = { V: dv, I: dv * e.g, P: dv * dv * e.g, same: e.a === e.b }; });
+  chips.forEach(c => {
+    const o = { powered: c.powered, dead: c.dead, vcc: c.vcc, ins: {}, outI: {}, out: c.out, n: c.n };
+    c.def.gates.forEach(g => g.slice(0, -1).forEach(pin => o.ins[pin] = lvl(c, pin)));
+    srcs.filter(s => s.c === c).forEach(s => o.outI[s.pin] = (v[s.n] - s.vs) / ROUT);
+    R.chip[c.p.id] = o;
+  });
+  res.forEach(e => { if (e.a === TP) R.supplyI += (V - v[e.b]) * e.g; else if (e.b === TP) R.supplyI += (V - v[e.a]) * e.g; });
+  leds.forEach(e => { if (e.a === TP) R.supplyI += R.led[e.p.id].I; });
+  return R;
+}
+
+/* =============== DIAGNOSTICS =============== */
+const nm = p => p.label ? `${p.label}` : p.id;
+function diagnose(R) {
+  const D = [], add = (lv, t) => D.push([lv, t]);
+  if (R.off) { add("warn", "Power is off. Turn it on to test the circuit."); return D; }
+  if (R.short) { add("bad", "💥 Short circuit! Something connects the + rail straight to the − rail with nothing in between. A real battery would get hot fast. Find the wire (or switch) that joins them."); return D; }
+  const net = R.net, cnt = {};
+  S.parts.forEach(p => p.pins.forEach(h => { const n = net(h); cnt[n] = (cnt[n] || 0) + 1; }));
+  const used = h => (cnt[net(h)] || 0) > 1 || /^(tp|tn|bp|bn)/.test(h) || net(h) === net("tp1") || net(h) === net("tn1");
+  const bottomUsed = S.parts.some(p => p.pins.some(h => /^b[pn]/.test(h)));
+  if (bottomUsed && (!R.driven.has(net("bp1")) || !R.driven.has(net("bn1")))) add("warn", "The bottom rails aren't powered. Add a jumper from top + to bottom + and from top − to bottom −.");
+  S.parts.forEach(p => {
+    if (p.type === "chip") {
+      const c = R.chip[p.id], name = `${p.id} (74HC${p.kind})`;
+      if (c.dead) add("bad", `💥 ${name} is getting ${sig(c.vcc, 2)} V. 74HC chips max out around 6 V, so this one would be damaged. Use the 5 V supply.`);
+      else if (!c.powered) add("bad", `${name} has no power (pin 14 to pin 7 reads ${fV(R.vh(p.pins[13]) - R.vh(p.pins[6]))}). Pin 14, top-left by the notch, goes to +. Pin 7, bottom-right, goes to −.`);
+      else {
+        CHIPS[p.kind].gates.forEach((g, gi) => {
+          if (!g.some(pin => used(p.pins[pin - 1]) && (cnt[net(p.pins[pin - 1])] || 0) > 1)) return;
+          g.slice(0, -1).forEach(pin => {
+            const l = c.ins[pin];
+            if (l === "float") add("warn", `${name} pin ${pin} (gate ${gi + 1} input) isn't connected to anything, so it "floats" and could read 1 or 0. Wire it to a switch or a rail.`);
+            else if (l === "mid") add("warn", `${name} pin ${pin} sits at ${fV(R.vh(p.pins[pin - 1]))}, halfway between 0 and 1. The chip can't tell which it is.`);
+          });
+        });
+        Object.entries(c.outI).forEach(([pin, I]) => { if (Math.abs(I) > 0.025) add("bad", `${name} output pin ${pin} is being forced (${fAmp(I)}). It's wired straight to + or −, a switch, or another output. That can wreck the chip.`); });
+      }
+    } else if (p.type === "led") {
+      const r = R.led[p.id];
+      if (net(p.pins[0]) === net(p.pins[1])) add("warn", `${nm(p)}: both legs are connected to the same strip, so it's shorted out.`);
+      else if (r.I > 0.04) add("bad", `💥 ${nm(p)} is pulling ${fAmp(r.I)}. LEDs want about 20 mA, so it would burn out. Put a resistor in series.`);
+      else if (r.I > 0.025) add("warn", `${nm(p)} has ${fAmp(r.I)}, over the usual 20 mA. Use a bigger resistor.`);
+      else if (r.vak < -1) add("warn", `${nm(p)} looks backwards: its − leg is at the higher voltage. Flip it so the + leg (anode) faces the higher voltage.`);
+    } else if (p.type === "res") {
+      const r = R.res[p.id];
+      if (r.same) add("warn", `${nm(p)}: both legs are in connected holes, so current skips it. A resistor's legs need different strips.`);
+      else if (r.P > 0.25) add("bad", `${nm(p)} is turning ${sig(r.P, 2)} W into heat, more than a ¼ W resistor can take. It would smoke.`);
+    }
+  });
+  if (R.supplyI > 0.5) add("warn", `The supply is giving ${fAmp(R.supplyI)}. That's a lot for a battery; look for a missing resistor.`);
+  if (R.unstable) add("warn", "This circuit keeps flipping: an output feeds back to its own input. A real chip would oscillate.");
+  if (!D.length) add("ok", "No problems found.");
+  return D;
+}
+
+/* =============== RENDER: STATIC BOARD =============== */
+const svg = $("#board");
+const gBoard = el("g", {}, svg), gHoles = el("g", {}, svg), gHL = el("g", { "pointer-events": "none" }, svg), gParts = el("g", { class: "parts" }, svg), gOver = el("g", { "pointer-events": "none" }, svg);
+(function drawBoard() {
+  el("rect", { x: 62, y: 6, width: 826, height: 334, rx: 10, fill: "#ece6da", stroke: "#cfc6b5" }, gBoard);
+  el("rect", { x: 62, y: 166, width: 826, height: 16, fill: "#d9d1c1" }, gBoard);
+  [[12, "#d62828"], [50, "#1d5fd1"], [296, "#d62828"], [334, "#1d5fd1"]].forEach(([y, c]) => el("line", { x1: 80, x2: 880, y1: y, y2: y, stroke: c, "stroke-width": 2 }, gBoard));
+  [["+", 22, "#d62828"], ["−", 40, "#1d5fd1"], ["+", 306, "#d62828"], ["−", 324, "#1d5fd1"]].forEach(([s, y, c]) => { txt(gBoard, 72, y + 5, s, { "text-anchor": "middle", "font-weight": 800, "font-size": 15, fill: c }); txt(gBoard, 878 + 2, y + 5, s, { "text-anchor": "start", "font-weight": 800, "font-size": 13, fill: c }); });
+  "abcdefghij".split("").forEach(r => txt(gBoard, 74, ROWY[r] + 4, r, { "text-anchor": "middle", "font-size": 11, "font-weight": 700, fill: "#7a7062" }));
+  for (let c = 1; c <= COLS; c++) if (c === 1 || c % 5 === 0) { txt(gBoard, X(c), 62, c, { "text-anchor": "middle", "font-size": 10, fill: "#7a7062" }); txt(gBoard, X(c), 290, c, { "text-anchor": "middle", "font-size": 10, fill: "#7a7062" }); }
+  // battery pack feeding the top rails
+  el("rect", { x: 4, y: 8, width: 50, height: 46, rx: 6, fill: "#2b2b2b" }, gBoard);
+  el("line", { x1: 54, x2: 84, y1: 22, y2: 22, stroke: "#d62828", "stroke-width": 3 }, gBoard);
+  el("line", { x1: 54, x2: 84, y1: 40, y2: 40, stroke: "#2b2b2b", "stroke-width": 3 }, gBoard);
+  ALLH.forEach(h => { const [x, y] = hxy(h); el("rect", { class: "hole", "data-hole": h, x: x - 4, y: y - 4, width: 8, height: 8, rx: 1.5, fill: "#4a4540", stroke: "transparent", "stroke-width": 10 }, gHoles); });
+})();
+const batText = txt(gBoard, 29, 30, "5 V", { "text-anchor": "middle", "font-weight": 800, "font-size": 13, fill: "#f5c842" });
+const batOn = txt(gBoard, 29, 46, "ON", { "text-anchor": "middle", "font-weight": 800, "font-size": 9, fill: "#9fe6b8" });
+
+/* =============== RENDER: PARTS =============== */
+function legs(g, a, b) { el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "#9a9a9a", "stroke-width": 2.2, "stroke-linecap": "round" }, g); }
+function pinDot(g, p) { el("circle", { cx: p[0], cy: p[1], r: 3, fill: "#8a8a8a" }, g); }
+function renderParts(R) {
+  gParts.innerHTML = "";
+  const order = { chip: 0, sw: 1, btn: 2, res: 3, led: 4, wire: 5 };
+  [...S.parts].sort((a, b) => order[a.type] - order[b.type]).forEach(p => {
+    const g = el("g", { class: "part", "data-part": p.id }, gParts), isSel = sel === p.id;
+    const pts = p.pins.map(hxy);
+    if (p.type === "wire") {
+      const [a, b] = pts;
+      if (isSel) el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "#c25a22", "stroke-width": 10, opacity: .45, "stroke-linecap": "round" }, g);
+      el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "transparent", "stroke-width": 12 }, g);
+      if (p.color === "white") el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "#999", "stroke-width": 6, "stroke-linecap": "round" }, g);
+      el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: WIRE[p.color], "stroke-width": 4, "stroke-linecap": "round" }, g);
+      pts.forEach(q => el("circle", { cx: q[0], cy: q[1], r: 3.5, fill: "#c9c9c9", stroke: "#777" }, g));
+    } else if (p.type === "res" || p.type === "led" || p.type === "btn") {
+      const [a, b] = pts, mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, ang = Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
+      if (isSel) el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "#c25a22", "stroke-width": 12, opacity: .35, "stroke-linecap": "round" }, g);
+      el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "transparent", "stroke-width": 14 }, g);
+      legs(g, a, b); pts.forEach(q => pinDot(g, q));
+      const body = el("g", { transform: `translate(${mx} ${my}) rotate(${ang})` }, g);
+      if (p.type === "res") {
+        el("rect", { x: -12, y: -5, width: 24, height: 10, rx: 4, fill: "#e8d3a8", stroke: "#a58d62" }, body);
+        const d = String(p.ohms), m = d.length - 2;
+        [BAND[+d[0]], BAND[+d[1]], BAND[m], "#c9a43a"].forEach((c, k) => el("rect", { x: [-8, -4.5, -1, 6][k], y: -5, width: 2.4, height: 10, fill: c }, body));
+      } else if (p.type === "led") {
+        const r = R.led[p.id] || { I: 0 }, col = LEDS[p.color].c, I = r.I, burnt = I > 0.04, glow = Math.min(1, I / 0.015);
+        if (glow > 0.03 && !burnt) el("circle", { cx: 0, cy: 0, r: 13 + 10 * glow, fill: col, opacity: .25 + .35 * glow }, body);
+        el("circle", { cx: 0, cy: 0, r: 8, fill: burnt ? "#555" : col, "fill-opacity": burnt ? 1 : glow > 0.03 ? 1 : .45, stroke: "#555", "stroke-width": 1 }, body);
+        el("line", { x1: 5, x2: 5, y1: -7, y2: 7, stroke: "#555", "stroke-width": 1.5 }, body);
+        txt(g, a[0] + (a[0] <= b[0] ? -2 : 2), a[1] - 7, "+", { "text-anchor": "middle", "font-size": 11, "font-weight": 800, fill: "#b02020" });
+        if (burnt) txt(g, mx, my - 12, "💥", { "text-anchor": "middle", "font-size": 13 });
+        if (p.label) txt(g, mx, my + (a[1] === b[1] ? 22 : 4), p.label, { "text-anchor": "middle", "font-size": 12, "font-weight": 800, fill: "#7a2e0e" });
+      } else {
+        el("rect", { x: -8, y: -8, width: 16, height: 16, rx: 3, fill: "#333", stroke: "#111" }, body);
+        el("circle", { cx: 0, cy: 0, r: 5, fill: p.pressed ? "#c25a22" : "#888" }, body);
+        if (p.label) txt(g, mx, my - 13, p.label, { "text-anchor": "middle", "font-size": 12, "font-weight": 800, fill: "#7a2e0e" });
+      }
+    } else if (p.type === "sw") {
+      const [a, , c] = pts, y = a[1];
+      el("rect", { x: a[0] - 9, y: y - 8, width: c[0] - a[0] + 18, height: 16, rx: 4, fill: "#333", stroke: isSel ? "#c25a22" : "#111", "stroke-width": isSel ? 3 : 1, class: "sw-hit" }, g);
+      el("rect", { x: p.pos === "L" ? a[0] - 6 : c[0] - 14, y: y - 6, width: 20, height: 12, rx: 3, fill: "#f5c842" }, g);
+      pts.forEach(q => el("circle", { cx: q[0], cy: y + 11, r: 2, fill: "#8a8a8a" }, g));
+      const vh = R.vh ? R.vh(p.pins[1]) : 0, dh = R.dh ? R.dh(p.pins[1]) : false;
+      const st = dh ? (vh > S.V / 2 ? "1" : "0") : "?";
+      txt(g, (a[0] + c[0]) / 2, y - 12, (p.label || p.id) + " = " + st, { "text-anchor": "middle", "font-size": 12, "font-weight": 800, fill: "#7a2e0e" });
+    } else if (p.type === "chip") {
+      const c0 = parseH(p.pins[0])[1], x0 = X(c0) - 9, x1 = X(c0 + 6) + 9, info = R.chip[p.id];
+      el("rect", { x: x0, y: 159, width: x1 - x0, height: 30, rx: 3, fill: "#222", stroke: isSel ? "#c25a22" : info && info.powered && !info.dead ? "#2a9d3a" : "#111", "stroke-width": isSel || (info && info.powered) ? 2.5 : 1 }, g);
+      el("path", { d: `M${x0} 168 a6 6 0 0 1 0 12`, fill: "#ece6da" }, g);
+      txt(g, (x0 + x1) / 2, 172, "74HC" + p.kind, { "text-anchor": "middle", "font-size": 10, "font-weight": 800, fill: "#f0f0f0" });
+      txt(g, (x0 + x1) / 2, 184, CHIPS[p.kind].name + (info && info.dead ? " 💥" : ""), { "text-anchor": "middle", "font-size": 9, fill: "#bdbdbd" });
+      el("circle", { cx: X(c0), cy: 184, r: 2, fill: "#bdbdbd" }, g);
+      p.pins.forEach(h => { const [x, y] = hxy(h); el("rect", { x: x - 2.5, y: y < 174 ? y : 189, width: 5, height: y < 174 ? 159 - y : y - 189, fill: "#b8b8b8" }, g); });
+    }
+  });
+}
+function renderOver(R) {
+  gHL.innerHTML = ""; gOver.innerHTML = "";
+  const ring = (h, c, r = 7, w = 2.5) => { const [x, y] = hxy(h); el("circle", { cx: x, cy: y, r, fill: "none", stroke: c, "stroke-width": w }, gHL); };
+  if (hover && tool !== "del") { const s = strip(hover); ALLH.forEach(h => { if (strip(h) === s) { const [x, y] = hxy(h); el("rect", { x: x - 6, y: y - 6, width: 12, height: 12, rx: 3, fill: "#2a64c8", opacity: .22 }, gHL); } }); }
+  if (netSel) { const n = R.net(netSel); ALLH.forEach(h => { if (R.net(h) === n) ring(h, "#1f9d6b"); }); ring(netSel, "#1f9d6b", 9, 3.5); }
+  if (pending) { const [x, y] = hxy(pending); el("circle", { cx: x, cy: y, r: 9, fill: "#c25a22", opacity: .5 }, gOver); }
+  const probe = (h, c, s) => { if (!h) return; const [x, y] = hxy(h); el("circle", { cx: x, cy: y, r: 7, fill: c, stroke: "#fff", "stroke-width": 2 }, gOver); txt(gOver, x, y - 11, s, { "text-anchor": "middle", "font-size": 10, "font-weight": 800, fill: c }); };
+  probe(probes.r, "#d62828", "+"); probe(probes.b, "#222222", "COM");
+}
+
+/* =============== PANELS =============== */
+function renderDiag(R) { $("#diag").innerHTML = diagnose(R).map(([lv, t]) => `<li class="${lv === "ok" ? "" : lv}">${t}</li>`).join(""); }
+function renderMeter(R) {
+  const m = $("#meter"), t = $("#meter-txt");
+  if (!probes.r || !probes.b) { m.textContent = "-.-- V"; t.textContent = tool === "probe" ? (probes.r ? "Now tap a hole for the black (COM) probe." : "Tap a hole for the red (+) probe.") : "Pick 📟 Meter, then tap two holes: red probe first, then black."; return; }
+  const dv = R.vh(probes.r) - R.vh(probes.b), same = R.net(probes.r) === R.net(probes.b);
+  m.textContent = R.off ? "0.00 V" : fV(dv);
+  const fl = [probes.r, probes.b].filter(h => !R.dh(h));
+  t.innerHTML = `Red on <b>${probes.r}</b>, black on <b>${probes.b}</b>. Continuity: ${same ? "<b>connected</b> 🔔 (same net)" : "not connected"}.` + (fl.length && !R.off && !R.short ? ` <br>⚠ ${fl.join(" and ")} ${fl.length > 1 ? "aren't" : "isn't"} connected to anything that sets a voltage, so the reading means little.` : "");
+}
+function opts(list, cur, fmt = x => x) { return list.map(v => `<option value="${v}" ${String(v) === String(cur) ? "selected" : ""}>${fmt(v)}</option>`).join(""); }
+function renderInsp(R) {
+  const b = $("#insp-body"), p = sel && part(sel);
+  if (!p) {
+    if (netSel) {
+      const n = R.net(netSel), holes = ALLH.filter(h => R.net(h) === n).length, v = R.vh(netSel), d = R.dh(netSel);
+      b.innerHTML = `<p>Hole <b>${netSel}</b> is connected to <b>${holes - 1}</b> other holes (highlighted in green).</p><p>Voltage: <b>${R.off ? "0.00 V" : fV(v)}</b> · ${R.off ? "power off" : !d ? "floating (nothing sets its voltage)" : v > S.V * 0.7 ? "logic HIGH (1)" : v < S.V * 0.3 ? "logic LOW (0)" : "in between"}</p>`;
+    } else b.innerHTML = `<p class="muted">With 👆 Select, tap a part to see its readings and change it. Tap an empty hole to light up everything connected to it.</p>`;
+    return;
+  }
+  const lock = p.locked ? `<p class="muted">🔒 Part of the challenge setup.</p>` : "";
+  const ends = (labels) => p.locked ? "" : `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">${labels.map((l, k) => `<button class="tb" data-act="move" data-k="${k}">Move ${l}</button>`).join("")}<button class="tb" data-act="del">🗑 Delete</button></div>`;
+  let h = "";
+  if (p.type === "wire") h = `<p><b>Wire ${p.id}</b>: ${p.pins[0]} → ${p.pins[1]}</p><p>Color <select class="opt" data-act="color">${opts(Object.keys(WIRE), p.color)}</select></p>` + lock + ends(["end 1", "end 2"]);
+  else if (p.type === "res") { const r = R.res[p.id]; h = `<p><b>Resistor ${p.id}</b>: ${p.pins[0]} – ${p.pins[1]}</p><p>Value ${p.locked ? fOhm(p.ohms) : `<select class="opt" data-act="ohms">${opts(RVALS, p.ohms, fOhm)}</select>`}</p><p>Voltage across: <b>${fV(Math.abs(r.V))}</b> · Current: <b>${fAmp(r.I)}</b> · Power: <b>${sig(r.P * 1000, 2)} mW</b></p>` + lock + ends(["end 1", "end 2"]); }
+  else if (p.type === "led") { const r = R.led[p.id]; h = `<p><b>LED ${nm(p)}</b>: + (anode) ${p.pins[0]}, − (cathode) ${p.pins[1]}</p><p>Color ${p.locked ? p.color : `<select class="opt" data-act="ledc">${opts(Object.keys(LEDS), p.color)}</select>`} · turns on at about ${LEDS[p.color].vf} V</p><p>Current: <b>${fAmp(r.I)}</b> · ${r.I > 0.04 ? "burning out" : r.I > 0.001 ? "lit" : r.vak < -1 ? "dark: backwards" : "dark"}</p>` + lock + (p.locked ? "" : `<button class="tb" data-act="flip" style="margin-top:6px">⇄ Flip direction</button>`) + ends(["+ leg", "− leg"]); }
+  else if (p.type === "sw") h = `<p><b>Switch ${p.label || p.id}</b> (SPDT): the middle pin ${p.pins[1]} connects to ${p.pos === "L" ? "the left pin " + p.pins[0] : "the right pin " + p.pins[2]}.</p><button class="tb" data-act="toggle">🎚 Flip it</button>` + lock + (p.locked ? "" : `<div style="margin-top:6px"><button class="tb" data-act="del">🗑 Delete</button></div>`);
+  else if (p.type === "btn") h = `<p><b>Push button ${p.id}</b>: connects ${p.pins[0]} and ${p.pins[1]} only while you hold it down.</p>` + lock + ends(["end 1", "end 2"]);
+  else if (p.type === "chip") {
+    const c = R.chip[p.id] || {};
+    const rows = p.pins.map((hh, k) => { const pin = k + 1, role = pinRole(p.kind, pin), v = R.vh(hh); const l = role.startsWith("input") ? c.ins && c.ins[pin] : role.startsWith("output") ? (c.powered && !c.dead ? c.out[pin] : "—") : ""; return `<tr><td>${pin}</td><td>${role}</td><td>${R.off ? "0.00 V" : fV(v)}</td><td>${l === "float" ? "floating" : l === "mid" ? "?" : l}</td></tr>`; }).join("");
+    h = `<p><b>${p.id}</b>: ${p.locked ? "74HC" + p.kind : `<select class="opt" data-act="kind">${opts(allowedChips(), p.kind, k => "74HC" + k + " " + CHIPS[k].name)}</select>`} · ${c.dead ? "💥 over-voltage" : c.powered ? `powered (${sig(c.vcc, 3)} V)` : "no power"}</p><div class="tablewrap"><table><tr><th>Pin</th><th>Job</th><th>Volts</th><th>Logic</th></tr>${rows}</table></div>` + lock + (p.locked ? "" : `<div style="margin-top:6px"><button class="tb" data-act="del">🗑 Delete</button></div>`);
+  }
+  b.innerHTML = h;
+}
+$("#insp-body").addEventListener("click", e => {
+  const t = e.target.closest("[data-act]"); if (!t || t.tagName === "SELECT") return;
+  const p = part(sel); if (!p) return;
+  const a = t.dataset.act;
+  if (a === "del") { snapshot(); S.parts = S.parts.filter(x => x !== p); sel = null; }
+  else if (a === "move") { moveEnd = { id: p.id, k: +t.dataset.k }; setTool("select", true); }
+  else if (a === "flip") { snapshot(); p.pins.reverse(); }
+  else if (a === "toggle") { p.pos = p.pos === "L" ? "R" : "L"; }
+  update();
+});
+$("#insp-body").addEventListener("change", e => {
+  const t = e.target.closest("select[data-act]"); const p = part(sel); if (!t || !p) return;
+  snapshot();
+  const a = t.dataset.act;
+  if (a === "color") p.color = t.value; else if (a === "ohms") p.ohms = +t.value; else if (a === "ledc") p.color = t.value; else if (a === "kind") p.kind = t.value;
+  update();
+});
+const HINTS = {
+  select: "👆 Select: tap a part to inspect or change it, flip a switch, or hold a button. Tap an empty hole to see what it's connected to.",
+  wire: "🔗 Wire: tap one hole, then another.",
+  res: "〰️ Resistor: tap the holes for its two legs. Pick the value first in the Resistor menu.",
+  led: "💡 LED: tap the hole for the + leg (anode, the long one) first, then the − leg.",
+  sw: "🎚 Switch: tap a hole for its left pin. It takes that hole and the next two to the right. The middle pin connects to the left or right pin.",
+  btn: "🔘 Button: tap the holes for its two legs. It connects them only while held down (in Select mode).",
+  chip: "🔲 Chip: tap any hole in the column where pin 1 should go. The chip straddles the center gap and takes 7 columns.",
+  probe: "📟 Meter: tap a hole for the red probe, then one for the black probe.",
+  del: "🗑 Delete: tap a part to remove it."
+};
+function renderHint() {
+  const h = $("#hint");
+  if (flash) { h.className = "hintline warn"; h.textContent = flash; return; }
+  h.className = "hintline";
+  if (moveEnd) { const p = part(moveEnd.id); h.textContent = `Tap the new hole for ${p ? p.id : "the part"}'s end ${moveEnd.k + 1}. Tap the same part again to cancel.`; return; }
+  if (pending) { h.textContent = `First end at ${pending}. Now tap the second hole (tap ${pending} again to cancel).`; return; }
+  h.textContent = HINTS[tool];
+}
+
+/* =============== INTERACTION =============== */
+const placing = () => !["select", "del"].includes(tool);
+function setTool(t, keepMove) {
+  tool = t; pending = null; flash = null; if (!keepMove) moveEnd = null;
+  document.querySelectorAll("#tools [data-tool]").forEach(b => b.setAttribute("aria-pressed", b.dataset.tool === t ? "true" : "false"));
+  svg.classList.toggle("placing", placing());
+  update(true);
+}
+$("#tools").addEventListener("click", e => { const b = e.target.closest("[data-tool]"); if (b && !b.disabled) setTool(b.dataset.tool); });
+function wireColor(a, b) {
+  const v = $("#o-wire").value; if (v !== "auto") return v;
+  if ([a, b].some(h => /^(tp|bp)/.test(h))) return "red";
+  if ([a, b].some(h => /^(tn|bn)/.test(h))) return "black";
+  return ["blue", "green", "yellow", "orange"][S.parts.filter(p => p.type === "wire").length % 4];
+}
+function addPart(p) { snapshot(); S.parts.push(p); flash = null; }
+function onHole(h) {
+  const occ = occupied();
+  flash = null;
+  if (tool === "select") {
+    if (moveEnd) {
+      const p = part(moveEnd.id);
+      if (p && !occ[h]) { snapshot(); p.pins[moveEnd.k] = h; moveEnd = null; }
+      else if (occ[h]) flash = "That hole already has a lead in it. Pick an empty hole (any hole in the same strip works the same).";
+      return update();
+    }
+    netSel = netSel === h ? null : h; sel = null; return update();
+  }
+  if (tool === "probe") { if (!probes.r || probes.b) probes = { r: h, b: null }; else probes.b = h; return update(); }
+  if (tool === "del") return;
+  if (occ[h] && h !== pending) { flash = "That hole already has a lead in it. Use another hole in the same strip: all 5 are connected."; return update(); }
+  const [r, c] = parseH(h);
+  if (tool === "sw") {
+    if (r.length === 2 || c > COLS - 2) { flash = "A switch needs three holes in a row on the main area, so start it at column " + (COLS - 2) + " or lower."; return update(); }
+    const pins = [h, r + (c + 1), r + (c + 2)];
+    if (pins.some(x => occ[x])) { flash = "The switch needs this hole and the next two to the right to be empty."; return update(); }
+    addPart({ id: nextId("SW"), type: "sw", pins, pos: "L" }); return update();
+  }
+  if (tool === "chip") {
+    const kind = $("#o-chip").value;
+    if (c > COLS - 6) { flash = `A chip is 7 columns wide, so pin 1 must be at column ${COLS - 6} or lower.`; return update(); }
+    const pins = chipPins(c);
+    if (pins.some(x => occ[x])) { flash = "Something is already in row e or f of those columns. The chip needs both rows clear for 7 columns."; return update(); }
+    addPart({ id: nextId("U"), type: "chip", kind, pins }); return update();
+  }
+  if (!pending) { pending = h; return update(); }
+  if (pending === h) { pending = null; return update(); }
+  const a = pending; pending = null;
+  if (tool === "wire") addPart({ id: nextId("W"), type: "wire", pins: [a, h], color: wireColor(a, h) });
+  else if (tool === "res") addPart({ id: nextId("R"), type: "res", pins: [a, h], ohms: +$("#o-res").value });
+  else if (tool === "led") addPart({ id: nextId("LED"), type: "led", pins: [a, h], color: $("#o-led").value });
+  else if (tool === "btn") addPart({ id: nextId("BTN"), type: "btn", pins: [a, h], pressed: false });
+  update();
+}
+function onPart(id) {
+  const p = part(id); if (!p) return;
+  flash = null;
+  if (tool === "del") { if (p.locked) flash = "That part is part of the challenge setup, so it stays."; else { snapshot(); S.parts = S.parts.filter(x => x !== p); if (sel === id) sel = null; } return update(); }
+  if (moveEnd && moveEnd.id === id) { moveEnd = null; return update(); }
+  if (p.type === "sw") p.pos = p.pos === "L" ? "R" : "L";
+  sel = id; netSel = null; update();
+}
+svg.addEventListener("click", e => {
+  const pe = e.target.closest("[data-part]"), he = e.target.closest("[data-hole]");
+  if (pe && !placing()) return onPart(pe.dataset.part);
+  if (he) onHole(he.dataset.hole);
+});
+svg.addEventListener("pointerdown", e => {
+  const pe = e.target.closest("[data-part]"); if (!pe || tool !== "select") return;
+  const p = part(pe.dataset.part); if (p && p.type === "btn") { p.pressed = true; update(true); }
+});
+addEventListener("pointerup", () => { let any = false; S.parts.forEach(p => { if (p.pressed) { p.pressed = false; any = true; } }); if (any) update(true); });
+svg.addEventListener("pointermove", e => {
+  if (e.pointerType !== "mouse") return;
+  const he = e.target.closest("[data-hole]"), h = he ? he.dataset.hole : null;
+  if (h !== hover) { hover = h; renderOver(lastR); }
+});
+svg.addEventListener("pointerleave", () => { hover = null; renderOver(lastR); });
+$("#undo").addEventListener("click", () => { if (!hist.length) return; S.parts = JSON.parse(hist.pop()); sel = null; moveEnd = null; update(); });
+$("#clear").addEventListener("click", () => { snapshot(); S.parts = S.parts.filter(p => p.locked); sel = null; netSel = null; probes = { r: null, b: null }; update(); });
+$("#power").addEventListener("click", () => { S.power = !S.power; update(); });
+$("#o-v").addEventListener("change", e => { S.V = +e.target.value; update(); });
+$("#o-res").innerHTML = opts(RVALS, 330, fOhm);
+function allowedChips() { return challenge && challenge.chips ? challenge.chips : Object.keys(CHIPS); }
+
+/* =============== UPDATE LOOP =============== */
+let lastR = null;
+function update(light) {
+  const R = simulate(S.parts); lastR = R;
+  $("#power").setAttribute("aria-pressed", S.power ? "true" : "false");
+  $("#power").textContent = S.power ? "⚡ Power on" : "⏻ Power off";
+  $("#o-v").value = String(S.V);
+  batText.textContent = S.V + " V"; batOn.textContent = S.power ? "ON" : "OFF"; batOn.setAttribute("fill", S.power ? "#9fe6b8" : "#ff8a7a");
+  if (sel && !part(sel)) sel = null;
+  renderParts(R); renderOver(R); renderDiag(R); renderMeter(R); renderInsp(R); renderHint();
+  if (!light) save();
+}
+function save() { if (challenge) return; try { localStorage.setItem("cl-breadboard-free", JSON.stringify({ parts: S.parts, V: S.V })); } catch (e) {} }
+
+/* =============== CHALLENGES =============== */
+const W = (id, a, b, color) => ({ id, type: "wire", pins: [a, b], color, locked: true });
+const rails = () => [W("J1", "tp40", "bp40", "red"), W("J2", "tn39", "bn39", "black")];
+function inSw(label, c, id) { return [{ id, type: "sw", pins: ["a" + c, "a" + (c + 1), "a" + (c + 2)], pos: "R", label, locked: true }, W(id + "w1", "b" + c, "tp" + c, "red"), W(id + "w2", "b" + (c + 2), "tn" + (c + 2), "black")]; }
+function outQ(label, id, top) {
+  return top
+    ? [{ id, type: "led", pins: ["e36", "e38"], color: "green", label, locked: true }, { id: id + "r", type: "res", pins: ["d38", "tn38"], ohms: 330, locked: true }]
+    : [{ id, type: "led", pins: ["g36", "g38"], color: "red", label, locked: true }, { id: id + "r", type: "res", pins: ["h38", "bn38"], ohms: 330, locked: true }];
+}
+const AB = () => [...inSw("A", 2, "SA"), ...inSw("B", 6, "SB")];
+const unlock = parts => parts.map(p => ({ ...p, locked: p.type === "sw" || /^SA|^SB|^SS/.test(p.id) && p.type === "wire" ? true : false }));
+const tt = (ins, outs, fn) => ({ check: "logic", inputs: ins, outputs: outs, fn });
+const CH = [
+  { id: "led", lvl: "led", title: "Light an LED", blurb: "The very first bench skill: battery, resistor, LED.", V: 5, allow: ["wire", "res", "led"], chips: [],
+    goal: "Make an LED glow at a safe current: between 5 and 25 mA.", setup: () => rails(),
+    hints: ["Current has to flow out of +, through the resistor and LED, and back to −. All in one loop.", "The LED's + leg (anode) must face the + side.", "At 5 V a red LED with 330 Ω gives (5 − 2) ÷ 330 ≈ 9 mA.", "Each part's two legs go in different strips, and the strips need to connect end to end."], check: "led1" },
+  { id: "two", lvl: "led", title: "Two LEDs, equally bright", blurb: "A real bench task: a red and a green LED with the same current.", V: 9, allow: ["wire", "res", "led"], chips: [],
+    goal: "Light a red LED and a green LED (pick colors in the LED menu) so their currents are within 10% of each other, both between 5 and 20 mA. Supply is 9 V.", setup: () => rails(),
+    hints: ["Brightness follows current. Same current = same brightness.", "Parts in series always share the same current.", "Red needs about 2 V and green about 3 V. In series that's 5 V, leaving 4 V for one resistor: 4 ÷ 390 ≈ 10 mA.", "In parallel, each LED needs its own resistor: (9 − 2) ÷ 470 ≈ 15 mA and (9 − 3) ÷ 390 ≈ 15 mA."], check: "led2" },
+  { id: "and", lvl: "logic", title: "Build an AND gate", blurb: "Wire a 74HC08 so Q = A · B.", V: 5, allow: ["wire", "chip"], chips: ["08"],
+    goal: "Use a 74HC08 so the LED Q lights only when switches A and B are both 1.", setup: () => [...rails(), ...AB(), ...outQ("Q", "LQ")],
+    hints: ["Place the chip with pin 1 at column 14 or later, so it stays clear of the switches.", "Power first: pin 14 (top-left) to the + rail, pin 7 (bottom-right) to −.", "Each switch's middle strip is its signal. Run a wire from it to an input: pins 1 and 2 are gate 1's inputs.", "Gate 1's output is pin 3. Wire it to the strip of Q's + leg (column 36, bottom half)."],
+    ...tt([{ id: "SA", name: "A" }, { id: "SB", name: "B" }], [{ id: "LQ", name: "Q" }], ([a, b]) => [a & b]) },
+  { id: "ornand", lvl: "logic", title: "OR from NAND gates", blurb: "Only 74HC00 chips allowed. Time for De Morgan.", V: 5, allow: ["wire", "chip"], chips: ["00"],
+    goal: "Make Q = A + B (OR) using only NAND gates from a 74HC00.", setup: () => [...rails(), ...AB(), ...outQ("Q", "LQ")],
+    hints: ["De Morgan: A + B = (A′ · B′)′. That's a NAND of A′ and B′.", "A NAND with both inputs tied together is a NOT gate: (A·A)′ = A′.", "So: gate 1 makes A′ (A into pins 1 and 2), gate 2 makes B′ (pins 4 and 5), and gate 3 NANDs those two outputs.", "Three NAND gates, one chip. Don't forget pins 14 and 7."],
+    ...tt([{ id: "SA", name: "A" }, { id: "SB", name: "B" }], [{ id: "LQ", name: "Q" }], ([a, b]) => [a | b]) },
+  { id: "xornand", lvl: "logic", title: "XOR from NAND gates", blurb: "The classic four-NAND puzzle.", V: 5, allow: ["wire", "chip"], chips: ["00"],
+    goal: "Make Q = A ⊕ B (on when A and B differ) using only one 74HC00.", setup: () => [...rails(), ...AB(), ...outQ("Q", "LQ")],
+    hints: ["You need all four NAND gates on the chip.", "Gate 1: N = (A · B)′. Both A and B go to gate 1.", "Gate 2 gets A and N. Gate 3 gets B and N.", "Gate 4 NANDs the outputs of gates 2 and 3. That's XOR."],
+    ...tt([{ id: "SA", name: "A" }, { id: "SB", name: "B" }], [{ id: "LQ", name: "Q" }], ([a, b]) => [a ^ b]) },
+  { id: "mux", lvl: "logic", title: "2-to-1 multiplexer", blurb: "S picks whether A or B reaches Q.", V: 5, allow: ["wire", "chip"], chips: ["08", "32", "04"],
+    goal: "Make Q = S′·A + S·B: when S = 0, Q copies A; when S = 1, Q copies B. Use the 74HC04, 74HC08, and 74HC32.", setup: () => [...rails(), ...AB(), ...inSw("S", 10, "SS"), ...outQ("Q", "LQ")],
+    hints: ["You'll need three chips. Space them out: pin 1 at columns 14, 21, and 28 fits.", "Every chip needs its own pin 14 to + and pin 7 to −.", "NOT gate: S → S′. AND gate 1: A and S′. AND gate 2: B and S.", "OR the two AND outputs into Q."],
+    ...tt([{ id: "SS", name: "S" }, { id: "SA", name: "A" }, { id: "SB", name: "B" }], [{ id: "LQ", name: "Q" }], ([s, a, b]) => [s ? b : a]) },
+  { id: "half", lvl: "logic", title: "Half adder", blurb: "Add two bits: a sum LED and a carry LED.", V: 5, allow: ["wire", "chip"], chips: ["86", "08"],
+    goal: "Light Sum (bottom LED) with A ⊕ B and Carry (top LED) with A · B. Use a 74HC86 and a 74HC08.", setup: () => [...rails(), ...AB(), ...outQ("Sum", "LQ"), ...outQ("Carry", "LC", true)],
+    hints: ["1 + 1 = 10 in binary: sum 0, carry 1.", "Put the chips at columns 14 and 24, and power both.", "XOR output → the Sum LED's + strip (column 36, bottom). AND output → the Carry LED's + strip (column 36, top)."],
+    ...tt([{ id: "SA", name: "A" }, { id: "SB", name: "B" }], [{ id: "LQ", name: "Sum" }, { id: "LC", name: "Carry" }], ([a, b]) => [a ^ b, a & b]) },
+  { id: "3way", lvl: "logic", title: "3-way light switch", blurb: "Two SPDT switches, one light, no chips.", V: 5, allow: ["wire"], chips: [],
+    goal: "Wire switches S1 and S2 so flipping either one always changes the light Q, like a stairway light.",
+    setup: () => [...rails(), { id: "S1", type: "sw", pins: ["a4", "a5", "a6"], pos: "L", label: "S1", locked: true }, { id: "S2", type: "sw", pins: ["a16", "a17", "a18"], pos: "L", label: "S2", locked: true }, ...outQ("Q", "LQ")],
+    hints: ["Power goes into S1's middle pin (column 5).", "Two \"traveler\" wires join S1's left pin to S2's left pin and S1's right pin to S2's right pin.", "S2's middle pin (column 17) feeds the light: run it to Q's + strip at column 36, bottom half."],
+    check: "3way", inputs: [{ id: "S1", name: "S1" }, { id: "S2", name: "S2" }], outputs: [{ id: "LQ", name: "Q" }] },
+  { id: "fixand", lvl: "fix", title: "Fix it: the dead AND gate", blurb: "Someone built an AND circuit. Nothing lights. Two mistakes.", V: 5, allow: ["wire", "res", "led", "chip"], chips: ["08"],
+    goal: "Find and fix the mistakes so Q = A · B. Try the meter before you change anything: check the chip's power first.",
+    setup: () => [...rails(), ...AB(), { id: "U1", type: "chip", kind: "08", pins: chipPins(14) }, W("W1", "d14", "tp14", "red"), W("W2", "g20", "bp20", "black"), W("W3", "c3", "g14", "blue"), W("W4", "c7", "h15", "green"), W("W5", "i16", "h36", "yellow"), { id: "LQ", type: "led", pins: ["g38", "g36"], color: "red", label: "Q" }, { id: "LQr", type: "res", pins: ["h38", "bn38"], ohms: 330 }].map(p => ({ ...p, locked: /^S[AB]/.test(p.id) || p.id[0] === "J" })),
+    hints: ["Probe pin 14 to pin 7 of the chip. It should read 5 V.", "Which rail does pin 7's wire go to? Check the color stripe next to it.", "With the chip powered, set A = B = 1. Pin 3 is high, but Q stays dark. Look at Q's + mark."],
+    ...tt([{ id: "SA", name: "A" }, { id: "SB", name: "B" }], [{ id: "LQ", name: "Q" }], ([a, b]) => [a & b]) },
+  { id: "fixor", lvl: "fix", title: "Fix it: the tangled OR gate", blurb: "A messy board with an off-by-one wire and a sneaky shortcut.", V: 5, allow: ["wire", "res", "led", "chip"], chips: ["32"],
+    goal: "Untangle it so Q = A + B and the LED runs at a safe current. Some wires are just clutter.",
+    setup: () => [...rails(), ...AB(), { id: "U1", type: "chip", kind: "32", pins: chipPins(14) }, W("W1", "d14", "tp14", "red"), W("W2", "g20", "bn20", "black"), W("W3", "c3", "g14", "blue"), W("W4", "c7", "g16", "green"), W("W5", "h16", "h36", "yellow"), W("W6", "j38", "bn37", "orange"), W("W7", "a25", "a28", "white"), W("W8", "j24", "j30", "blue"), ...outQ("Q", "LQ").map(p => ({ ...p, locked: false }))].map(p => ({ ...p, locked: /^S[AB]/.test(p.id) || p.id[0] === "J" })),
+    hints: ["Gate 1 of a 74HC32 uses pins 1 and 2 as inputs and pin 3 as the output. Which pins are A and B wired to?", "Tap Q's resistor: how much current does it carry? Then tap Q itself.", "One wire connects Q's − strip straight to the − rail, so current skips the resistor.", "W7 and W8 don't connect to anything useful. Delete clutter so the board is easier to read."],
+    ...tt([{ id: "SA", name: "A" }, { id: "SB", name: "B" }], [{ id: "LQ", name: "Q" }], ([a, b]) => [a | b]) },
+  { id: "fixnot", lvl: "fix", title: "Fix it: the NOT that won't", blurb: "Q should be the opposite of A. The bottom half seems dead.", V: 5, allow: ["wire", "res", "led", "chip"], chips: ["04"],
+    goal: "Fix the board so Q = A′ (Q on when A = 0).",
+    setup: () => [...inSw("A", 2, "SA"), { id: "U1", type: "chip", kind: "04", pins: chipPins(14) }, W("W1", "d14", "tp14", "red"), W("W2", "g20", "bn20", "black"), W("W3", "c3", "g15", "blue"), W("W4", "h15", "h36", "yellow"), { id: "LQ", type: "led", pins: ["g36", "g38"], color: "red", label: "Q" }, { id: "LQr", type: "res", pins: ["h38", "bn38"], ohms: 330 }].map(p => ({ ...p, locked: /^SA/.test(p.id) })),
+    hints: ["Probe the bottom − rail against the top − rail. Are they connected?", "On this board only the top rails come from the battery. The bottom rails need jumper wires.", "On a 74HC04, pin 1 is an input and pin 2 is its output. Which one is the switch wired to?"],
+    ...tt([{ id: "SA", name: "A" }], [{ id: "LQ", name: "Q" }], ([a]) => [a ? 0 : 1]) }
+];
+let done = new Set();
+try { done = new Set(JSON.parse(localStorage.getItem("cl-breadboard-done") || "[]")); } catch (e) {}
+function renderChal() {
+  $("#chal").innerHTML = `<button data-ch="free" aria-pressed="${!challenge}"><span class="lvl">sandbox</span><b>Free build</b><span>Anything goes. Your board is saved on this device.</span></button>` +
+    CH.map(c => `<button data-ch="${c.id}" aria-pressed="${challenge && challenge.id === c.id}"><span class="lvl ${c.lvl === "fix" ? "fix" : c.lvl === "led" ? "led" : ""}">${c.lvl === "fix" ? "fix it" : c.lvl === "led" ? "LEDs" : "logic"}</span><b>${c.title} ${done.has(c.id) ? '<span class="done">✓</span>' : ""}</b><span>${c.blurb}</span></button>`).join("");
+}
+$("#chal").addEventListener("click", e => { const b = e.target.closest("[data-ch]"); if (!b) return; loadChallenge(b.dataset.ch); $("#bench").scrollIntoView({ behavior: "smooth" }); });
+const ALLTOOLS = ["wire", "res", "led", "sw", "btn", "chip"];
+function loadChallenge(id) {
+  challenge = id === "free" ? null : CH.find(c => c.id === id);
+  hist = []; sel = null; netSel = null; moveEnd = null; pending = null; probes = { r: null, b: null }; result = null; hintsShown = 0; S.power = true;
+  if (challenge) { S.parts = JSON.parse(JSON.stringify(challenge.setup())); S.V = challenge.V; }
+  else { let saved = null; try { saved = JSON.parse(localStorage.getItem("cl-breadboard-free") || "null"); } catch (e) {} S.parts = saved && saved.parts ? saved.parts : rails(); S.V = saved && saved.V ? saved.V : 5; }
+  const allow = challenge ? challenge.allow : ALLTOOLS;
+  document.querySelectorAll("#tools [data-tool]").forEach(b => { const t = b.dataset.tool; b.disabled = ALLTOOLS.includes(t) && !allow.includes(t); });
+  $("#o-chip").innerHTML = opts(allowedChips(), allowedChips()[0], k => "74HC" + k + " " + CHIPS[k].name);
+  $("#o-chip").disabled = !allowedChips().length;
+  renderChal(); renderGoal(); setTool("select");
+}
+function renderGoal() {
+  const g = $("#goal");
+  if (!challenge) { g.innerHTML = `<h5>Free build</h5><p>Build anything. Your board saves itself on this device. Pick a <a href="#challenges">challenge</a> when you want a goal.</p>`; return; }
+  const c = challenge;
+  let table = "";
+  if (c.check === "logic") {
+    const n = c.inputs.length;
+    table = `<div class="tablewrap"><table class="tt"><tr>${c.inputs.map(i => `<th>${i.name}</th>`).join("")}${c.outputs.map(o => `<th>${o.name}</th>`).join("")}</tr>` +
+      Array.from({ length: 1 << n }, (_, m) => { const v = c.inputs.map((_, k) => (m >> (n - 1 - k)) & 1); return `<tr>${v.map(x => `<td>${x}</td>`).join("")}${c.fn(v).map(x => `<td><b>${x}</b></td>`).join("")}</tr>`; }).join("") + "</table></div>";
+  }
+  const parts = c.allow.map(t => ({ wire: "wires", res: "resistors", led: "LEDs", chip: "chips", sw: "switches", btn: "buttons" }[t])).join(", ");
+  g.innerHTML = `<h5>🏆 ${c.title}</h5><p>${c.goal}</p>${table}<p class="muted"><small>Allowed: ${parts}${c.chips.length ? " (" + c.chips.map(k => "74HC" + k).join(", ") + ")" : ""}. Supply: ${c.V} V. 🔒 parts can't be moved.</small></p>` +
+    (hintsShown ? `<ol class="hints" style="margin:6px 0;padding-left:20px">${c.hints.slice(0, hintsShown).map(h => `<li>${h}</li>`).join("")}</ol>` : "") +
+    `<div class="btnrow"><button class="btn" id="g-check">✔ Check my circuit</button><button class="btn ghost" id="g-hint" ${hintsShown >= c.hints.length ? "disabled" : ""}>💡 Hint (${c.hints.length - hintsShown} left)</button><button class="btn ghost" id="g-reset">↺ Start over</button></div><div id="g-res">${result || ""}</div>`;
+  $("#g-check").onclick = runCheck;
+  $("#g-hint").onclick = () => { hintsShown++; renderGoal(); };
+  $("#g-reset").onclick = () => loadChallenge(c.id);
+}
+function runCheck() {
+  const c = challenge; if (!c) return;
+  let ok = false, html = "";
+  if (c.check === "logic" || c.check === "3way") {
+    const saved = c.inputs.map(i => part(i.id).pos), n = c.inputs.length, rows = [];
+    let burnt = false, short = false;
+    for (let m = 0; m < (1 << n); m++) {
+      const vals = c.inputs.map((_, k) => (m >> (n - 1 - k)) & 1);
+      c.inputs.forEach((inp, k) => part(inp.id).pos = vals[k] ? "L" : "R");
+      const R = simulate(S.parts); if (R.short) short = true;
+      const got = c.outputs.map(o => { const r = R.led[o.id]; if (r && r.I > 0.04) burnt = true; return r && r.I > 0.001 ? 1 : 0; });
+      rows.push({ vals, got });
+    }
+    c.inputs.forEach((inp, k) => part(inp.id).pos = saved[k]);
+    if (c.check === "3way") {
+      const q = rows.map(r => r.got[0]), xor = rows.map(r => r.vals[0] ^ r.vals[1]), xnor = xor.map(x => 1 - x);
+      ok = !short && !burnt && (q.join() === xor.join() || q.join() === xnor.join());
+      html = `<table class="tt"><tr><th>S1</th><th>S2</th><th>Q</th></tr>${rows.map(r => `<tr><td>${r.vals[0] ? "left" : "right"}</td><td>${r.vals[1] ? "left" : "right"}</td><td>${r.got[0] ? "💡 on" : "off"}</td></tr>`).join("")}</table>`;
+      html += `<div class="verdict ${ok ? "" : "bad"}">${short ? "There's a short circuit in one of the switch positions." : ok ? "🎉 Flipping either switch always changes the light. That's a working 3-way switch." : "Not yet: flipping one of the switches doesn't always change the light. Each switch's left pin should reach the other's left pin, and right to right."}</div>`;
+    } else {
+      rows.forEach(r => { r.exp = c.fn(r.vals); r.good = r.exp.every((e, k) => e === r.got[k]); });
+      ok = !short && !burnt && rows.every(r => r.good);
+      const bad = rows.filter(r => !r.good).length;
+      html = `<table class="tt"><tr>${c.inputs.map(i => `<th>${i.name}</th>`).join("")}${c.outputs.map(o => `<th>${o.name} want</th><th>got</th>`).join("")}<th></th></tr>${rows.map(r => `<tr>${r.vals.map(x => `<td>${x}</td>`).join("")}${r.exp.map((e, k) => `<td>${e}</td><td>${r.got[k]}</td>`).join("")}<td class="${r.good ? "ok" : "no"}">${r.good ? "✓" : "✗"}</td></tr>`).join("")}</table>`;
+      html += `<div class="verdict ${ok ? "" : "bad"}">${short ? "A short circuit shows up in at least one switch setting. Fix that first." : burnt ? (rows.every(r => r.good) ? "The outputs match, but an LED would burn out in at least one row. Keep a resistor in series with every LED." : "An LED would burn out in at least one row: something lets current skip its resistor. Fix that, then check the truth table.") : ok ? "🎉 Every row matches the truth table. Nice work!" : `${bad} of ${rows.length} rows are wrong. Check the Problems box, then probe the chip's input and output pins with the meter.`}</div>`;
+    }
+  } else {
+    const R = simulate(S.parts), leds = S.parts.filter(p => p.type === "led").map(p => ({ p, I: R.led[p.id].I }));
+    if (c.check === "led1") {
+      const good = leds.filter(l => l.I >= 0.005 && l.I <= 0.025), hot = leds.some(l => l.I > 0.025);
+      ok = !R.short && good.length > 0 && !hot;
+      html = `<div class="verdict ${ok ? "" : "bad"}">${R.short ? "That's a short circuit: + is joined straight to −." : hot ? "An LED is getting too much current. Use a bigger resistor." : ok ? `🎉 ${nm(good[0].p)} glows at ${fAmp(good[0].I)}. That's a safe current.` : leds.length ? "No LED is lit yet. Tap it with Select to see its current, and check its + leg faces +." : "Place an LED and a resistor first."}</div>`;
+    } else {
+      const lit = leds.filter(l => l.I > 0.001), cols = new Set(lit.map(l => l.p.color)), Is = lit.map(l => l.I);
+      const inRange = lit.every(l => l.I >= 0.005 && l.I <= 0.02), ratio = Is.length ? Math.max(...Is) / Math.min(...Is) : 9;
+      ok = !R.short && lit.length >= 2 && lit.length === leds.length && cols.has("red") && cols.has("green") && inRange && ratio <= 1.1;
+      html = `<div class="tablewrap"><table><tr><th>LED</th><th>Color</th><th>Current</th></tr>${leds.map(l => `<tr><td>${l.p.id}</td><td>${l.p.color}</td><td>${fAmp(l.I)}</td></tr>`).join("")}</table></div>`;
+      html += `<div class="verdict ${ok ? "" : "bad"}">${ok ? `🎉 Both LEDs carry about the same current (${Is.map(fAmp).join(" and ")}). Equally bright!` : lit.length < 2 ? "You need a red and a green LED, both lit." : !(cols.has("red") && cols.has("green")) ? "Use one red and one green LED (pick the color in the LED menu, or tap an LED and change it)." : !inRange ? "Keep each LED between 5 and 20 mA." : `The currents differ by ${Math.round((ratio - 1) * 100)}%. Get them within 10%.`}</div>`;
+    }
+  }
+  if (ok) { done.add(c.id); try { localStorage.setItem("cl-breadboard-done", JSON.stringify([...done])); } catch (e) {} renderChal(); }
+  result = html; renderGoal(); update(true);
+}
+
+/* =============== START =============== */
+loadChallenge("free");
+window.__bb = { S, CH, loadChallenge, runCheck, simulate, chipPins, update, get challenge() { return challenge; } };
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => update(true));
+})();
+</script>
+</body>
+</html>
