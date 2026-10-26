@@ -61,6 +61,28 @@ th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertic
 th{font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
 .tablewrap{overflow-x:auto}
 
+/* calculators */
+.calc.cols{grid-template-columns:minmax(0,1fr) minmax(0,1.45fr)}
+@media (max-width:820px){.calc.cols{grid-template-columns:minmax(0,1fr)}}
+#sp-work td:nth-child(n+2){white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.calc label.lbl{display:block;font-weight:800;font-size:.85rem;color:var(--muted);margin:12px 0 6px;text-transform:uppercase;letter-spacing:.04em}
+.calc input.num{font:inherit;font-weight:700;width:110px;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.calc input.num.narrow{width:84px}
+.bigout{margin-top:14px;background:#1d2a24;color:#9fe6b8;border-radius:12px;padding:10px 14px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.bigout b{font-size:1.6rem}
+.work{margin-top:8px;font-size:.95rem}
+.work .eq{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 10px;margin:6px 0;overflow-x:auto;white-space:nowrap}
+.chain{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+.chain .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:6px 8px}
+.chain .row b{min-width:34px}
+.chain .x{margin-left:auto}
+.vbar{display:flex;height:34px;border-radius:10px;overflow:hidden;margin:12px 0 4px;border:1px solid var(--line)}
+.vbar div{display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;min-width:0}
+.splitgrid{display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:14px;align-items:start}
+@media (max-width:620px){.splitgrid{grid-template-columns:minmax(0,1fr)}}
+#sp-svg{width:100%;max-width:210px;height:auto;display:block;margin:0 auto}
+
 /* bench */
 .bench{background:var(--paper);border:2px solid var(--line);border-radius:22px;padding:14px;box-shadow:var(--shadow)}
 .toolbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
@@ -144,6 +166,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
   <div class="wrap">
     <a href="../">← The Spark Lab</a>
     <a href="#bench">🔧 Bench</a>
+    <a href="#calc">🧮 Calculators</a>
     <a href="#challenges">🏆 Challenges</a>
     <a href="#tips">📌 Breadboard and chip tips</a>
   </div>
@@ -213,6 +236,45 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.88rem;border-top:1px da
           <div class="panel"><h5>Problems</h5><ul class="diag" id="diag"></ul></div>
 
           <div class="panel" id="insp"><h5>Selected</h5><div id="insp-body"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="calc">
+  <div class="wrap">
+    <h2>Calculators: Ohm's law and voltage splits</h2>
+    <p class="sub">Work out a circuit on paper before you build it, then check your answer on the board with the meter. These use the same simple models as the board: ideal resistors and LEDs that drop a fixed voltage.</p>
+    <div class="cols calc">
+      <div class="card" id="ohm">
+        <h4>⚡ V = I × R: how much current?</h4>
+        <label class="lbl">Supply voltage</label>
+        <div class="chips" id="oh-v"></div>
+        <label class="lbl" for="oh-r">Resistance</label>
+        <div class="chips"><input class="num" id="oh-r" inputmode="decimal" value="330" aria-label="Resistance in ohms"><span class="muted">Ω</span>
+          <span class="muted"><small>Type 4.7k for 4,700 Ω.</small></span></div>
+        <div class="chips" id="oh-rq" style="margin-top:6px"></div>
+        <label class="lbl" for="oh-led">LED in series?</label>
+        <select class="opt" id="oh-led"><option value="">No LED (just the resistor)</option><option value="red">Red LED (about 2.0 V)</option><option value="yellow">Yellow LED (about 2.1 V)</option><option value="green">Green LED (about 3.0 V)</option><option value="blue">Blue LED (about 3.2 V)</option><option value="white">White LED (about 3.2 V)</option></select>
+        <div class="bigout" id="oh-out"></div>
+        <div class="work" id="oh-work"></div>
+        <label class="lbl" for="oh-t">Working backwards: what resistor gives a target current?</label>
+        <div class="chips"><input class="num narrow" id="oh-t" inputmode="decimal" value="10" aria-label="Target current in milliamps"><span class="muted">mA</span></div>
+        <div class="work" id="oh-back"></div>
+      </div>
+      <div class="card" id="split">
+        <h4>🍰 Voltage split: where does the voltage go?</h4>
+        <p class="muted" style="margin:0"><small>Line up parts in series, from + down to −. The same current flows through every part, and each one takes its share of the supply voltage.</small></p>
+        <label class="lbl">Supply voltage</label>
+        <div class="chips" id="sp-v"></div>
+        <label class="lbl">Parts, from + to −</label>
+        <div class="chain" id="sp-chain"></div>
+        <div class="chips" style="margin-top:8px"><button class="tb" id="sp-addr">+ Resistor</button><button class="tb" id="sp-addl">+ LED</button><button class="tb" id="sp-addp">+ Parallel pair</button></div>
+        <div class="vbar" id="sp-bar" aria-label="How the supply voltage is shared"></div>
+        <div class="splitgrid">
+          <div class="work" id="sp-work"></div>
+          <div><svg id="sp-svg" role="img" aria-label="Circuit diagram with the voltage at each point"></svg><p class="muted" style="text-align:center;margin:4px 0 0"><small>Green numbers: what the meter reads with black on − and red on that point.</small></p></div>
         </div>
       </div>
     </div>
@@ -993,6 +1055,126 @@ function runCheck() {
   if (ok) { done.add(c.id); try { localStorage.setItem("cl-breadboard-done", JSON.stringify([...done])); } catch (e) {} renderChal(); }
   result = html; renderGoal(); update(true);
 }
+
+/* =============== CALCULATORS =============== */
+const parseR = t => { const m = /^\s*([\d.]+)\s*([kKmM]?)\s*(ohms?|Ω)?\s*$/.exec(String(t)); if (!m || isNaN(+m[1])) return NaN; return +m[1] * ({ k: 1e3, K: 1e3, m: 1e6, M: 1e6 }[m[2]] || 1); };
+const E12 = [1, 1.2, 1.5, 1.8, 2.2, 2.7, 3.3, 3.9, 4.7, 5.6, 6.8, 8.2];
+const nearestUp = r => { for (let d = 1; d <= 1e6; d *= 10) for (const e of E12) if (e * d >= r - 1e-9) return e * d; return 1e7; };
+const SUPPLIES = [3, 4.5, 5, 9, 12];
+function supplyChips(box, cur, onPick) {
+  box.innerHTML = SUPPLIES.map(v => `<button class="tb" data-v="${v}" aria-pressed="${v === cur}">${v} V</button>`).join("") + `<input class="num narrow" data-custom inputmode="decimal" placeholder="other" aria-label="Other voltage" value="${SUPPLIES.includes(cur) ? "" : cur}"><span class="muted">V</span>`;
+  box.onclick = e => { const b = e.target.closest("[data-v]"); if (b) onPick(+b.dataset.v); };
+  box.querySelector("[data-custom]").oninput = e => { const v = parseFloat(e.target.value); if (v > 0 && v <= 50) onPick(v, true); };
+}
+const OH = { V: 5 };
+function ohmUpdate(fromInput) {
+  if (!fromInput) supplyChips($("#oh-v"), OH.V, (v, typed) => { OH.V = v; ohmUpdate(typed); });
+  else $("#oh-v").querySelectorAll("[data-v]").forEach(b => b.setAttribute("aria-pressed", +b.dataset.v === OH.V ? "true" : "false"));
+  const V = OH.V, R = parseR($("#oh-r").value), led = $("#oh-led").value, vf = led ? LEDS[led].vf : 0;
+  const out = $("#oh-out"), work = $("#oh-work");
+  if (!(R > 0)) { out.innerHTML = "I = ?"; work.innerHTML = `<p>Type a resistance above zero, like <b>330</b> or <b>4.7k</b>.</p>`; }
+  else {
+    const vr = Math.max(0, V - vf), I = vr / R, P = I * I * R;
+    out.innerHTML = `I = <b>${fAmp(I)}</b>`;
+    let h = "";
+    if (led) h += `<div class="eq">resistor gets V = ${V} V − ${vf} V (LED) = ${sig(vr)} V</div>`;
+    h += `<div class="eq">I = V ÷ R = ${sig(vr)} V ÷ ${fOhm(R)} = ${sig(I, 3)} A = ${fAmp(I)}</div>`;
+    h += `<p>The resistor turns <b>${sig(P * 1000, 2)} mW</b> into heat (P = I × V = ${fAmp(I)} × ${sig(vr)} V).${P > 0.25 ? " ⚠ That's more than a normal ¼ W resistor can handle: it will get hot." : ""}</p>`;
+    if (led) h += vr <= 0 ? `<p>⚠ ${V} V isn't enough to turn on a ${led} LED, which needs about ${vf} V. It stays dark.</p>` : `<p>${I > 0.025 ? "⚠ Over 25 mA: too much for a small LED. Use a bigger resistor." : I < 0.002 ? "Under 2 mA: the LED will be very dim." : "✓ A safe, visible LED current (2 to 25 mA)."}</p>`;
+    work.innerHTML = h;
+  }
+  const t = parseFloat($("#oh-t").value) / 1000, back = $("#oh-back");
+  if (!(t > 0)) back.innerHTML = "<p>Type a current in mA, like 10.</p>";
+  else if (V - vf <= 0) back.innerHTML = `<p>No resistor helps: the supply is too low for this LED.</p>`;
+  else { const Rn = (V - vf) / t, Rs = nearestUp(Rn); back.innerHTML = `<div class="eq">R = V ÷ I = ${sig(V - vf)} V ÷ ${sig(t * 1000)} mA = ${fOhm(Rn)}</div><p>Closest standard value at or above it: <b>${fOhm(Rs)}</b> (gives ${fAmp((V - vf) / Rs)}). Rounding up keeps the current a little under your target, which is the safe direction.</p>`; }
+}
+$("#oh-rq").innerHTML = [100, 220, 330, 470, 1000, 2200, 10000].map(r => `<button class="tb" data-r="${r}">${fOhm(r)}</button>`).join("");
+$("#oh-rq").onclick = e => { const b = e.target.closest("[data-r]"); if (b) { $("#oh-r").value = b.dataset.r; ohmUpdate(true); } };
+["#oh-r", "#oh-t"].forEach(id => $(id).addEventListener("input", () => ohmUpdate(true)));
+$("#oh-led").addEventListener("change", () => ohmUpdate(true));
+
+const SP = { V: 9, parts: [{ t: "r", r: 1000 }, { t: "r", r: 2200 }, { t: "l", c: "red" }] };
+const SPCOL = ["#c25a22", "#2a64c8", "#1f9d6b", "#d29c00", "#7b3fbf", "#b0406a"];
+function spCalc() {
+  const V = SP.V, items = SP.parts.map((p, k) => ({ ...p, k, req: p.t === "r" ? p.r : p.t === "p" ? 1 / (1 / p.r + 1 / p.r2) : 0, vf: p.t === "l" ? LEDS[p.c].vf : 0 }));
+  const bad = items.some(it => it.t !== "l" && !(it.req > 0));
+  const Rt = items.reduce((a, it) => a + it.req, 0), Vf = items.reduce((a, it) => a + it.vf, 0);
+  let I = 0, mode = "ok";
+  if (bad) mode = "bad"; else if (!items.length) mode = "empty";
+  else if (Vf >= V && Vf > 0) mode = "dark";
+  else if (Rt === 0) mode = "short";
+  else I = (V - Vf) / Rt;
+  items.forEach(it => { it.v = mode === "ok" ? (it.t === "l" ? it.vf : I * it.req) : 0; });
+  if (mode === "dark") { const leds = items.filter(it => it.t === "l"); items.forEach(it => it.v = it.t === "l" ? V * it.vf / Vf : 0); }
+  return { V, items, Rt, Vf, I, mode };
+}
+function spRow(p, k) {
+  const del = `<button class="tb ghost x" data-del="${k}" aria-label="Remove">✕</button>`, tag = `<b style="color:${SPCOL[k % 6]}">${p.t === "l" ? "LED" + (k + 1) : "R" + (k + 1)}</b>`;
+  if (p.t === "r") return `<div class="row">${tag}<input class="num narrow" data-k="${k}" data-f="r" value="${p.rTxt ?? p.r}" inputmode="decimal" aria-label="Resistance"><span class="muted">Ω</span>${del}</div>`;
+  if (p.t === "p") return `<div class="row">${tag}<span class="muted">pair:</span><input class="num narrow" data-k="${k}" data-f="r" value="${p.rTxt ?? p.r}" inputmode="decimal" aria-label="First resistor"><span class="muted">Ω ∥</span><input class="num narrow" data-k="${k}" data-f="r2" value="${p.r2Txt ?? p.r2}" inputmode="decimal" aria-label="Second resistor"><span class="muted">Ω</span>${del}</div>`;
+  return `<div class="row">${tag}<select class="opt" data-k="${k}" data-f="c">${opts(Object.keys(LEDS), p.c, c => c + " LED (" + LEDS[c].vf + " V)")}</select>${del}</div>`;
+}
+function spUpdate(full) {
+  if (full) {
+    supplyChips($("#sp-v"), SP.V, (v, typed) => { SP.V = v; spUpdate(!typed); });
+    $("#sp-chain").innerHTML = SP.parts.map(spRow).join("") || `<p class="muted">Add a part to start.</p>`;
+    ["#sp-addr", "#sp-addl", "#sp-addp"].forEach(id => $(id).disabled = SP.parts.length >= 6);
+  } else $("#sp-v").querySelectorAll("[data-v]").forEach(b => b.setAttribute("aria-pressed", +b.dataset.v === SP.V ? "true" : "false"));
+  const C = spCalc(), nm = it => (it.t === "l" ? "LED" : "R") + (it.k + 1);
+  const bar = $("#sp-bar");
+  bar.innerHTML = C.mode === "ok" || C.mode === "dark" ? C.items.filter(it => it.v > 1e-9).map(it => `<div style="flex:${it.v};background:${SPCOL[it.k % 6]}" title="${nm(it)}: ${fV(it.v)}">${nm(it)} ${sig(it.v, 3)} V</div>`).join("") : `<div style="flex:1;background:#8a8a8a">—</div>`;
+  let h = "";
+  if (C.mode === "bad") h = `<p>Type a value above zero in every resistor box (like 330 or 4.7k).</p>`;
+  else if (C.mode === "empty") h = `<p>Add some parts.</p>`;
+  else if (C.mode === "short") h = `<p>⚠ LEDs with no resistor: nothing limits the current, so it shoots up and the LED burns out. Add a resistor.</p>`;
+  else if (C.mode === "dark") h = `<p>⚠ The LEDs need ${sig(C.Vf)} V in total to turn on, but the supply is only ${C.V} V. No current flows, so the LEDs stay dark (and the resistors drop 0 V).</p>`;
+  else {
+    const rs = C.items.filter(it => it.t !== "l");
+    h += `<div class="eq">R total = ${rs.map(it => fOhm(it.req)).join(" + ")} = ${fOhm(C.Rt)}</div>`;
+    h += `<div class="eq">I = ${C.Vf ? `(${C.V} V − ${sig(C.Vf)} V for LEDs)` : C.V + " V"} ÷ ${fOhm(C.Rt)} = <b>${fAmp(C.I)}</b></div>`;
+    h += `<div class="tablewrap"><table><tr><th>Part</th><th>Drop</th><th>Current</th></tr>` + C.items.map(it => {
+      let r = `<tr><td><b style="color:${SPCOL[it.k % 6]}">${nm(it)}</b> ${it.t === "l" ? it.c + " LED" : it.t === "p" ? fOhm(it.r) + " ∥ " + fOhm(it.r2) + " = " + fOhm(it.req) : fOhm(it.r)}</td><td>${fV(it.v)}</td><td>${fAmp(C.I)}</td></tr>`;
+      if (it.t === "p") r += `<tr><td class="muted">&nbsp;&nbsp;↳ split: ${fOhm(it.r)} gets ${fAmp(it.v / it.r)}, ${fOhm(it.r2)} gets ${fAmp(it.v / it.r2)}</td><td></td><td></td></tr>`;
+      return r;
+    }).join("") + `</table></div>`;
+    h += `<p>Check: ${C.items.map(it => sig(it.v, 3)).join(" + ")} = <b>${sig(C.items.reduce((a, it) => a + it.v, 0), 3)} V</b>, the whole supply. The drops always add up to the supply voltage (Kirchhoff's voltage law). Bigger resistors take bigger shares.</p>`;
+    if (C.items.some(it => it.t === "l") && C.I > 0.025) h += `<p>⚠ ${fAmp(C.I)} is too much for an LED. Use bigger resistors.</p>`;
+  }
+  $("#sp-work").innerHTML = h;
+  // diagram: vertical chain with the voltage at every point (what a meter reads with black on −)
+  const g = $("#sp-svg"); g.innerHTML = ""; const n = C.items.length, H = 40 + n * 62 + 30;
+  g.setAttribute("viewBox", `0 0 210 ${H}`);
+  el("line", { x1: 60, y1: 30, x2: 60, y2: H - 30, stroke: "#8a8a8a", "stroke-width": 2 }, g);
+  txt(g, 60, 16, "+ " + C.V + " V", { "text-anchor": "middle", "font-weight": 800, "font-size": 12, fill: "#d62828" });
+  txt(g, 60, H - 8, "− 0 V", { "text-anchor": "middle", "font-weight": 800, "font-size": 12, fill: "#1d5fd1" });
+  let vNode = C.V, y = 30;
+  const node = (yy, v) => { el("circle", { cx: 60, cy: yy, r: 4, fill: "#555" }, g); txt(g, 120, yy + 4, (C.mode === "ok" || C.mode === "dark" ? sig(Math.max(0, v), 3) : "?") + " V", { "font-weight": 800, "font-size": 12, fill: "#2a8a5c" }); };
+  node(y, vNode);
+  C.items.forEach(it => {
+    const c = SPCOL[it.k % 6], top = y + 10, bot = y + 52, mid = (top + bot) / 2;
+    el("rect", { x: 40, y: top, width: 40, height: 42, style: "fill:var(--paper)" }, g);
+    if (it.t === "l") {
+      el("path", { d: `M48 ${top + 8} L72 ${top + 8} L60 ${bot - 12} Z`, fill: c }, g);
+      el("line", { x1: 48, x2: 72, y1: bot - 12, y2: bot - 12, stroke: c, "stroke-width": 3 }, g);
+      el("line", { x1: 60, x2: 60, y1: top, y2: top + 8, stroke: "#8a8a8a", "stroke-width": 2 }, g); el("line", { x1: 60, x2: 60, y1: bot - 12, y2: bot, stroke: "#8a8a8a", "stroke-width": 2 }, g);
+    } else if (it.t === "p") {
+      el("path", { d: `M60 ${top} L60 ${top + 5} L45 ${top + 5} L45 ${bot - 5} L60 ${bot - 5} L60 ${bot} M60 ${top + 5} L75 ${top + 5} L75 ${bot - 5} L60 ${bot - 5}`, fill: "none", stroke: "#8a8a8a", "stroke-width": 2 }, g);
+      [45, 75].forEach(x => el("rect", { x: x - 5, y: top + 10, width: 10, height: 22, rx: 2, fill: c }, g));
+    } else el("rect", { x: 53, y: top + 4, width: 14, height: 34, rx: 3, fill: c }, g);
+    txt(g, 8, mid + 4, (it.t === "l" ? "LED" : "R") + (it.k + 1), { "font-weight": 800, "font-size": 11, fill: c });
+    vNode -= it.v; y = bot + 10; node(y, vNode);
+  });
+}
+$("#sp-chain").addEventListener("input", e => {
+  const t = e.target, p = SP.parts[+t.dataset.k]; if (!p) return;
+  if (t.dataset.f === "c") p.c = t.value; else { const v = parseR(t.value); p[t.dataset.f] = v; p[t.dataset.f + "Txt"] = t.value; }
+  spUpdate(false);
+});
+$("#sp-chain").addEventListener("click", e => { const b = e.target.closest("[data-del]"); if (b) { SP.parts.splice(+b.dataset.del, 1); SP.parts.forEach(p => { delete p.rTxt; delete p.r2Txt; }); spUpdate(true); } });
+$("#sp-addr").onclick = () => { SP.parts.push({ t: "r", r: 1000 }); spUpdate(true); };
+$("#sp-addl").onclick = () => { SP.parts.push({ t: "l", c: "red" }); spUpdate(true); };
+$("#sp-addp").onclick = () => { SP.parts.push({ t: "p", r: 1000, r2: 1000 }); spUpdate(true); };
+ohmUpdate(); spUpdate(true);
 
 /* =============== START =============== */
 loadChallenge("free");
